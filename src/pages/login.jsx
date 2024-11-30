@@ -5,6 +5,14 @@ import PropTypes from "prop-types"; // Import PropTypes
 const Login = ({ setIsAuthenticated }) => {
   const images = [
     "https://s3-alpha-sig.figma.com/img/4b63/af82/0420c6f4f669edd06fa7686e00d7ccbf?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GlRggYrooYBzbpVgEajcLhYXCYQgWrMZKL-1kBryEENvstqJiB~xgPWLWUzVz1IyqL2pv8xoc~Q~NZGbfmtM9yvaIuU2T8DU2Ec19QMoSvNdNpXW7g7KVSDt0PhKhvtRhX3XYj0FE1L5XqHd3MmtJeXpJ3-gKNjbBuqmGWWop4k8ekiDtnMzp~bbXs3dXkzZQUvnTx88Zk9Pp9uA9aT42zeEVPv6UsqZxAyOKJSTOhxhGYObxTHqtTHSCGrG~xut8AWVfgqBbaCpvjw~iXBIPa-TUqWCVJc0cBqEmfOuWv0JeGInXy62h9Gc8pjE9EmzXSCqJTx1zT4iL4XccFc9Ig__",
+    "https://png.pngtree.com/background/20230526/original/pngtree-white-desk-with-a-laptop-and-a-monitor-picture-image_2751387.jpg",
+    "https://s3-alpha-sig.figma.com/img/4b63/af82/0420c6f4f669edd06fa7686e00d7ccbf?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GlRggYrooYBzbpVgEajcLhYXCYQgWrMZKL-1kBryEENvstqJiB~xgPWLWUzVz1IyqL2pv8xoc~Q~NZGbfmtM9yvaIuU2T8DU2Ec19QMoSvNdNpXW7g7KVSDt0PhKhvtRhX3XYj0FE1L5XqHd3MmtJeXpJ3-gKNjbBuqmGWWop4k8ekiDtnMzp~bbXs3dXkzZQUvnTx88Zk9Pp9uA9aT42zeEVPv6UsqZxAyOKJSTOhxhGYObxTHqtTHSCGrG~xut8AWVfgqBbaCpvjw~iXBIPa-TUqWCVJc0cBqEmfOuWv0JeGInXy62h9Gc8pjE9EmzXSCqJTx1zT4iL4XccFc9Ig__",
+    "https://png.pngtree.com/background/20230526/original/pngtree-white-desk-with-a-laptop-and-a-monitor-picture-image_2751387.jpg",
+    "https://s3-alpha-sig.figma.com/img/4b63/af82/0420c6f4f669edd06fa7686e00d7ccbf?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GlRggYrooYBzbpVgEajcLhYXCYQgWrMZKL-1kBryEENvstqJiB~xgPWLWUzVz1IyqL2pv8xoc~Q~NZGbfmtM9yvaIuU2T8DU2Ec19QMoSvNdNpXW7g7KVSDt0PhKhvtRhX3XYj0FE1L5XqHd3MmtJeXpJ3-gKNjbBuqmGWWop4k8ekiDtnMzp~bbXs3dXkzZQUvnTx88Zk9Pp9uA9aT42zeEVPv6UsqZxAyOKJSTOhxhGYObxTHqtTHSCGrG~xut8AWVfgqBbaCpvjw~iXBIPa-TUqWCVJc0cBqEmfOuWv0JeGInXy62h9Gc8pjE9EmzXSCqJTx1zT4iL4XccFc9Ig__",
+    "https://png.pngtree.com/background/20230526/original/pngtree-white-desk-with-a-laptop-and-a-monitor-picture-image_2751387.jpg",
+    "https://s3-alpha-sig.figma.com/img/4b63/af82/0420c6f4f669edd06fa7686e00d7ccbf?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GlRggYrooYBzbpVgEajcLhYXCYQgWrMZKL-1kBryEENvstqJiB~xgPWLWUzVz1IyqL2pv8xoc~Q~NZGbfmtM9yvaIuU2T8DU2Ec19QMoSvNdNpXW7g7KVSDt0PhKhvtRhX3XYj0FE1L5XqHd3MmtJeXpJ3-gKNjbBuqmGWWop4k8ekiDtnMzp~bbXs3dXkzZQUvnTx88Zk9Pp9uA9aT42zeEVPv6UsqZxAyOKJSTOhxhGYObxTHqtTHSCGrG~xut8AWVfgqBbaCpvjw~iXBIPa-TUqWCVJc0cBqEmfOuWv0JeGInXy62h9Gc8pjE9EmzXSCqJTx1zT4iL4XccFc9Ig__",
+    "https://png.pngtree.com/background/20230526/original/pngtree-white-desk-with-a-laptop-and-a-monitor-picture-image_2751387.jpg",
+    "https://s3-alpha-sig.figma.com/img/4b63/af82/0420c6f4f669edd06fa7686e00d7ccbf?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GlRggYrooYBzbpVgEajcLhYXCYQgWrMZKL-1kBryEENvstqJiB~xgPWLWUzVz1IyqL2pv8xoc~Q~NZGbfmtM9yvaIuU2T8DU2Ec19QMoSvNdNpXW7g7KVSDt0PhKhvtRhX3XYj0FE1L5XqHd3MmtJeXpJ3-gKNjbBuqmGWWop4k8ekiDtnMzp~bbXs3dXkzZQUvnTx88Zk9Pp9uA9aT42zeEVPv6UsqZxAyOKJSTOhxhGYObxTHqtTHSCGrG~xut8AWVfgqBbaCpvjw~iXBIPa-TUqWCVJc0cBqEmfOuWv0JeGInXy62h9Gc8pjE9EmzXSCqJTx1zT4iL4XccFc9Ig__",
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -53,7 +61,9 @@ const Login = ({ setIsAuthenticated }) => {
           {images.map((_, index) => (
             <div
               key={index}
-              className={`w-2 h-2 rounded-full ${currentImageIndex === index ? "bg-custom-blue" : "bg-gray-400"}`}
+              className={`w-2 h-2 rounded-full ${
+                currentImageIndex === index ? "bg-custom-blue" : "bg-gray-400"
+              }`}
             ></div>
           ))}
         </div>
@@ -77,7 +87,9 @@ const Login = ({ setIsAuthenticated }) => {
         <div className="w-full bg-white">
           <div className="container bg-white mx-auto mt-10 px-4 sm:px-10 md:px-12 lg:px-14">
             <div className="w-full bg-white py-6">
-              <h2 className="text-xl font-semibold text-custom-blue mb-4">Login</h2>
+              <h2 className="text-xl font-semibold text-custom-blue mb-4">
+                Login
+              </h2>
 
               {error && <p className="text-red-500 mb-4">{error}</p>}
 
@@ -124,7 +136,9 @@ const Login = ({ setIsAuthenticated }) => {
                 Request Access
               </button>
 
-              <div className="text-center text-gray-400 mt-16">Powered by Altru</div>
+              <div className="text-center text-gray-400 mt-16">
+                Powered by Altru
+              </div>
             </div>
           </div>
         </div>
