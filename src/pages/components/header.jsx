@@ -1,6 +1,6 @@
 const Header = () => {
     return (
-      <div className="bg-custom-blue flex w-full items-center justify-between py-4 h-20 ">
+      <div className="sticky top-0 left-0 right-0 bg-custom-blue flex w-full items-center justify-between py-4 h-20 ">
         {/* Logo dan Project Select */}
         <div className="flex items-center h-full">
           {/* Logo */}
