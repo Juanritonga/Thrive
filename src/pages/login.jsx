@@ -48,102 +48,103 @@ const Login = ({ setIsAuthenticated }) => {
   };
 
   return (
-    <div className="flex h-screen">
-      {/* Background Image */}
-      <div className="w-2/3 bg-cover bg-center flex justify-center items-center relative">
-        <div
-          className="absolute w-full h-full bg-cover bg-center"
-          style={{ backgroundImage: `url(${images[currentImageIndex]})` }}
-        ></div>
-
-        {/* Image indicators */}
-        <div className="absolute bottom-12 items-center  flex justify-center items-center space-x-2 bg-white p-2 rounded-lg">
-          {images.map((_, index) => (
-            <div
-              key={index}
-              className={`w-2 h-2 rounded-full ${
-                currentImageIndex === index ? "bg-custom-blue" : "bg-gray-400"
-              }`}
-            ></div>
-          ))}
-        </div>
-      </div>
-
-      {/* Login Form */}
-      <div className="w-1/3">
-        <div className="w-full bg-custom-blue">
-          <div className="flex justify-center py-8">
-            <div className="text-center">
-              <img
-                src="./thrive.png"
-                alt="Company Logo"
-                className="max-w-[100px] w-auto h-auto mb-4"
-              />
-            </div>
+      <div className="flex flex-col lg:flex-row h-screen">
+        {/* Background Image */}
+        <div className="lg:w-2/3 w-full h-1/2 lg:h-full bg-cover bg-center flex justify-center items-center relative">
+          <div
+            className="absolute w-full h-full bg-cover bg-center"
+            style={{ backgroundImage: `url(${images[currentImageIndex]})` }}
+          ></div>
+    
+          {/* Image indicators */}
+          <div className="absolute bottom-6 lg:bottom-12 flex justify-center items-center space-x-2 bg-white p-2 rounded-lg">
+            {images.map((_, index) => (
+              <div
+                key={index}
+                className={`w-2 h-2 rounded-full ${
+                  currentImageIndex === index ? "bg-custom-blue" : "bg-gray-400"
+                }`}
+              ></div>
+            ))}
           </div>
         </div>
-
-        {/* Form with white background */}
-        <div className="w-full bg-white">
-          <div className="container bg-white mx-auto mt-10 px-4 sm:px-10 md:px-12 lg:px-14">
-            <div className="w-full bg-white py-6">
-              <h2 className="text-xl font-semibold text-custom-blue mb-4">
-                Login
-              </h2>
-
-              {error && <p className="text-red-500 mb-4">{error}</p>}
-
-              <div className="mb-6">
-                <div className="flex items-center border border-gray-300 rounded-lg p-2">
-                  <i className="fa-solid fa-user bg-gray-200 text-gray-400 mr-2 p-4 rounded-lg"></i>
-                  <input
-                    type="text"
-                    placeholder="Email / Whatsapp"
-                    className="w-full outline-none"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="mb-6">
-                <div className="flex items-center border border-gray-300 rounded-lg p-2">
-                  <i className="fa-solid fa-lock bg-gray-200 text-gray-400 mr-2 p-4 rounded-lg"></i>
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    className="w-full outline-none"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="text-center mb-6">
-                <a href="#" className="text-custom-blue">
-                  Forgot password?
-                </a>
-              </div>
-
-              <button
-                className="w-2/3 font-bold bg-custom-blue text-white py-4 rounded-lg mb-6 mx-auto block hover:bg-blue-900"
-                onClick={handleLogin}
-              >
-                Log in
-              </button>
-
-              <button className="w-2/3 font-bold border border-gray-300 text-custom-blue py-4 rounded-lg mx-auto block hover:bg-gray-200">
-                Request Access
-              </button>
-
-              <div className="text-center text-gray-400 mt-16">
-                Powered by Altru
+    
+        {/* Login Form */}
+        <div className="lg:w-1/3 w-full h-1/2 lg:h-full">
+          <div className="w-full bg-custom-blue">
+            <div className="flex justify-center py-4 lg:py-8">
+              <div className="text-center">
+                <img
+                  src="./thrive.png"
+                  alt="Company Logo"
+                  className="max-w-[80px] lg:max-w-[100px] w-auto h-auto mb-2 lg:mb-4"
+                />
               </div>
             </div>
           </div>
+    
+          {/* Form with white background */}
+          <div className="w-full bg-white">
+            <div className="container bg-white mx-auto mt-4 lg:mt-10 px-4 sm:px-6 md:px-8 lg:px-10">
+              <div className="w-full bg-white py-6">
+                <h2 className="text-lg lg:text-xl font-semibold text-custom-blue mb-4 lg:mb-6">
+                  Login
+                </h2>
+    
+                {error && <p className="text-red-500 mb-4 lg:mb-6">{error}</p>}
+    
+                <div className="mb-4 lg:mb-6">
+                  <div className="flex items-center border border-gray-300 rounded-lg p-2">
+                    <i className="fa-solid fa-user bg-gray-200 text-gray-400 mr-2 p-2 lg:p-4 rounded-lg"></i>
+                    <input
+                      type="text"
+                      placeholder="Email / Whatsapp"
+                      className="w-full outline-none text-sm lg:text-base"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                    />
+                  </div>
+                </div>
+    
+                <div className="mb-4 lg:mb-6">
+                  <div className="flex items-center border border-gray-300 rounded-lg p-2">
+                    <i className="fa-solid fa-lock bg-gray-200 text-gray-400 mr-2 p-2 lg:p-4 rounded-lg"></i>
+                    <input
+                      type="password"
+                      placeholder="Password"
+                      className="w-full outline-none text-sm lg:text-base"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                </div>
+    
+                <div className="text-center mb-4 lg:mb-6">
+                  <a href="#" className="text-custom-blue text-sm lg:text-base">
+                    Forgot password?
+                  </a>
+                </div>
+    
+                <button
+                  className="w-full lg:w-2/3 font-bold bg-custom-blue text-white py-3 lg:py-4 rounded-lg mb-4 lg:mb-6 mx-auto block hover:bg-blue-900"
+                  onClick={handleLogin}
+                >
+                  Log in
+                </button>
+    
+                <button className="w-full lg:w-2/3 font-bold border border-gray-300 text-custom-blue py-3 lg:py-4 rounded-lg mx-auto block hover:bg-gray-200">
+                  Request Access
+                </button>
+    
+                <div className="text-center text-gray-400 mt-10 lg:mt-16 text-sm lg:text-base">
+                  Powered by Altru
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    
   );
 };
 
