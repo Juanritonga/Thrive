@@ -2,6 +2,11 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Login from "./pages/login";
 import Layout from "./pages/layout";
+import MasterData from "./pages/masterdata/master-data";
+import Type from "./pages/masterdata/type";
+import Location from "./pages/masterdata/location";
+import Class from "./pages/masterdata/class";
+import Master from "./pages/masterdata/master";
 import Format from "./pages/cashbook/format";
 import CashBook from "./pages/cashbook/cashbook";
 import BankC from "./pages/cashbook/bankchasbook";
@@ -9,7 +14,6 @@ import PettyCash from "./pages/cashbook/pettycash";
 import CashAdvance from "./pages/cashbook/cashadvance";
 import Reimbursement from "./pages/cashbook/reimbursement";
 import EntryCashAdvance from "./pages/cashbook/Entry/entryca";
-
 import Dashboard from "./pages/dashboard";
 
 const App = () => {
@@ -27,7 +31,10 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         {/* Route for Login */}
-        <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+        <Route
+          path="/login"
+          element={<Login setIsAuthenticated={setIsAuthenticated} />}
+        />
 
         {/* Layout with nested routes */}
         <Route path="/" element={<Layout />}>
@@ -38,6 +45,13 @@ const App = () => {
           />
 
           {/* Routes for other pages */}
+          <Route path="MasterData" element={<MasterData />}>
+          <Route index element={<Type />} /> {/* Default route */}
+            <Route path="type" element={<Type />} />
+            <Route path="class" element={<Class />} />
+            <Route path="location" element={<Location />} />
+            <Route path="Master" element={<Master />} />
+          </Route>
           <Route path="cashbook" element={<CashBook />}>
             <Route path="format" element={<Format />} />
             <Route path="bankchasbook" element={<BankC />}>

@@ -10,7 +10,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   const menuItems = [
     {
       label: "MASTER DATA",
-      path: "#",
+      path: "/MasterData",
       isParent: true,
       icon: "fas fa-database",
     },
