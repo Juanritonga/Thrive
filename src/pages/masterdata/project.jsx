@@ -6,14 +6,12 @@ const Project = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  
-  
-  const filteredData = projects.filter((project) =>
-    Object.values(project)
-      .join(" ")
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
-  );
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [limit, setLimit] = useState(10);
+
+  const indexOfLastItem = currentPage * limit;
+  const indexOfFirstItem = indexOfLastItem - limit;
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -24,7 +22,7 @@ const Project = () => {
         }
 
         const response = await axios.get(
-          "https://thrive-be.app-dev.altru.id/api/v1/projects?page=1&limit=10",
+          `https://thrive-be.app-dev.altru.id/api/v1/projects?page=${currentPage}&limit=${limit}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -35,6 +33,7 @@ const Project = () => {
 
         if (response.data.success) {
           setProjects(response.data.data.items);
+          setTotalPages(response.data.data.total_pages || 1);
         } else {
           throw new Error(
             response.data.message || "Unexpected response format."
@@ -53,7 +52,20 @@ const Project = () => {
     };
 
     fetchProjects();
-  }, []);
+  }, [currentPage, limit]);
+
+  const filteredData = projects.filter((project) =>
+    Object.values(project)
+      .join(" ")
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  );
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   if (loading) {
     return (
@@ -109,10 +121,10 @@ const Project = () => {
                   <td className="py-3 px-4">{project.name}</td>
                   <td className="py-3 px-4">{project.created_by}</td>
                   <td className="py-3 px-4">
-                    {new Date(project.updated_at).toLocaleDateString("en-US")}
+                    {new Date(project.updated_at).toLocaleDateString("en-GB")}
                   </td>
                   <td className="py-3 px-4">{project.status}</td>
-                  <td className="py-3 px-4 border">
+                  <td className="py-3 px-4">
                     <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12">
                       <i className="fas fa-edit"></i>
                     </button>
@@ -122,6 +134,57 @@ const Project = () => {
             </tbody>
           </table>
         )}
+      </div>
+      <div className="flex flex-wrap justify-between items-center gap-4">
+        <span className="text-sm text-gray-500">
+          Showing {indexOfFirstItem + 1} to{" "}
+          {Math.min(indexOfLastItem, projects.length)} of {projects.length} entries
+        </span>
+        <div className="flex items-center gap-4 ml-auto">
+          {" "}
+          <div className="flex items-center space-x-3">
+            <button
+              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              &lt;
+            </button>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index}
+                className={`px-4 py-2 border rounded-md ${
+                  currentPage === index + 1
+                    ? "bg-custom-blue text-white"
+                    : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                }`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              &gt;
+            </button>
+          </div>
+          <div className="flex items-center space-x-2">
+            <select
+              className="px-4 py-2 border rounded-md text-white bg-custom-blue"
+              value={limit}
+              onChange={(e) =>
+                setCurrentPage(1) || setLimit(Number(e.target.value))
+              }
+            >
+              <option value={10}>10 Baris</option>
+              <option value={20}>20 Baris</option>
+              <option value={50}>50 Baris</option>
+            </select>
+          </div>
+        </div>
       </div>
     </div>
   );

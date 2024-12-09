@@ -1,34 +1,64 @@
+import { useNavigate } from "react-router-dom"; // Untuk navigasi
+import { useState, useEffect } from "react";
+
+
 const Header = () => {
-    return (
-      <div className="sticky top-0 left-0 right-0 bg-custom-blue flex w-full items-center justify-between py-4 h-20 ">
-        <div className="flex items-center h-full">
-          <img src="../thrive.png" alt="Company Logo" className="h-full object-contain mr-4 ml-4" />
-  
-          <select className="bg-white text-gray-400 p-2 rounded w-full ml-40 sm:w-60">
-            <option>Project</option>
-          </select>
-        </div>
-  
-        <div className="flex items-center sm:mt-0">
-          <div className="flex items-center text-black p-2 rounded mr-4">
-            <div className="font-bold bg-white text-custom-blue mr-2 p-4 rounded-lg flex items-center justify-center w-12 h-12">
-              S
-            </div>
-            <div className="min-w-0 mr-5">
-              <div className="font-bold text-white text-sm truncate">Admin</div>
-              <div className="text-xs text-white truncate">Admin</div>
-            </div>
-          </div>
-  
-          <i className="fa fa-sign-out bg-white text-custom-blue mr-2 p-4 rounded-lg"></i>
-  
-          <button className="font-bold text-white p-2 rounded hidden sm:block mr-5">
-            Log Out
-          </button>
-        </div>
-      </div>
-    );
+  const [name, setName] = useState("");
+  const navigate = useNavigate(); // Hook untuk navigasi
+
+  useEffect(() => {
+    const storedName = sessionStorage.getItem("name");
+    if (storedName) {
+      setName(storedName);
+    } else {
+      navigate("/login"); // Jika nama tidak ditemukan, arahkan ke login
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("token"); // Hapus token saat logout
+    sessionStorage.removeItem("name");  // Hapus nama pengguna
+    navigate("/login"); // Arahkan ke halaman login setelah logout
   };
-  
-  export default Header;
-  
+
+  return (
+    <div className="sticky top-0 left-0 right-0 bg-custom-blue flex w-full items-center justify-between py-4 h-20">
+      <div className="flex items-center h-full">
+        <img
+          src="../thrive.png"
+          alt="Company Logo"
+          className="h-full object-contain mr-4 ml-4"
+        />
+        <select className="bg-white text-gray-400 p-2 rounded w-full ml-40 sm:w-60">
+          <option>Project</option>
+        </select>
+      </div>
+
+      <div className="flex items-center sm:mt-0">
+        <div className="flex items-center text-black p-2 rounded mr-4">
+          <div className="font-bold bg-white text-custom-blue mr-2 p-4 rounded-lg flex items-center justify-center w-12 h-12">
+            {name.charAt(0)}
+          </div>
+          <div className="min-w-0 mr-5">
+            <div className="font-bold text-white text-sm truncate">{name}</div>
+            <div className="text-xs text-white truncate">{name}</div>
+          </div>
+        </div>
+
+        <i
+          className="fa fa-sign-out bg-white text-custom-blue mr-2 p-4 rounded-lg"
+          onClick={handleLogout}
+        ></i>
+
+        <button
+          className="font-bold text-white p-2 rounded hidden sm:block mr-5"
+          onClick={handleLogout}
+        >
+          Log Out
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Header;

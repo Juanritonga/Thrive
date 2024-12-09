@@ -28,23 +28,20 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/login"
-          element={<Login setIsAuthenticated={setIsAuthenticated} />}
-        />
-
+        <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+        
         <Route path="/" element={<Layout />}>
           <Route
             index
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
           />
+          
           <Route path="MasterData" element={<MasterData />}>
             <Route path="user" element={<User />} />
             <Route path="project" element={<Project />} />
-            <Route path="finance" element={<Finance />} >
-            
-            </Route>
+            <Route path="finance" element={<Finance />} />
           </Route>
+
           <Route path="cashbook" element={<CashBook />}>
             <Route path="format" element={<Format />} />
             <Route path="bankchasbook" element={<BankC />}>

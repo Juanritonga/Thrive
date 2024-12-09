@@ -85,8 +85,8 @@ const User = () => {
 
   return (
     <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
-      <div>
-        <div className="relative w-full sm:w-[300px] mb-4">
+      <div className="flex flex-wrap justify-between items-center mb-6 gap-2">
+        <div className="relative w-full sm:w-[300px]">
           <input
             type="text"
             placeholder="Cari"

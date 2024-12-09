@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   const location = useLocation();
@@ -84,33 +85,24 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
 
   return (
     <div className="relative">
+      {/* Sidebar */}
       <div
         className={`fixed left-0 h-full border-gray-200 shadow-md transform duration-300 ${
           isSidebarVisible ? "w-64" : "w-16"
-        } overflow-y-auto scrollbar-hide`}
+        } overflow-y-auto bg-white scrollbar-hide`}
       >
-        <button
-          onClick={() => setIsSidebarVisible(!isSidebarVisible)}
-          className="absolute top-1/2 right-[-20px] transform -translate-y-1/2 p-2 text-custom-blue rounded-lg focus:outline-none z-50"
-        >
-          {isSidebarVisible ? (
-            <i className="fa-solid fa-caret-left"></i>
-          ) : (
-            <i className="fa-solid fa-caret-right"></i>
-          )}
-        </button>
-
+        {/* Menu Items */}
         <ul className="p-4 space-y-2 mb-20">
           {menuItems.map((item, index) => (
             <li
               key={index}
               className={`flex items-center ${item.indent ? "pl-4" : ""} ${
-                isActive(item.path) ? "font-bold text-blue-700" : "text-custom-blue"
+                isActive(item.path) ? "font-bold text-custom-blue" : "text-dark"
               }`}
             >
               <Link
                 to={item.path}
-                className={`flex items-center w-full p-2 text-gray-700 hover:text-blue-700 ${
+                className={`flex items-center w-full p-2 hover:text-custom-blue ${
                   isSidebarVisible ? "justify-start" : "justify-center"
                 }`}
               >
@@ -121,8 +113,26 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
           ))}
         </ul>
       </div>
+
+      <button
+        onClick={() => setIsSidebarVisible(!isSidebarVisible)}
+        className={`fixed top-1/2 transform -translate-y-1/2 transition-all duration-300 ${
+          isSidebarVisible ? "left-64" : "left-16"
+        } p-2 text-custom-blue rounded-full  focus:outline-none z-50`}
+      >
+        {isSidebarVisible ? (
+          <i className="fas fa-chevron-left"></i>
+        ) : (
+          <i className="fas fa-chevron-right"></i>
+        )}
+      </button>
     </div>
   );
+};
+
+Sidebar.propTypes = {
+  isSidebarVisible: PropTypes.bool.isRequired,
+  setIsSidebarVisible: PropTypes.func.isRequired,
 };
 
 export default Sidebar;

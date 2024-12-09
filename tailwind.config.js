@@ -26,6 +26,6 @@ export default {
     },
   },
   plugins: [
-    tailwindScrollbarHide, // Gunakan plugin dengan import
+    tailwindScrollbarHide, 
   ],
 };
