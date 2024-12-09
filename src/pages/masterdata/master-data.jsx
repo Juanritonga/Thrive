@@ -1,10 +1,8 @@
-import React from "react";
 import { Outlet, useLocation, Link } from "react-router-dom";
 
 const MasterData = () => {
   const location = useLocation();
 
-  // Menentukan breadcrumb berdasarkan path
   const getBreadcrumbs = () => {
     const paths = location.pathname.split("/").filter(Boolean);
     const breadcrumbPath = [
@@ -37,15 +35,12 @@ const MasterData = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      {/* Header Section */}
       <div className="text-black">
         <h1 className="text-2xl font-bold text-custom-blue ml-3 mt-4">
           MASTER DATA
         </h1>
         <div className="text-sm">{getBreadcrumbs()}</div>
       </div>
-
-      {/* Content Section */}
       <div className="flex-1">
         <Outlet />
       </div>

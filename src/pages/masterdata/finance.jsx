@@ -152,18 +152,17 @@ const Type = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState(TypeData);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [itemsPerPage, setItemsPerPage] = useState(10);  // Ubah jadi state
+  const [itemsPerPage, setItemsPerPage] = useState(10); 
 
   const [newItem, setNewItem] = useState({
     id: "",
     description: "",
     type: "",
     prefix: "",
-    madeBy: "", // Bisa diubah jika user mengisi sendiri
+    madeBy: "", 
     updateDate: new Date().toLocaleDateString("en-GB"),
   });
 
-  // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const filteredData = items.filter((item) =>
@@ -194,7 +193,7 @@ const Type = () => {
           updateDate: new Date().toLocaleDateString("en-GB"),
           acquistion: "Yes",
         });
-        handleCloseModal(); // Pindahkan ke sini
+        handleCloseModal();
       } else {
         alert("Isi semua field terlebih dahulu.");
       }      
@@ -225,7 +224,6 @@ const Type = () => {
         </button>
       </div>
 
-      {/* Table */}
       <div className="overflow-auto shadow-sm mb-6">
         <table className="min-w-full bg-white border rounded-lg">
           <thead>
@@ -262,7 +260,6 @@ const Type = () => {
         </table>
       </div>
 
-      {/* Pagination */}
       <div className="flex flex-wrap justify-between items-center gap-4">
         <span className="text-sm text-gray-500">
           Showing {indexOfFirstItem + 1} to{" "}
@@ -271,9 +268,7 @@ const Type = () => {
         </span>
 
         <div className="flex items-center space-x-3">
-          {/* Tombol untuk memilih jumlah item per halaman */}
 
-          {/* Pagination buttons */}
           <div className="flex items-center space-x-3">
             <button
               className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
@@ -311,8 +306,8 @@ const Type = () => {
             <span className="text-sm text-gray-600"></span>
             <select
               className="px-4 py-2 border rounded-md text-white bg-custom-blue "
-              value={itemsPerPage}  // Tampilkan sesuai state itemsPerPage
-              onChange={(e) => setItemsPerPage(Number(e.target.value))}  // Mengubah state itemsPerPage
+              value={itemsPerPage}  
+              onChange={(e) => setItemsPerPage(Number(e.target.value))}  
             >
               <option value={10}>10 Baris</option>
               <option value={20}>20 Baris</option>

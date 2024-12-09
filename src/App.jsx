@@ -6,7 +6,6 @@ import MasterData from "./pages/masterdata/master-data";
 import User from "./pages/masterdata/user";
 import Project from "./pages/masterdata/project";
 import Finance from "./pages/masterdata/finance";
-import Master from "./pages/masterdata/master";
 import Format from "./pages/cashbook/format";
 import CashBook from "./pages/cashbook/cashbook";
 import BankC from "./pages/cashbook/bankchasbook";
@@ -42,8 +41,9 @@ const App = () => {
           <Route path="MasterData" element={<MasterData />}>
             <Route path="user" element={<User />} />
             <Route path="project" element={<Project />} />
-            <Route path="finance" element={<Finance />} />
-            <Route path="Master" element={<Master />} />
+            <Route path="finance" element={<Finance />} >
+            
+            </Route>
           </Route>
           <Route path="cashbook" element={<CashBook />}>
             <Route path="format" element={<Format />} />

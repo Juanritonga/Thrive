@@ -6,9 +6,16 @@ const User = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [limit, setLimit] = useState(10);
+
+  const indexOfLastItem = currentPage * limit;
+  const indexOfFirstItem = indexOfLastItem - limit;
 
   useEffect(() => {
     const fetchUsers = async () => {
+      setLoading(true);
       try {
         const token = localStorage.getItem("authToken");
         if (!token) {
@@ -16,7 +23,7 @@ const User = () => {
         }
 
         const response = await axios.get(
-          "https://thrive-be.app-dev.altru.id/api/v1/users?page=1&limit=10",
+          `https://thrive-be.app-dev.altru.id/api/v1/users?page=${currentPage}&limit=${limit}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -27,6 +34,7 @@ const User = () => {
 
         if (response.data.success) {
           setUsers(response.data.data.items);
+          setTotalPages(response.data.data.total_pages || 1);
         } else {
           throw new Error(
             response.data.message || "Unexpected response format."
@@ -45,7 +53,7 @@ const User = () => {
     };
 
     fetchUsers();
-  }, []);
+  }, [currentPage, limit]);
 
   const filteredData = users.filter((user) =>
     Object.values(user)
@@ -54,8 +62,21 @@ const User = () => {
       .includes(searchQuery.toLowerCase())
   );
 
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
   if (loading) {
-    return <div>Loading users, please wait...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-100">
+        <div className="flex flex-col items-center">
+          <div className="w-16 h-16 border-4 border-custom-blue border-dashed rounded-full animate-spin"></div>
+          <p className="mt-4 text-lg font-medium text-gray-700">Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
@@ -106,6 +127,58 @@ const User = () => {
             </tbody>
           </table>
         )}
+      </div>
+
+      <div className="flex flex-wrap justify-between items-center gap-4">
+        <span className="text-sm text-gray-500">
+          Showing {indexOfFirstItem + 1} to{" "}
+          {Math.min(indexOfLastItem, users.length)} of {users.length} entries
+        </span>
+        <div className="flex items-center gap-4 ml-auto">
+          {" "}
+          <div className="flex items-center space-x-3">
+            <button
+              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              &lt;
+            </button>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index}
+                className={`px-4 py-2 border rounded-md ${
+                  currentPage === index + 1
+                    ? "bg-custom-blue text-white"
+                    : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                }`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              &gt;
+            </button>
+          </div>
+          <div className="flex items-center space-x-2">
+            <select
+              className="px-4 py-2 border rounded-md text-white bg-custom-blue"
+              value={limit}
+              onChange={(e) =>
+                setCurrentPage(1) || setLimit(Number(e.target.value))
+              }
+            >
+              <option value={10}>10 Baris</option>
+              <option value={20}>20 Baris</option>
+              <option value={50}>50 Baris</option>
+            </select>
+          </div>
+        </div>
       </div>
     </div>
   );
