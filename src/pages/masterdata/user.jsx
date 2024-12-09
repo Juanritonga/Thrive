@@ -27,7 +27,7 @@ const User = () => {
           {
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
+              'Authorization' : `Bearer ${token}`,
             },
             params: {
               page: currentPage,

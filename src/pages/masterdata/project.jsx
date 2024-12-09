@@ -22,11 +22,15 @@ const Project = () => {
         }
 
         const response = await axios.get(
-          `https://thrive-be.app-dev.altru.id/api/v1/projects?page=${currentPage}&limit=${limit}`,
+          "https://thrive-be.app-dev.altru.id/api/v1/projects",
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              'Authorization': `Bearer ${token}`,
+            },
+            params: {
+              page: currentPage,
+              limit: limit,
             },
           }
         );
@@ -121,8 +125,11 @@ const Project = () => {
                   <td className="py-3 px-4">{project.name}</td>
                   <td className="py-3 px-4">{project.created_by}</td>
                   <td className="py-3 px-4">
-                    {new Date(project.updated_at).toLocaleDateString("en-GB")}
+                    {new Date(project.updated_at)
+                      .toLocaleDateString("en-GB")
+                      .replace(/\//g, "-")}
                   </td>
+
                   <td className="py-3 px-4">{project.status}</td>
                   <td className="py-3 px-4">
                     <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12">
@@ -138,7 +145,8 @@ const Project = () => {
       <div className="flex flex-wrap justify-between items-center gap-4">
         <span className="text-sm text-gray-500">
           Showing {indexOfFirstItem + 1} to{" "}
-          {Math.min(indexOfLastItem, projects.length)} of {projects.length} entries
+          {Math.min(indexOfLastItem, projects.length)} of {projects.length}{" "}
+          entries
         </span>
         <div className="flex items-center gap-4 ml-auto">
           {" "}
