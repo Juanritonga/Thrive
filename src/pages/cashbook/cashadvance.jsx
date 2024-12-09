@@ -182,7 +182,7 @@ const CashAdvance = () => {
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleRowClick = (id) => {
-    navigate(`${id}`); // Navigasi ke child dengan ID
+    navigate(`${id}`); 
   };
 
   const handleInputChange = (e) => {
@@ -274,7 +274,6 @@ const CashAdvance = () => {
         </table>
       </div>
 
-      {/* Pagination */}
       <div className="flex flex-wrap justify-between items-center gap-4">
         <span className="text-sm text-gray-500">
           Showing {indexOfFirstItem + 1} to{" "}
@@ -283,9 +282,6 @@ const CashAdvance = () => {
         </span>
 
         <div className="flex items-center space-x-3">
-          {/* Tombol untuk memilih jumlah item per halaman */}
-
-          {/* Pagination buttons */}
           <div className="flex items-center space-x-3">
             <button
               className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
@@ -323,7 +319,7 @@ const CashAdvance = () => {
             <span className="text-sm text-gray-600"></span>
             <select
               className="px-4 py-2 border rounded-md text-white bg-custom-blue "
-              value={itemsPerPage} // Tampilkan sesuai state itemsPerPage
+              value={itemsPerPage} 
               onChange={(e) => setItemsPerPage(Number(e.target.value))} // Mengubah state itemsPerPage
             >
               <option value={10}>10 Baris</option>
@@ -335,7 +331,6 @@ const CashAdvance = () => {
         </div>
       </div>
 
-      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg w-98">

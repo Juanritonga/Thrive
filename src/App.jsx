@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import Login from "./pages/login";
 import Layout from "./pages/layout";
 import MasterData from "./pages/masterdata/master-data";
-import Type from "./pages/masterdata/type";
-import Location from "./pages/masterdata/location";
-import Class from "./pages/masterdata/class";
+import User from "./pages/masterdata/user";
+import Project from "./pages/masterdata/project";
+import Finance from "./pages/masterdata/finance";
 import Master from "./pages/masterdata/master";
 import Format from "./pages/cashbook/format";
 import CashBook from "./pages/cashbook/cashbook";
@@ -20,9 +20,8 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Check login status from localStorage
-    const user = localStorage.getItem("user");
-    if (user) {
+    const token = sessionStorage.getItem("token");
+    if (token) {
       setIsAuthenticated(true);
     }
   }, []);
@@ -30,26 +29,20 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Route for Login */}
         <Route
           path="/login"
           element={<Login setIsAuthenticated={setIsAuthenticated} />}
         />
 
-        {/* Layout with nested routes */}
         <Route path="/" element={<Layout />}>
-          {/* If authenticated, go to dashboard, otherwise redirect to login */}
           <Route
             index
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
           />
-
-          {/* Routes for other pages */}
           <Route path="MasterData" element={<MasterData />}>
-          <Route index element={<Type />} /> {/* Default route */}
-            <Route path="type" element={<Type />} />
-            <Route path="class" element={<Class />} />
-            <Route path="location" element={<Location />} />
+            <Route path="user" element={<User />} />
+            <Route path="project" element={<Project />} />
+            <Route path="finance" element={<Finance />} />
             <Route path="Master" element={<Master />} />
           </Route>
           <Route path="cashbook" element={<CashBook />}>

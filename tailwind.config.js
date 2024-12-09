@@ -1,13 +1,15 @@
+import tailwindScrollbarHide from 'tailwind-scrollbar-hide';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    "./src/**/*.{html,js,jsx,ts,tsx}", // Pastikan path ke file Anda benar
+    "./src/**/*.{html,js,jsx,ts,tsx}", // Path ke file Anda
   ],
   theme: {
     extend: {
       colors: {
         'custom-blue': '#0E1D54',
-        'custom-blue2' :'#5C7CB0', // Menambahkan warna kustom
+        'custom-blue2': '#5C7CB0', // Warna tambahan
       },
       fontFamily: {
         sans: ['DM Sans'],
@@ -20,8 +22,10 @@ export default {
         '13/14': '92.857142857%', // 13/14 = 92.86%
         '14/15': '93.333333333%', // 14/15 = 93.33%
         '15/16': '93.75%', // 6/7 adalah sekitar 85.7%
-      }
+      },
     },
   },
-  plugins: [],
-}
+  plugins: [
+    tailwindScrollbarHide, // Gunakan plugin dengan import
+  ],
+};

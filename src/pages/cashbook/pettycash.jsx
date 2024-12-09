@@ -167,7 +167,6 @@ const PettyCash = () => {
     updateDate: new Date().toLocaleDateString("en-GB"),
   });
 
-  // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const filteredData = items.filter((item) =>
@@ -182,7 +181,7 @@ const PettyCash = () => {
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleRowClick = (id) => {
-    navigate(`${id}`); // Navigasi ke child dengan ID
+    navigate(`${id}`); 
   };
 
   const handleInputChange = (e) => {
@@ -323,8 +322,8 @@ const PettyCash = () => {
             <span className="text-sm text-gray-600"></span>
             <select
               className="px-4 py-2 border rounded-md text-white bg-custom-blue "
-              value={itemsPerPage} // Tampilkan sesuai state itemsPerPage
-              onChange={(e) => setItemsPerPage(Number(e.target.value))} // Mengubah state itemsPerPage
+              value={itemsPerPage}
+              onChange={(e) => setItemsPerPage(Number(e.target.value))}
             >
               <option value={10}>10 Baris</option>
               <option value={20}>20 Baris</option>

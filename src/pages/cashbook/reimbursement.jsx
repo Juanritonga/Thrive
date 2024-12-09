@@ -182,7 +182,7 @@ const Reimbursement = () => {
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleRowClick = (id) => {
-    navigate(`${id}`); // Navigasi ke child dengan ID
+    navigate(`${id}`); 
   };
 
   const handleInputChange = (e) => {
@@ -234,7 +234,6 @@ const Reimbursement = () => {
         </button>
       </div>
 
-      {/* Table */}
       <div className="overflow-auto shadow-sm mb-6">
         <table className="min-w-full bg-white border rounded-lg">
           <thead>
@@ -254,7 +253,7 @@ const Reimbursement = () => {
               <tr
                 key={item.id}
                 className="cursor-pointer border-t text-center text-custom-blue2"
-                onClick={() => navigate(`${item.id}`)} // Navigasi ke rute dengan ID
+                onClick={() => navigate(`${item.id}`)} 
               >
                 <td className="py-3 px-4">{item.id}</td>
                 <td className="py-3 px-4">{item.advanceTransaction}</td>
@@ -274,7 +273,6 @@ const Reimbursement = () => {
         </table>
       </div>
 
-      {/* Pagination */}
       <div className="flex flex-wrap justify-between items-center gap-4">
         <span className="text-sm text-gray-500">
           Showing {indexOfFirstItem + 1} to{" "}
@@ -283,9 +281,6 @@ const Reimbursement = () => {
         </span>
 
         <div className="flex items-center space-x-3">
-          {/* Tombol untuk memilih jumlah item per halaman */}
-
-          {/* Pagination buttons */}
           <div className="flex items-center space-x-3">
             <button
               className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
@@ -323,8 +318,8 @@ const Reimbursement = () => {
             <span className="text-sm text-gray-600"></span>
             <select
               className="px-4 py-2 border rounded-md text-white bg-custom-blue "
-              value={itemsPerPage} // Tampilkan sesuai state itemsPerPage
-              onChange={(e) => setItemsPerPage(Number(e.target.value))} // Mengubah state itemsPerPage
+              value={itemsPerPage}
+              onChange={(e) => setItemsPerPage(Number(e.target.value))} 
             >
               <option value={10}>10 Baris</option>
               <option value={20}>20 Baris</option>

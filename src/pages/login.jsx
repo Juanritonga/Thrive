@@ -1,17 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types"; // Import PropTypes
+import PropTypes from "prop-types";
+import axios from "axios";
 
 const Login = ({ setIsAuthenticated }) => {
   const images = [
-    "https://s3-alpha-sig.figma.com/img/4b63/af82/0420c6f4f669edd06fa7686e00d7ccbf?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GlRggYrooYBzbpVgEajcLhYXCYQgWrMZKL-1kBryEENvstqJiB~xgPWLWUzVz1IyqL2pv8xoc~Q~NZGbfmtM9yvaIuU2T8DU2Ec19QMoSvNdNpXW7g7KVSDt0PhKhvtRhX3XYj0FE1L5XqHd3MmtJeXpJ3-gKNjbBuqmGWWop4k8ekiDtnMzp~bbXs3dXkzZQUvnTx88Zk9Pp9uA9aT42zeEVPv6UsqZxAyOKJSTOhxhGYObxTHqtTHSCGrG~xut8AWVfgqBbaCpvjw~iXBIPa-TUqWCVJc0cBqEmfOuWv0JeGInXy62h9Gc8pjE9EmzXSCqJTx1zT4iL4XccFc9Ig__",
-    "https://png.pngtree.com/background/20230526/original/pngtree-white-desk-with-a-laptop-and-a-monitor-picture-image_2751387.jpg",
-    "https://s3-alpha-sig.figma.com/img/4b63/af82/0420c6f4f669edd06fa7686e00d7ccbf?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GlRggYrooYBzbpVgEajcLhYXCYQgWrMZKL-1kBryEENvstqJiB~xgPWLWUzVz1IyqL2pv8xoc~Q~NZGbfmtM9yvaIuU2T8DU2Ec19QMoSvNdNpXW7g7KVSDt0PhKhvtRhX3XYj0FE1L5XqHd3MmtJeXpJ3-gKNjbBuqmGWWop4k8ekiDtnMzp~bbXs3dXkzZQUvnTx88Zk9Pp9uA9aT42zeEVPv6UsqZxAyOKJSTOhxhGYObxTHqtTHSCGrG~xut8AWVfgqBbaCpvjw~iXBIPa-TUqWCVJc0cBqEmfOuWv0JeGInXy62h9Gc8pjE9EmzXSCqJTx1zT4iL4XccFc9Ig__",
-    "https://png.pngtree.com/background/20230526/original/pngtree-white-desk-with-a-laptop-and-a-monitor-picture-image_2751387.jpg",
-    "https://s3-alpha-sig.figma.com/img/4b63/af82/0420c6f4f669edd06fa7686e00d7ccbf?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GlRggYrooYBzbpVgEajcLhYXCYQgWrMZKL-1kBryEENvstqJiB~xgPWLWUzVz1IyqL2pv8xoc~Q~NZGbfmtM9yvaIuU2T8DU2Ec19QMoSvNdNpXW7g7KVSDt0PhKhvtRhX3XYj0FE1L5XqHd3MmtJeXpJ3-gKNjbBuqmGWWop4k8ekiDtnMzp~bbXs3dXkzZQUvnTx88Zk9Pp9uA9aT42zeEVPv6UsqZxAyOKJSTOhxhGYObxTHqtTHSCGrG~xut8AWVfgqBbaCpvjw~iXBIPa-TUqWCVJc0cBqEmfOuWv0JeGInXy62h9Gc8pjE9EmzXSCqJTx1zT4iL4XccFc9Ig__",
-    "https://png.pngtree.com/background/20230526/original/pngtree-white-desk-with-a-laptop-and-a-monitor-picture-image_2751387.jpg",
-    "https://s3-alpha-sig.figma.com/img/4b63/af82/0420c6f4f669edd06fa7686e00d7ccbf?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GlRggYrooYBzbpVgEajcLhYXCYQgWrMZKL-1kBryEENvstqJiB~xgPWLWUzVz1IyqL2pv8xoc~Q~NZGbfmtM9yvaIuU2T8DU2Ec19QMoSvNdNpXW7g7KVSDt0PhKhvtRhX3XYj0FE1L5XqHd3MmtJeXpJ3-gKNjbBuqmGWWop4k8ekiDtnMzp~bbXs3dXkzZQUvnTx88Zk9Pp9uA9aT42zeEVPv6UsqZxAyOKJSTOhxhGYObxTHqtTHSCGrG~xut8AWVfgqBbaCpvjw~iXBIPa-TUqWCVJc0cBqEmfOuWv0JeGInXy62h9Gc8pjE9EmzXSCqJTx1zT4iL4XccFc9Ig__",
-    "https://png.pngtree.com/background/20230526/original/pngtree-white-desk-with-a-laptop-and-a-monitor-picture-image_2751387.jpg",
     "https://s3-alpha-sig.figma.com/img/4b63/af82/0420c6f4f669edd06fa7686e00d7ccbf?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GlRggYrooYBzbpVgEajcLhYXCYQgWrMZKL-1kBryEENvstqJiB~xgPWLWUzVz1IyqL2pv8xoc~Q~NZGbfmtM9yvaIuU2T8DU2Ec19QMoSvNdNpXW7g7KVSDt0PhKhvtRhX3XYj0FE1L5XqHd3MmtJeXpJ3-gKNjbBuqmGWWop4k8ekiDtnMzp~bbXs3dXkzZQUvnTx88Zk9Pp9uA9aT42zeEVPv6UsqZxAyOKJSTOhxhGYObxTHqtTHSCGrG~xut8AWVfgqBbaCpvjw~iXBIPa-TUqWCVJc0cBqEmfOuWv0JeGInXy62h9Gc8pjE9EmzXSCqJTx1zT4iL4XccFc9Ig__",
   ];
 
@@ -21,27 +14,62 @@ const Login = ({ setIsAuthenticated }) => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const userData = {
-    username: "admin@admin.com",
-    password: "12345",
-  };
-
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 3000);
-
-    return () => clearInterval(interval);
+    if (images.length > 1) {
+      const interval = setInterval(() => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
   }, [images.length]);
 
-  const handleLogin = () => {
-    if (username === userData.username && password === userData.password) {
-      setError("");
-      setIsAuthenticated(true);
-      localStorage.setItem("user", username);
-      navigate("/");
-    } else {
-      setError("Invalid username or password!");
+  const handleLogin = async () => {
+    if (!username || !password) {
+      setError("Please enter both email/Whatsapp and password.");
+      return;
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(username)) {
+      setError("Please enter a valid email.");
+      return;
+    }
+
+    const requestBody = {
+      email: username,
+      password: password,
+    };
+
+    try {
+      const response = await axios.post(
+        "https://thrive-be.app-dev.altru.id/api/v1/auth/login",
+        requestBody,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const jsonData = response.data;
+
+      if (jsonData.success) {
+        if (jsonData.data && jsonData.data.token) {
+          sessionStorage.setItem("authToken", jsonData.data.token); // Change to sessionStorage
+          sessionStorage.setItem("userName", jsonData.data.name); // Change to sessionStorage
+          sessionStorage.setItem("userRole", JSON.stringify(jsonData.data.role)); // Change to sessionStorage
+
+          setIsAuthenticated(true);
+          navigate("/");
+        } else {
+          setError("Token not found in the response.");
+        }
+      } else {
+        setError(jsonData.message || "Login failed! Please check your credentials.");
+      }
+    } catch (err) {
+      console.error("Request Failed:", err);
+      setError(err.response?.data?.message || "An error occurred. Please try again later.");
     }
   };
 
@@ -54,14 +82,13 @@ const Login = ({ setIsAuthenticated }) => {
         ></div>
 
         <div className="absolute bottom-6 lg:bottom-12 flex justify-center items-center space-x-2 bg-white p-2 rounded-lg">
-          {images.map((_, index) => (
-            <div
-              key={index}
-              className={`w-2 h-2 rounded-full ${
-                currentImageIndex === index ? "bg-custom-blue" : "bg-gray-400"
-              }`}
-            ></div>
-          ))}
+          {images.length > 1 &&
+            images.map((_, index) => (
+              <div
+                key={index}
+                className={`w-2 h-2 rounded-full ${currentImageIndex === index ? "bg-custom-blue" : "bg-gray-400"}`}
+              ></div>
+            ))}
         </div>
       </div>
 
@@ -81,10 +108,7 @@ const Login = ({ setIsAuthenticated }) => {
         <div className="w-full bg-white">
           <div className="container bg-white mx-auto mt-4 lg:mt-10 px-4 sm:px-6 md:px-8 lg:px-10">
             <div className="w-full bg-white py-6">
-              <h2 className="text-lg lg:text-xl font-semibold text-custom-blue mb-4 lg:mb-6">
-                Login
-              </h2>
-
+              <h2 className="text-lg lg:text-xl font-semibold text-custom-blue mb-4 lg:mb-6">Login</h2>
               {error && <p className="text-red-500 mb-4 lg:mb-6">{error}</p>}
 
               <div className="mb-4 lg:mb-6">
@@ -124,10 +148,6 @@ const Login = ({ setIsAuthenticated }) => {
                 onClick={handleLogin}
               >
                 Log in
-              </button>
-
-              <button className="w-full lg:w-2/3 font-bold border border-gray-300 text-custom-blue py-3 lg:py-4 rounded-lg mx-auto block hover:bg-gray-200">
-                Request Access
               </button>
 
               <div className="text-center text-gray-400 mt-10 lg:mt-16 text-sm lg:text-base">

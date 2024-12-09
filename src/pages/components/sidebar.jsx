@@ -3,16 +3,27 @@ import { Link, useLocation } from "react-router-dom";
 const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   const location = useLocation();
 
-  // Helper function to determine if a path is active
   const isActive = (path) => location.pathname === path;
 
-  // Menu Items
   const menuItems = [
+    { label: "MASTER DATA", path: "/MasterData", icon: "fas fa-database" },
     {
-      label: "MASTER DATA",
-      path: "/MasterData",
-      isParent: true,
-      icon: "fas fa-database",
+      label: "User",
+      path: "/masterdata/user",
+      icon: "fas fa-university",
+      indent: true,
+    },
+    {
+      label: "Project",
+      path: "/masterdata/project",
+      icon: "fas fa-wallet",
+      indent: true,
+    },
+    {
+      label: "Finance",
+      path: "/masterdata/finance",
+      icon: "fas fa-hand-holding-usd",
+      indent: true,
     },
     {
       label: "FINANCE",
@@ -67,37 +78,36 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       icon: "fas fa-hand-holding-usd",
       indent: true,
     },
+    { label: "Reimbursement", path: "#", icon: "fas fa-receipt", indent: true },
+    { label: "Format", path: "#", icon: "fas fa-file-alt", indent: true },
   ];
 
   return (
     <div className="relative">
-      {/* Sidebar */}
       <div
-        className={`fixed left-0 h-full r-r-2 border-gray-200 shadow-md transform duration-300 ${
+        className={`fixed left-0 h-full border-gray-200 shadow-md transform duration-300 ${
           isSidebarVisible ? "w-64" : "w-16"
-        }`}
+        } overflow-y-auto scrollbar-hide`}
       >
         <button
           onClick={() => setIsSidebarVisible(!isSidebarVisible)}
-          className="absolute top-1/2 right-[-20px] transform -translate-y-1/2 p-2 text-custom-blue rounded-lg  focus:outline-none z-50"
+          className="absolute top-1/2 right-[-20px] transform -translate-y-1/2 p-2 text-custom-blue rounded-lg focus:outline-none z-50"
         >
           {isSidebarVisible ? (
-            <i className="fa-solid fa-caret-left"></i> // You can use a different icon for the close button
+            <i className="fa-solid fa-caret-left"></i>
           ) : (
-            <i className="fa-solid fa-caret-right"></i> // Open icon
+            <i className="fa-solid fa-caret-right"></i>
           )}
         </button>
 
-        <ul className="p-4 space-y-2">
+        <ul className="p-4 space-y-2 mb-20">
           {menuItems.map((item, index) => (
             <li
-            key={index}
-            className={`flex items-center ${item.indent ? "pl-4" : ""} ${
-              isActive(item.path) ? "font-bold" : "text-custom-blue"
-            }`}
-          >
-          
-          
+              key={index}
+              className={`flex items-center ${item.indent ? "pl-4" : ""} ${
+                isActive(item.path) ? "font-bold text-blue-700" : "text-custom-blue"
+              }`}
+            >
               <Link
                 to={item.path}
                 className={`flex items-center w-full p-2 text-gray-700 hover:text-blue-700 ${
