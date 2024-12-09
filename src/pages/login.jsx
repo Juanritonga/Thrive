@@ -55,9 +55,9 @@ const Login = ({ setIsAuthenticated }) => {
 
       if (jsonData.success) {
         if (jsonData.data && jsonData.data.token) {
-          sessionStorage.setItem("authToken", jsonData.data.token); // Change to sessionStorage
-          sessionStorage.setItem("userName", jsonData.data.name); // Change to sessionStorage
-          sessionStorage.setItem("userRole", JSON.stringify(jsonData.data.role)); // Change to sessionStorage
+          sessionStorage.setItem("authToken", jsonData.data.token);
+          sessionStorage.setItem("userName", jsonData.data.name);
+          sessionStorage.setItem("userRole", JSON.stringify(jsonData.data.role));
 
           setIsAuthenticated(true);
           navigate("/");
