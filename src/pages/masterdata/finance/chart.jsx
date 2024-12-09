@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-const User = () => {
-  const [users, setUsers] = useState([]);
+const Chart = () => {
+  const [charts, setCharts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -14,7 +14,7 @@ const User = () => {
   const indexOfFirstItem = indexOfLastItem - limit;
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchCharts = async () => {
       setLoading(true);
       try {
         const token = sessionStorage.getItem("authToken");
@@ -23,11 +23,11 @@ const User = () => {
         }
 
         const response = await axios.get(
-          'https://thrive-be.app-dev.altru.id/api/v1/users',
+          "https://thrive-be.app-dev.altru.id/api/v1/finance/acc",
           {
             headers: {
-              'Content-Type': 'application/json',
-              'Authorization' : `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
             params: {
               page: currentPage,
@@ -35,10 +35,9 @@ const User = () => {
             },
           }
         );
-        
 
         if (response.data.success) {
-          setUsers(response.data.data.items);
+          setCharts(response.data.data.items);
           setTotalPages(response.data.data.total_pages || 1);
         } else {
           throw new Error(
@@ -57,11 +56,11 @@ const User = () => {
       }
     };
 
-    fetchUsers();
+    fetchCharts();
   }, [currentPage, limit]);
 
-  const filteredData = users.filter((user) =>
-    Object.values(user)
+  const filteredData = charts.filter((chart) =>
+    Object.values(chart)
       .join(" ")
       .toLowerCase()
       .includes(searchQuery.toLowerCase())
@@ -109,24 +108,38 @@ const User = () => {
           <table className="min-w-full bg-white border rounded-lg">
             <thead>
               <tr className="text-custom-blue bg-gray-200">
-                <th className="py-3 px-4 border">User ID</th>
-                <th className="py-3 px-4 border">Full Name</th>
-                <th className="py-3 px-4 border">Role</th>
-                <th className="py-3 px-4 border">Entity</th>
+                <th className="py-3 px-4 border">Acc. ID</th>
+                <th className="py-3 px-4 border">Nama Acc.</th>
+                <th className="py-3 px-4 border">Kelas</th>
+                <th className="py-3 px-4 border">Kode</th>
+                <th className="py-3 px-4 border">Dibuat Oleh</th>
+                <th className="py-3 px-4 border">Tanggal Update</th>
                 <th className="py-3 px-4 border">Status</th>
+                <th className="py-3 px-4 border">Action</th>
               </tr>
             </thead>
             <tbody>
-              {filteredData.map((user) => (
+              {filteredData.map((chart) => (
                 <tr
-                  key={user.user_id}
+                  key={chart.id}
                   className="cursor-pointer border-t text-center text-custom-blue2"
                 >
-                  <td className="py-3 px-4">{user.user_id}</td>
-                  <td className="py-3 px-4">{user.full_name}</td>
-                  <td className="py-3 px-4">{user.role}</td>
-                  <td className="py-3 px-4">{user.entity}</td>
-                  <td className="py-3 px-4">{user.status}</td>
+                  <td className="py-3 px-4">{chart.acc_id}</td>
+                  <td className="py-3 px-4">{chart.name}</td>
+                  <td className="py-3 px-4">{chart.class_name}</td>
+                  <td className="py-3 px-4">{chart.class_code}</td>
+                  <td className="py-3 px-4">{chart.created_by}</td>
+                  <td className="py-3 px-4">
+                    {new Date(chart.updated_at)
+                      .toLocaleDateString("en-GB")
+                      .replace(/\//g, "-")}
+                  </td>{" "}
+                  <td className="py-3 px-4">{chart.status}</td>
+                  <td className="py-3 px-4">
+                    <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12">
+                      <i className="fas fa-edit"></i>
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -137,7 +150,7 @@ const User = () => {
       <div className="flex flex-wrap justify-between items-center gap-4">
         <span className="text-sm text-gray-500">
           Showing {indexOfFirstItem + 1} to{" "}
-          {Math.min(indexOfLastItem, users.length)} of {users.length} entries
+          {Math.min(indexOfLastItem, charts.length)} of {charts.length} entries
         </span>
         <div className="flex items-center gap-4 ml-auto">
           {" "}
@@ -189,4 +202,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Chart;

@@ -14,6 +14,11 @@ import CashAdvance from "./pages/cashbook/cashadvance";
 import Reimbursement from "./pages/cashbook/reimbursement";
 import EntryCashAdvance from "./pages/cashbook/Entry/entryca";
 import Dashboard from "./pages/dashboard";
+import Bank from "./pages/masterdata/finance/bank";
+import ClassF from "./pages/masterdata/finance/classF";
+import Chart from "./pages/masterdata/finance/chart";
+import Currency from "./pages/masterdata/finance/currency";
+import Tax from "./pages/masterdata/finance/tax";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -28,18 +33,27 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
-        
+        <Route
+          path="/login"
+          element={<Login setIsAuthenticated={setIsAuthenticated} />}
+        />
+
         <Route path="/" element={<Layout />}>
           <Route
             index
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
           />
-          
+
           <Route path="MasterData" element={<MasterData />}>
             <Route path="user" element={<User />} />
             <Route path="project" element={<Project />} />
-            <Route path="finance" element={<Finance />} />
+            <Route path="finance" element={<Finance />}>
+              <Route path="bank" element={<Bank />} />
+              <Route path="classF" element={<ClassF />} />
+              <Route path="chart" element={<Chart />} />
+              <Route path="currency" element={<Currency />} />
+              <Route path="tax" element={<Tax />} />
+            </Route>
           </Route>
 
           <Route path="cashbook" element={<CashBook />}>
