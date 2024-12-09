@@ -23,14 +23,19 @@ const User = () => {
         }
 
         const response = await axios.get(
-          `https://thrive-be.app-dev.altru.id/api/v1/users`,
+          'https://thrive-be.app-dev.altru.id/api/v1/users',
           {
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
+            },
+            params: {
+              page: currentPage,
+              limit: limit,
             },
           }
         );
+        
 
         if (response.data.success) {
           setUsers(response.data.data.items);
