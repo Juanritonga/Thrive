@@ -7,6 +7,8 @@ import User from "./pages/masterdata/user";
 import Project from "./pages/masterdata/project";
 import FinanceMasterData from "./pages/masterdata/FinanceMasterData";
 import Finance from "./pages/finance/finance";
+import BankFinance from "./pages/finance/BankFinance";
+import TranscodeFinance from "./pages/finance/TranscodeFinance";
 import Format from "./pages/cashbook/format";
 import CashBook from "./pages/cashbook/cashbook";
 import BankC from "./pages/cashbook/bankchasbook";
@@ -15,7 +17,7 @@ import CashAdvance from "./pages/cashbook/cashadvance";
 import Reimbursement from "./pages/cashbook/reimbursement";
 import EntryCashAdvance from "./pages/cashbook/Entry/entryca";
 import Dashboard from "./pages/dashboard";
-import Bank from "./pages/masterdata/finance/bank";
+import Bank from "./pages/masterdata/finance/BankMasterData";
 import ClassF from "./pages/masterdata/finance/classF";
 import Chart from "./pages/masterdata/finance/chart";
 import Currency from "./pages/masterdata/finance/currency";
@@ -58,7 +60,9 @@ const App = () => {
           </Route>
 
           <Route path="finance" element={<Finance />}>
-            
+          <Route index element={<Navigate to="bank" replace />} />
+            <Route path="bank" element={<BankFinance />} />
+            <Route path="transcode" element={<TranscodeFinance />} />
           </Route>
 
           <Route path="cashbook" element={<CashBook />}>
