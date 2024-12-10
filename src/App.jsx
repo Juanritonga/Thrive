@@ -5,7 +5,10 @@ import Layout from "./pages/layout";
 import MasterData from "./pages/masterdata/master-data";
 import User from "./pages/masterdata/user";
 import Project from "./pages/masterdata/project";
-import Finance from "./pages/masterdata/finance";
+import FinanceMasterData from "./pages/masterdata/FinanceMasterData";
+import Finance from "./pages/finance/finance";
+import BankFinance from "./pages/finance/BankFinance";
+import TranscodeFinance from "./pages/finance/TranscodeFinance";
 import Format from "./pages/cashbook/format";
 import CashBook from "./pages/cashbook/cashbook";
 import BankC from "./pages/cashbook/bankchasbook";
@@ -14,7 +17,7 @@ import CashAdvance from "./pages/cashbook/cashadvance";
 import Reimbursement from "./pages/cashbook/reimbursement";
 import EntryCashAdvance from "./pages/cashbook/Entry/entryca";
 import Dashboard from "./pages/dashboard";
-import Bank from "./pages/masterdata/finance/bank";
+import Bank from "./pages/masterdata/finance/BankMasterData";
 import ClassF from "./pages/masterdata/finance/classF";
 import Chart from "./pages/masterdata/finance/chart";
 import Currency from "./pages/masterdata/finance/currency";
@@ -44,16 +47,22 @@ const App = () => {
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
           />
 
-          <Route path="MasterData" element={<MasterData />}>
+          <Route path="master-data" element={<MasterData />}>
             <Route path="user" element={<User />} />
             <Route path="project" element={<Project />} />
-            <Route path="finance" element={<Finance />}>
+            <Route path="finance" element={<FinanceMasterData />}>
               <Route path="bank" element={<Bank />} />
               <Route path="classF" element={<ClassF />} />
               <Route path="chart" element={<Chart />} />
               <Route path="currency" element={<Currency />} />
               <Route path="tax" element={<Tax />} />
             </Route>
+          </Route>
+
+          <Route path="finance" element={<Finance />}>
+          <Route index element={<Navigate to="bank" replace />} />
+            <Route path="bank" element={<BankFinance />} />
+            <Route path="transcode" element={<TranscodeFinance />} />
           </Route>
 
           <Route path="cashbook" element={<CashBook />}>
