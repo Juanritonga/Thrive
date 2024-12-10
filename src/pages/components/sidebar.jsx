@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   const location = useLocation();
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => location.pathname.startsWith(path);
 
   const menuItems = [
     { label: "MASTER DATA", path: "/master-data", icon: "fas fa-database" },
