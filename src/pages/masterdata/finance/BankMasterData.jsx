@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-const Bank = () => {
+const BankMasterData = () => {
   const [banks, setBanks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -202,4 +202,4 @@ const Bank = () => {
   );
 };
 
-export default Bank;
+export default BankMasterData;
