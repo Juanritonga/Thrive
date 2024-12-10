@@ -7,28 +7,28 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   const isActive = (path) => location.pathname === path;
 
   const menuItems = [
-    { label: "MASTER DATA", path: "/MasterData", icon: "fas fa-database" },
+    { label: "MASTER DATA", path: "/master-data", icon: "fas fa-database" },
     {
       label: "User",
-      path: "/masterdata/user",
+      path: "/master-data/user",
       icon: "fas fa-university",
       indent: true,
     },
     {
       label: "Project",
-      path: "/masterdata/project",
+      path: "/master-data/project",
       icon: "fas fa-wallet",
       indent: true,
     },
     {
       label: "Finance",
-      path: "/masterdata/finance",
+      path: "/master-data/finance",
       icon: "fas fa-hand-holding-usd",
       indent: true,
     },
     {
       label: "FINANCE",
-      path: "#",
+      path: "/finance",
       isParent: true,
       icon: "fas fa-file-invoice",
     },

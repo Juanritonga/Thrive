@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 
-const Finance = () => {
+const FinanceMasterData = () => {
   return (
     <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
       <div className="flex justify-center gap-4">
@@ -52,4 +52,4 @@ const Finance = () => {
   );
 };
 
-export default Finance;
+export default FinanceMasterData;

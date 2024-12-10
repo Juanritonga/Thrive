@@ -5,7 +5,8 @@ import Layout from "./pages/layout";
 import MasterData from "./pages/masterdata/master-data";
 import User from "./pages/masterdata/user";
 import Project from "./pages/masterdata/project";
-import Finance from "./pages/masterdata/finance";
+import FinanceMasterData from "./pages/masterdata/FinanceMasterData";
+import Finance from "./pages/finance/finance";
 import Format from "./pages/cashbook/format";
 import CashBook from "./pages/cashbook/cashbook";
 import BankC from "./pages/cashbook/bankchasbook";
@@ -44,16 +45,20 @@ const App = () => {
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
           />
 
-          <Route path="MasterData" element={<MasterData />}>
+          <Route path="master-data" element={<MasterData />}>
             <Route path="user" element={<User />} />
             <Route path="project" element={<Project />} />
-            <Route path="finance" element={<Finance />}>
+            <Route path="finance" element={<FinanceMasterData />}>
               <Route path="bank" element={<Bank />} />
               <Route path="classF" element={<ClassF />} />
               <Route path="chart" element={<Chart />} />
               <Route path="currency" element={<Currency />} />
               <Route path="tax" element={<Tax />} />
             </Route>
+          </Route>
+
+          <Route path="finance" element={<Finance />}>
+            
           </Route>
 
           <Route path="cashbook" element={<CashBook />}>
