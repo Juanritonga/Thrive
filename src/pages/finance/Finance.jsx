@@ -37,7 +37,7 @@ const Finance = () => {
     <div className="flex flex-col h-screen">
       <div className="text-black">
         <h1 className="text-2xl font-bold text-custom-blue ml-3 mt-4">
-          MASTER DATA
+          FINANCE
         </h1>
         <div className="text-sm">{getBreadcrumbs()}</div>
       </div>
