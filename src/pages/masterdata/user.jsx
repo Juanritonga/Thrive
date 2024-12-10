@@ -23,11 +23,11 @@ const User = () => {
         }
 
         const response = await axios.get(
-          'https://thrive-be.app-dev.altru.id/api/v1/users',
+          "https://thrive-be.app-dev.altru.id/api/v1/users",
           {
             headers: {
-              'Content-Type': 'application/json',
-              'Authorization' : `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
             params: {
               page: currentPage,
@@ -35,7 +35,6 @@ const User = () => {
             },
           }
         );
-        
 
         if (response.data.success) {
           setUsers(response.data.data.items);
@@ -126,7 +125,17 @@ const User = () => {
                   <td className="py-3 px-4">{user.full_name}</td>
                   <td className="py-3 px-4">{user.role}</td>
                   <td className="py-3 px-4">{user.entity}</td>
-                  <td className="py-3 px-4">{user.status}</td>
+                  <td className="py-3 px-4">
+                    <span
+                      className={`inline-block px-6 py-1 rounded-full font-bold w-max ${
+                        user.status.toLowerCase() === "active"
+                          ? "bg-green-200 text-green-600"
+                          : "bg-red-200 text-red-600"
+                      }`}
+                    >
+                      {user.status}
+                    </span>
+                  </td>
                 </tr>
               ))}
             </tbody>

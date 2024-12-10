@@ -134,7 +134,19 @@ const Bank = () => {
                       .toLocaleDateString("en-GB")
                       .replace(/\//g, "-")}
                   </td>{" "}
-                  <td className="py-3 px-4">{bank.status}</td>
+                  <td className="py-3 px-4">
+                    <td className="py-3 px-4">
+                      <span
+                        className={`inline-block px-6 py-1 rounded-full font-bold w-max ${
+                          bank.status.toLowerCase() === "active"
+                            ? "bg-green-200 text-green-600"
+                            : "bg-red-200 text-red-600"
+                        }`}
+                      >
+                        {bank.status}
+                      </span>
+                    </td>
+                  </td>
                   <td className="py-3 px-4">
                     <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12">
                       <i className="fas fa-edit"></i>
