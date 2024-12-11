@@ -6,7 +6,7 @@ import MasterData from "./pages/masterdata/master-data";
 import User from "./pages/masterdata/user";
 import Project from "./pages/masterdata/project";
 import FinanceMasterData from "./pages/masterdata/FinanceMasterData";
-import Finance from "./pages/finance/finance";
+import Finance from "./pages/finance/Finance";
 import BankFinance from "./pages/finance/BankFinance";
 import TranscodeFinance from "./pages/finance/TranscodeFinance";
 import Format from "./pages/cashbook/format";
