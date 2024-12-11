@@ -5,11 +5,12 @@ import axios from "axios";
 
 const Login = ({ setIsAuthenticated }) => {
   const images = [
-    "https://s3-alpha-sig.figma.com/img/4b63/af82/0420c6f4f669edd06fa7686e00d7ccbf?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GlRggYrooYBzbpVgEajcLhYXCYQgWrMZKL-1kBryEENvstqJiB~xgPWLWUzVz1IyqL2pv8xoc~Q~NZGbfmtM9yvaIuU2T8DU2Ec19QMoSvNdNpXW7g7KVSDt0PhKhvtRhX3XYj0FE1L5XqHd3MmtJeXpJ3-gKNjbBuqmGWWop4k8ekiDtnMzp~bbXs3dXkzZQUvnTx88Zk9Pp9uA9aT42zeEVPv6UsqZxAyOKJSTOhxhGYObxTHqtTHSCGrG~xut8AWVfgqBbaCpvjw~iXBIPa-TUqWCVJc0cBqEmfOuWv0JeGInXy62h9Gc8pjE9EmzXSCqJTx1zT4iL4XccFc9Ig__",
-    "https://s3-alpha-sig.figma.com/img/4b63/af82/0420c6f4f669edd06fa7686e00d7ccbf?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GlRggYrooYBzbpVgEajcLhYXCYQgWrMZKL-1kBryEENvstqJiB~xgPWLWUzVz1IyqL2pv8xoc~Q~NZGbfmtM9yvaIuU2T8DU2Ec19QMoSvNdNpXW7g7KVSDt0PhKhvtRhX3XYj0FE1L5XqHd3MmtJeXpJ3-gKNjbBuqmGWWop4k8ekiDtnMzp~bbXs3dXkzZQUvnTx88Zk9Pp9uA9aT42zeEVPv6UsqZxAyOKJSTOhxhGYObxTHqtTHSCGrG~xut8AWVfgqBbaCpvjw~iXBIPa-TUqWCVJc0cBqEmfOuWv0JeGInXy62h9Gc8pjE9EmzXSCqJTx1zT4iL4XccFc9Ig__",
-    "https://s3-alpha-sig.figma.com/img/4b63/af82/0420c6f4f669edd06fa7686e00d7ccbf?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GlRggYrooYBzbpVgEajcLhYXCYQgWrMZKL-1kBryEENvstqJiB~xgPWLWUzVz1IyqL2pv8xoc~Q~NZGbfmtM9yvaIuU2T8DU2Ec19QMoSvNdNpXW7g7KVSDt0PhKhvtRhX3XYj0FE1L5XqHd3MmtJeXpJ3-gKNjbBuqmGWWop4k8ekiDtnMzp~bbXs3dXkzZQUvnTx88Zk9Pp9uA9aT42zeEVPv6UsqZxAyOKJSTOhxhGYObxTHqtTHSCGrG~xut8AWVfgqBbaCpvjw~iXBIPa-TUqWCVJc0cBqEmfOuWv0JeGInXy62h9Gc8pjE9EmzXSCqJTx1zT4iL4XccFc9Ig__",
-    "https://s3-alpha-sig.figma.com/img/4b63/af82/0420c6f4f669edd06fa7686e00d7ccbf?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GlRggYrooYBzbpVgEajcLhYXCYQgWrMZKL-1kBryEENvstqJiB~xgPWLWUzVz1IyqL2pv8xoc~Q~NZGbfmtM9yvaIuU2T8DU2Ec19QMoSvNdNpXW7g7KVSDt0PhKhvtRhX3XYj0FE1L5XqHd3MmtJeXpJ3-gKNjbBuqmGWWop4k8ekiDtnMzp~bbXs3dXkzZQUvnTx88Zk9Pp9uA9aT42zeEVPv6UsqZxAyOKJSTOhxhGYObxTHqtTHSCGrG~xut8AWVfgqBbaCpvjw~iXBIPa-TUqWCVJc0cBqEmfOuWv0JeGInXy62h9Gc8pjE9EmzXSCqJTx1zT4iL4XccFc9Ig__",
-  ];
+    '/thrivewp.jpg',
+    '/thrivewp.jpg',
+    '/thrivewp.jpg',
+    '/thrivewp.jpg',
+];
+
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [username, setUsername] = useState("");
