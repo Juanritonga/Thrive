@@ -1,71 +1,83 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const TranscodeFinance = () => {
-  const [banks, setBanks] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const dummyTranscodes = [
+    {
+      transcode_id: "TRNS001",
+      transaction_type: "General Ledger",
+      transcode: "GL",
+      created_by: "Jon Pantau",
+      updated_at: "2024-01-01",
+      status: "Active",
+    },
+    {
+      transcode_id: "TRNS001",
+      transaction_type: "Account Payable",
+      transcode: "AP",
+      created_by: "Jon Pantau",
+      updated_at: "2024-01-02",
+      status: "Inactive",
+    },
+    {
+      transcode_id: "TRNS001",
+      transaction_type: "Account Receivable",
+      transcode: "AR",
+      created_by: "Jon Pantau",
+      updated_at: "2024-01-03",
+      status: "Inactive",
+    },
+    {
+      transcode_id: "TRNS001",
+      transaction_type: "Purchase Order",
+      transcode: "PO",
+      created_by: "Jon Pantau",
+      updated_at: "2024-01-03",
+      status: "Inactive",
+    },
+    {
+      transcode_id: "TRNS001",
+      transaction_type: "Sales",
+      transcode: "SA",
+      created_by: "Jon Pantau",
+      updated_at: "2024-01-03",
+      status: "Active",
+    },
+    {
+      transcode_id: "TRNS001",
+      transaction_type: "Purchase Request",
+      transcode: "PR",
+      created_by: "Jon Pantau",
+      updated_at: "2024-01-03",
+      status: "Active",
+    },
+  ];
+
+  const [transcodes, setTranscodes] = useState(dummyTranscodes);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [limit, setLimit] = useState(10);
   const [showModal, setShowModal] = useState(false);
+  const [newTranscode, setNewTranscode] = useState({
+    transcode_id: "",
+    transaction_type: "",
+    transcode: "",
+    created_by: "",
+    updated_at: new Date().toISOString().split("T")[0],
+    status: "Active",
+  });
+  const [editMode, setEditMode] = useState(false);
 
   const indexOfLastItem = currentPage * limit;
   const indexOfFirstItem = indexOfLastItem - limit;
 
-  useEffect(() => {
-    const fetchBanks = async () => {
-      setLoading(true);
-      try {
-        const token = sessionStorage.getItem("authToken");
-        if (!token) {
-          throw new Error("Authorization token is missing.");
-        }
-
-        const response = await axios.get(
-          "https://thrive-be.app-dev.altru.id/api/v1/banks",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            params: {
-              page: currentPage,
-              limit: limit,
-            },
-          }
-        );
-
-        if (response.data.success) {
-          setBanks(response.data.data.items);
-          setTotalPages(response.data.data.total_pages || 1);
-        } else {
-          throw new Error(
-            response.data.message || "Unexpected response format."
-          );
-        }
-      } catch (err) {
-        console.error("Error:", err.response || err.message);
-        setError(
-          err.response?.data?.message ||
-            err.message ||
-            "An unexpected error occurred."
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBanks();
-  }, [currentPage, limit]);
-
-  const filteredData = banks.filter((bank) =>
-    Object.values(bank)
+  const filteredData = transcodes.filter((transcode) =>
+    Object.values(transcode)
       .join(" ")
       .toLowerCase()
       .includes(searchQuery.toLowerCase())
   );
+  const paginatedData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredData.length / limit);
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -75,26 +87,50 @@ const TranscodeFinance = () => {
 
   const handleTambahBaru = () => {
     setShowModal(true);
+    setEditMode(false);
+    setNewTranscode({
+      transcode_id: "",
+      transaction_type: "",
+      transcode: "",
+      created_by: "",
+      updated_at: new Date().toISOString().split("T")[0],
+      status: "Active",
+    });
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-white-100">
-        <div className="flex flex-col items-center">
-          <div className="w-16 h-16 border-4 border-custom-blue border-dashed rounded-full animate-spin"></div>
-          <p className="mt-4 text-lg font-medium text-gray-700">Loading...</p>
-        </div>
-      </div>
-    );
-  }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewTranscode((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-  if (error) {
-    return <div style={{ color: "red" }}>{error}</div>;
-  }
+  const handleSaveTranscode = (e) => {
+    e.preventDefault();
+    if (editMode) {
+      setTranscodes((prev) =>
+        prev.map((transcode) =>
+          transcode.transcode_id === newTranscode.transcode_id
+            ? { ...newTranscode }
+            : transcode
+        )
+      );
+    } else {
+      setTranscodes((prev) => [...prev, newTranscode]);
+    }
+    setShowModal(false);
+  };
+
+  const handleEdit = (transcode) => {
+    setNewTranscode(transcode);
+    setEditMode(true);
+    setShowModal(true);
+  };
 
   return (
     <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
@@ -102,7 +138,7 @@ const TranscodeFinance = () => {
         <div className="relative w-full sm:w-[300px]">
           <input
             type="text"
-            placeholder="Cari Bank"
+            placeholder="Cari Transcode"
             className="pl-6 pr-10 py-3 w-full border rounded-md"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -117,8 +153,8 @@ const TranscodeFinance = () => {
         </button>
       </div>
       <div className="overflow-auto shadow-sm mb-6">
-        {filteredData.length === 0 ? (
-          <p>No users found.</p>
+        {paginatedData.length === 0 ? (
+          <p>No transcodes found.</p>
         ) : (
           <table className="min-w-full bg-white border rounded-lg">
             <thead>
@@ -133,23 +169,34 @@ const TranscodeFinance = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredData.map((bank) => (
+              {paginatedData.map((transcode) => (
                 <tr
-                  key={bank.bank_id}
+                  key={transcode.transcode_id}
                   className="cursor-pointer border-t text-center text-custom-blue2"
                 >
-                  <td className="py-3 px-4">{bank.bank_id}</td>
-                  <td className="py-3 px-4">{bank.bank}</td>
-                  <td className="py-3 px-4">{bank.entity}</td>
-                  <td className="py-3 px-4">{bank.created_by}</td>
+                  <td className="py-3 px-4">{transcode.transcode_id}</td>
+                  <td className="py-3 px-4">{transcode.transaction_type}</td>
+                  <td className="py-3 px-4">{transcode.transcode}</td>
+                  <td className="py-3 px-4">{transcode.created_by}</td>
                   <td className="py-3 px-4">
-                    {new Date(bank.updated_at)
+                    {new Date(transcode.updated_at)
                       .toLocaleDateString("en-GB")
                       .replace(/\//g, "-")}
                   </td>
-                  <td className="py-3 px-4">{bank.status}</td>
+                  <td
+                    className={`py-3 px-4 font-bold ${
+                      transcode.status === "Active"
+                        ? "text-green-500"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {transcode.status}
+                  </td>
                   <td className="py-3 px-4">
-                    <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12">
+                    <button
+                      onClick={() => handleEdit(transcode)}
+                      className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12"
+                    >
                       <i className="fas fa-edit"></i>
                     </button>
                   </td>
@@ -163,7 +210,8 @@ const TranscodeFinance = () => {
       <div className="flex flex-wrap justify-between items-center gap-4">
         <span className="text-sm text-gray-500">
           Showing {indexOfFirstItem + 1} to{" "}
-          {Math.min(indexOfLastItem, banks.length)} of {banks.length} entries
+          {Math.min(indexOfLastItem, filteredData.length)} of{" "}
+          {filteredData.length} entries
         </span>
         <div className="flex items-center gap-4 ml-auto">
           <div className="flex items-center space-x-3">
@@ -195,19 +243,18 @@ const TranscodeFinance = () => {
               &gt;
             </button>
           </div>
-          <div className="flex items-center space-x-2">
-            <select
-              className="px-4 py-2 border rounded-md text-white bg-custom-blue"
-              value={limit}
-              onChange={(e) =>
-                setCurrentPage(1) || setLimit(Number(e.target.value))
-              }
-            >
-              <option value={10}>10 Baris</option>
-              <option value={20}>20 Baris</option>
-              <option value={50}>50 Baris</option>
-            </select>
-          </div>
+          <select
+            className="px-4 py-2 border rounded-md text-white bg-custom-blue"
+            value={limit}
+            onChange={(e) => {
+              setCurrentPage(1);
+              setLimit(Number(e.target.value));
+            }}
+          >
+            <option value={10}>10 Rows</option>
+            <option value={20}>20 Rows</option>
+            <option value={50}>50 Rows</option>
+          </select>
         </div>
       </div>
 
@@ -227,43 +274,75 @@ const TranscodeFinance = () => {
               &times;
             </button>
             <h2 className="text-xl font-bold text-custom-blue mb-4">
-              Tambah Baru
+              {editMode ? "Edit Transcode" : "Tambah Baru"}
             </h2>
-            <form>
+            <form onSubmit={handleSaveTranscode}>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block mb-1 font-bold">Transcode ID</label>
-                  <input type="text" className="border rounded-md p-2 w-full" />
+                  <input
+                    type="text"
+                    name="transcode_id"
+                    className="border rounded-md p-2 w-full"
+                    value={newTranscode.transcode_id}
+                    onChange={handleInputChange}
+                    required
+                    disabled={editMode}
+                  />
                 </div>
                 <div>
                   <label className="block mb-1 font-bold">
                     Transaction Type
                   </label>
-                  <input type="text" className="border rounded-md p-2 w-full" />
+                  <input
+                    type="text"
+                    name="transaction_type"
+                    className="border rounded-md p-2 w-full"
+                    value={newTranscode.transaction_type}
+                    onChange={handleInputChange}
+                    required
+                  />
                 </div>
                 <div>
-                  <label className="block mb-1 font-bold">Abbreviation</label>
-                  <input type="text" className="border rounded-md p-2 w-full" />
+                  <label className="block mb-1 font-bold">Transcode</label>
+                  <input
+                    type="text"
+                    name="transcode"
+                    className="border rounded-md p-2 w-full"
+                    value={newTranscode.transcode}
+                    onChange={handleInputChange}
+                    required
+                  />
                 </div>
                 <div>
-                  <label className="block mb-1 font-bold">Tax</label>
-                  <select className="border rounded-md p-2 w-full">
-                    <option>Tax</option>
-                  </select>
+                  <label className="block mb-1 font-bold">Created By</label>
+                  <input
+                    type="text"
+                    name="created_by"
+                    className="border rounded-md p-2 w-full"
+                    value={newTranscode.created_by}
+                    onChange={handleInputChange}
+                    required
+                  />
                 </div>
                 <div>
                   <label className="block mb-1 font-bold">Status</label>
-                  <select className="border rounded-md p-2 w-full">
-                    <option>Active</option>
-                    <option>Inactive</option>
+                  <select
+                    name="status"
+                    className="border rounded-md p-2 w-full"
+                    value={newTranscode.status}
+                    onChange={handleInputChange}
+                  >
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
                   </select>
                 </div>
               </div>
               <div className="flex justify-end gap-4 mt-4">
                 <button
                   type="button"
-                  onClick={handleCloseModal}
                   className="bg-red-500 text-white py-2 px-4 rounded-md"
+                  onClick={handleCloseModal}
                 >
                   Cancel
                 </button>
