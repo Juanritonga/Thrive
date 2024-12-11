@@ -190,12 +190,16 @@ const BankFinance = () => {
                       .replace(/\//g, "-")}
                   </td>
                   {/* Dynamic Status */}
-                  <td
-                    className={`py-3 px-4 font-bold ${
-                      bank.status === "Active" ? "text-green-500" : "text-red-500"
-                    }`}
-                  >
-                    {bank.status}
+                  <td className="py-3 px-4 text-center">
+                    <span
+                      className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+                        bank.status.toLowerCase() === "active"
+                          ? "bg-green-200 text-green-600"
+                          : "bg-red-200 text-red-600"
+                      }`}
+                    >
+                      {bank.status}
+                    </span>
                   </td>
                   <td className="py-3 px-4">
                     <button

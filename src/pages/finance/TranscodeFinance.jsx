@@ -183,14 +183,16 @@ const TranscodeFinance = () => {
                       .toLocaleDateString("en-GB")
                       .replace(/\//g, "-")}
                   </td>
-                  <td
-                    className={`py-3 px-4 font-bold ${
-                      transcode.status === "Active"
-                        ? "text-green-500"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {transcode.status}
+                  <td className="py-3 px-4 text-center">
+                    <span
+                      className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+                        transcode.status.toLowerCase() === "active"
+                          ? "bg-green-200 text-green-600"
+                          : "bg-red-200 text-red-600"
+                      }`}
+                    >
+                      {transcode.status}
+                    </span>
                   </td>
                   <td className="py-3 px-4">
                     <button
