@@ -17,11 +17,16 @@ const Project = () => {
     entity_id: "",
     status: "",
   });
+  const [updatedProject, setUpdatedProject] = useState({});
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [projectDetail, setProjectDetail] = useState(null);
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
-
   const indexOfLastItem = currentPage * limit;
   const indexOfFirstItem = indexOfLastItem - limit;
+
   const fetchProjects = async () => {
     try {
       const token = sessionStorage.getItem("authToken");
@@ -76,7 +81,7 @@ const Project = () => {
         if (!newProject.entity_id) {
           setNewProject((prev) => ({
             ...prev,
-            entity_id: response.data.data.items[0]?.id || "",
+            entity_id: response.data.data.items[0]?.id || "", // Set entity_id awal jika belum ada
           }));
         }
       } else {
@@ -91,14 +96,14 @@ const Project = () => {
 
   const handleAddProject = async () => {
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
       if (!newProject.name.trim() || !newProject.status.trim()) {
-        setError("Project name and status are required.");
+        alert("Isi Terlebih Dahulu");
         setLoading(false);
         return;
       }
@@ -133,6 +138,112 @@ const Project = () => {
         setError(response.data.message || "Unexpected response format.");
       }
     } catch (err) {
+      setError(
+        err.response?.data?.message || err.message || "An error occurred."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchProjectDetail = async (projectId) => {
+    try {
+      const token = sessionStorage.getItem("authToken");
+      if (!token) throw new Error("Authorization token is missing.");
+
+      const response = await axios.get(
+        `https://thrive-be.app-dev.altru.id/api/v1/projects/${projectId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        setProjectDetail(response.data.data); // Menyimpan detail proyek ke state
+      } else {
+        throw new Error(response.data.message || "Unexpected response format.");
+      }
+    } catch (err) {
+      setError(
+        err.response?.data?.message || err.message || "An error occurred."
+      );
+    }
+  };
+
+  const handleProjectClick = (projectId) => {
+    fetchProjectDetail(projectId); // Mengambil detail proyek saat diklik
+  };
+
+  const handleEditProject = async (projectId, updatedData) => {
+    try {
+      setLoading(true);
+
+      const token = sessionStorage.getItem("authToken");
+      if (!token) throw new Error("Authorization token is missing.");
+
+      // Validate the required fields before making the request
+      if (
+        !updatedData.name.trim() ||
+        !updatedData.entity_id ||
+        !updatedData.status.trim()
+      ) {
+        alert("All fields (name, entity_id, status) are required.");
+        setLoading(false);
+        return;
+      }
+
+      // Optimistically update the project in the UI before the API request
+      setProjects((prevProjects) =>
+        prevProjects.map((project) =>
+          project.id === projectId ? { ...project, ...updatedData } : project
+        )
+      );
+
+      // Make the API request to update the project
+      const response = await axios.put(
+        `https://thrive-be.app-dev.altru.id/api/v1/projects/${projectId}`,
+        {
+          name: updatedData.name.trim(),
+          entity_id: updatedData.entity_id,
+          status: updatedData.status.trim(),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Check the response success
+      if (response.data.success) {
+        const updatedProject = response.data.data;
+
+        // Update project list with the new data after a successful update
+        setProjects((prevProjects) =>
+          prevProjects.map((project) =>
+            project.id === projectId ? updatedProject : project
+          )
+        );
+
+        setError(null);
+        setEditModalOpen(false);
+      } else {
+        throw new Error(response.data.message || "Unexpected response format.");
+      }
+    } catch (err) {
+      // If an error occurs, revert the optimistic update and show an error message
+      setProjects((prevProjects) =>
+        prevProjects.map((project) =>
+          project.id === projectId
+            ? { ...project, status: project.status }
+            : project
+        )
+      );
+
       setError(
         err.response?.data?.message || err.message || "An error occurred."
       );
@@ -177,9 +288,12 @@ const Project = () => {
   };
 
   useEffect(() => {
+    if (selectedProject) {
+      setUpdatedProject({ ...selectedProject });
+    }
     fetchProjects();
     fetchEntities();
-  }, [currentPage, limit]);
+  }, [selectedProject, currentPage, limit]);
 
   const filteredData = projects.filter(
     (project) =>
@@ -254,6 +368,7 @@ const Project = () => {
               {paginatedData.map((project) => (
                 <tr
                   key={project.id}
+                  onClick={() => handleProjectClick(project.id)} // Tetap menangani klik pada baris
                   className="cursor-pointer border-t text-center text-custom-blue2"
                 >
                   <td className="py-3 px-4">{project.project_id}</td>
@@ -276,18 +391,38 @@ const Project = () => {
                     </span>
                   </td>
                   <td className="py-3 px-4">
-                    <div className="relative">
+                    <div className="relative flex justify-center">
                       {actionOpenId === project.id ? (
-                        <button
-                          className="font-bold text-red-600 bg-red-100 hover:bg-red-200 p-2 rounded-lg"
-                          onClick={() => handleDeleteProject(project.id)}
-                        >
-                          Delete
-                        </button>
+                        <div className="flex space-x-4">
+                          <button
+                            className="edit-button px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 ease-in-out"
+                            onClick={(e) => {
+                              e.stopPropagation(); // Hentikan propagasi klik ke baris
+                              setSelectedProject(project);
+                              setEditModalOpen(true);
+                            }}
+                          >
+                            Update
+                          </button>
+
+                          <button
+                            className="delete-button px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ease-in-out"
+                            onClick={(e) => {
+                              e.stopPropagation(); // Hentikan propagasi klik ke baris
+                              setSelectedProject(project);
+                              setDeleteModalOpen(true);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       ) : (
                         <button
-                          className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12"
-                          onClick={() => handleActionToggle(project.id)}
+                          className="font-bold bg-gray-200 text-gray-400 p-3 rounded-lg w-10 h-10 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                          onClick={(e) => {
+                            e.stopPropagation(); // Hentikan propagasi klik ke baris
+                            handleActionToggle(project.id);
+                          }}
                         >
                           <i className="fas fa-edit"></i>
                         </button>
@@ -375,8 +510,9 @@ const Project = () => {
                     Entitas
                   </label>
                   <select
+                    id="entity"
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                    value={newProject.entity_id || "1"}
+                    value={newProject.entity_id || ""}
                     onChange={(e) =>
                       setNewProject({
                         ...newProject,
@@ -384,7 +520,7 @@ const Project = () => {
                       })
                     }
                   >
-                    <option value="1" disabled>
+                    <option value="" disabled>
                       Select Entity
                     </option>
                     {entities.map((entity) => (
@@ -464,6 +600,236 @@ const Project = () => {
                     Simpan
                   </button>
                 )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {projectDetail && (
+        <div className="modal fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 p-4">
+          <div className="modal-content bg-white rounded-lg max-w-2xl w-full shadow-lg overflow-hidden">
+            <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
+              <h2 className="text-lg font-semibold">Project Detail</h2>
+              <button
+                className="text-white hover:text-gray-200"
+                onClick={() => setProjectDetail(null)} // Close modal
+              >
+                <i className="fas fa-times text-xl"></i>
+              </button>
+            </div>
+
+            <div className="p-6">
+              <div className="grid grid-cols-1 text-sm text-gray-600">
+                {/* Project ID */}
+                <div className="flex justify-between">
+                  <p className="font-semibold text-gray-800">Project ID :</p>
+                  <p className="text-gray-700">{projectDetail.project_id}</p>
+                </div>
+
+                {/* Project Name */}
+                <div className="flex justify-between">
+                  <p className="font-semibold text-gray-800">Name :</p>
+                  <p className="text-gray-700">{projectDetail.name}</p>
+                </div>
+
+                {/* Status */}
+                <div className="flex justify-between">
+                  <p className="font-semibold text-gray-800">Status :</p>
+                  <p
+                    className={`text-${
+                      projectDetail.status === "active" ? "green" : "red"
+                    }-600`}
+                  >
+                    {projectDetail.status.charAt(0).toUpperCase() +
+                      projectDetail.status.slice(1)}
+                  </p>
+                </div>
+
+                {/* Created By */}
+                <div className="flex justify-between">
+                  <p className="font-semibold text-gray-800">Created By :</p>
+                  <p className="text-gray-700">{projectDetail.created_by}</p>
+                </div>
+
+                {/* Created At */}
+                <div className="flex justify-between">
+                  <p className="font-semibold text-gray-800">Created At :</p>
+                  <p className="text-gray-700">
+                    {new Date(projectDetail.created_at).toLocaleString()}
+                  </p>
+                </div>
+
+                {/* Updated At */}
+                <div className="flex justify-between">
+                  <p className="font-semibold text-gray-800">Updated At :</p>
+                  <p className="text-gray-700">
+                    {new Date(projectDetail.updated_at).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {editModalOpen && selectedProject && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white rounded-lg max-w-lg w-full">
+            <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
+              <h2 className="text-lg">Edit Project</h2>
+              <button
+                className="text-white"
+                onClick={() => setEditModalOpen(false)} // Close modal without saving
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+
+            <div className="p-6">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault(); // Prevent default form submission
+                  handleEditProject(selectedProject.id, updatedProject); // Submit the data
+                }}
+              >
+                {/* Nama Project */}
+                <div className="mb-4">
+                  <label
+                    htmlFor="editName"
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    Nama Project
+                  </label>
+                  <input
+                    type="text"
+                    id="editName"
+                    placeholder="Project Name"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
+                    value={updatedProject.name || selectedProject.name}
+                    onChange={(e) =>
+                      setUpdatedProject({
+                        ...updatedProject,
+                        name: e.target.value.trim(),
+                      })
+                    }
+                  />
+                </div>
+
+                {/* Entitas */}
+                <div className="mb-4">
+                  <label
+                    htmlFor="editEntity"
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    Entitas
+                  </label>
+                  <select
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
+                    value={
+                      updatedProject.entity_id ||
+                      selectedProject.entity_id ||
+                      ""
+                    }
+                    onChange={(e) =>
+                      setUpdatedProject({
+                        ...updatedProject,
+                        entity_id: e.target.value, 
+                      })
+                    }
+                  >
+                    {/* Pastikan entities tidak kosong */}
+                    {entities && entities.length > 0 ? (
+                      entities.map((entity) => (
+                        <option key={entity.id} value={entity.id}>
+                          {entity.entity_name} 
+                        </option>
+                      ))
+                    ) : (
+                      <option disabled>No entities available</option> 
+                    )}
+                  </select>
+                </div>
+
+                {/* Status */}
+                <div className="mb-4">
+                  <label
+                    htmlFor="editStatus"
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    Status
+                  </label>
+                  <select
+                    id="editStatus"
+                    value={updatedProject.status || selectedProject.status}
+                    onChange={(e) =>
+                      setUpdatedProject({
+                        ...updatedProject,
+                        status: e.target.value,
+                      })
+                    }
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
+                  >
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
+
+                {/* Buttons */}
+                <div className="flex justify-end gap-4 mt-4">
+                  <button
+                    type="button"
+                    className="py-2 px-4 bg-red-500 text-white rounded-md hover:bg-red-600 transition-all"
+                    onClick={() => setEditModalOpen(false)} // Close modal without saving
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {deleteModalOpen && selectedProject && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white rounded-lg max-w-lg w-full">
+            <div className="flex justify-between items-center bg-red-500 text-white p-4 rounded-t-lg">
+              <h2 className="text-lg">Hapus Project</h2>
+              <button
+                className="text-white"
+                onClick={() => setDeleteModalOpen(false)}
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+
+            <div className="p-6 text-center">
+              <p className="text-lg">
+                Apakah Anda yakin ingin menghapus project ini?
+              </p>
+              <div className="flex justify-center gap-4 mt-4">
+                <button
+                  className="py-2 px-4 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all"
+                  onClick={() => {
+                    handleDeleteProject(selectedProject.id);
+                    setDeleteModalOpen(false);
+                  }}
+                >
+                  Ya
+                </button>
+                <button
+                  className="py-2 px-4 bg-gray-400 text-white rounded-md hover:bg-gray-500 transition-all"
+                  onClick={() => setDeleteModalOpen(false)}
+                >
+                  Tidak
+                </button>
               </div>
             </div>
           </div>

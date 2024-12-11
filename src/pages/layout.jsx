@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import { useState } from "react";
 
 const Layout = () => {
+  // Ensuring isSidebarVisible is set with a default value of `true` initially.
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
   return (

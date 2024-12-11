@@ -60,7 +60,7 @@ const Login = ({ setIsAuthenticated }) => {
         if (jsonData.data && jsonData.data.token) {
           sessionStorage.setItem("authToken", jsonData.data.token);
           sessionStorage.setItem("name", jsonData.data.name);
-
+          sessionStorage.setItem("role", jsonData.data.role.role_name);
 
           setIsAuthenticated(true);
           navigate("/");

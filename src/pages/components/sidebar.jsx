@@ -7,110 +7,140 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   const isActive = (path) => location.pathname.startsWith(path);
 
   const menuItems = [
-    { label: "MASTER DATA", path: "/master-data", icon: "fas fa-database" },
     {
+      role: "Super Admin",
+      label: "MASTER DATA",
+      path: "/master-data",
+      icon: "fas fa-database",
+    },
+    {
+      role: "Super Admin",
       label: "User",
       path: "/master-data/user",
       icon: "fas fa-university",
       indent: true,
     },
     {
+      role: "Super Admin",
       label: "Project",
       path: "/master-data/project",
       icon: "fas fa-wallet",
       indent: true,
     },
     {
+      role: "Super Admin",
       label: "Finance",
       path: "/master-data/finance",
       icon: "fas fa-hand-holding-usd",
       indent: true,
     },
     {
+      role: "front end",
       label: "FINANCE",
       path: "/finance",
       isParent: true,
       icon: "fas fa-file-invoice",
     },
-    { label: "Cash Book", path: "/cashbook", icon: "fas fa-money-bill" },
     {
+      role: "front end",
+      label: "Cash Book",
+      path: "/cashbook",
+      icon: "fas fa-money-bill",
+    },
+    {
+      role: "front end",
       label: "Bank",
       path: "/cashbook/bankchasbook",
       icon: "fas fa-university",
       indent: true,
     },
     {
+      role: "front end",
       label: "Petty Cash",
       path: "/cashbook/pettycash",
       icon: "fas fa-wallet",
       indent: true,
     },
     {
+      role: "front end",
       label: "Cash Advance",
       path: "/cashbook/cashadvance",
       icon: "fas fa-hand-holding-usd",
       indent: true,
     },
     {
+      role: "front end",
       label: "Reimbursement",
       path: "/cashbook/reimbursement",
       icon: "fas fa-receipt",
       indent: true,
     },
     {
+      role: "front end",
       label: "Format",
       path: "/cashbook/format",
       icon: "fas fa-file-alt",
       indent: true,
     },
-    { label: "Fixed Assets", path: "#", icon: "fas fa-cogs" },
     {
+      role: "front end",
+      label: "Fixed Assets",
+      path: "#",
+      icon: "fas fa-cogs",
+    },
+    {
+      role: "front end",
       label: "Cash Advance",
       path: "#",
       icon: "fas fa-hand-holding-usd",
       indent: true,
     },
-    { label: "Reimbursement", path: "#", icon: "fas fa-receipt", indent: true },
-    { label: "Format", path: "#", icon: "fas fa-file-alt", indent: true },
-    { label: "General Ledger", path: "#", icon: "fas fa-book" },
+    { role: "front end", label: "Reimbursement", path: "#", icon: "fas fa-receipt", indent: true },
+    { role: "front end", label: "Format", path: "#", icon: "fas fa-file-alt", indent: true },
+    { role: "front end", label: "General Ledger", path: "#", icon: "fas fa-book" },
     {
+      role: "front end",
       label: "Cash Advance",
       path: "#",
       icon: "fas fa-hand-holding-usd",
       indent: true,
     },
-    { label: "Reimbursement", path: "#", icon: "fas fa-receipt", indent: true },
-    { label: "Format", path: "#", icon: "fas fa-file-alt", indent: true },
+    { role: "front end", label: "Reimbursement", path: "#", icon: "fas fa-receipt", indent: true },
+    { role: "front end", label: "Format", path: "#", icon: "fas fa-file-alt", indent: true },
   ];
 
   return (
     <div className="relative">
-      {/* Sidebar */}
       <div
         className={`fixed left-0 h-full border-gray-200 shadow-md transform duration-300 ${
           isSidebarVisible ? "w-64" : "w-16"
         } overflow-y-auto bg-white scrollbar-hide`}
       >
-        {/* Menu Items */}
         <ul className="p-4 space-y-2 mb-20">
-          {menuItems.map((item, index) => (
-            <li
-              key={index}
-              className={`flex items-center ${item.indent ? "pl-4" : ""} ${
-                isActive(item.path) ? "font-bold text-custom-blue" : "text-dark"
-              }`}
-            >
-              <Link
-                to={item.path}
-                className={`flex items-center w-full p-2 hover:text-custom-blue ${
-                  isSidebarVisible ? "justify-start" : "justify-center"
+          {menuItems
+            .filter((item) => item.role === sessionStorage.getItem("role"))
+            .map((item, index) => (
+              <li
+                key={index}
+                className={`flex items-center ${item.indent ? "pl-4" : ""} ${
+                  isActive(item.path)
+                    ? "font-bold text-custom-blue"
+                    : "text-dark"
                 }`}
               >
-                <i className={`${item.icon} text-lg`}></i>
-                {isSidebarVisible && <span className="ml-3">{item.label}</span>}
-              </Link>
-            </li>
-          ))}
+                <Link
+                  to={item.path}
+                  className={`flex items-center w-full p-2 hover:text-custom-blue ${
+                    isSidebarVisible ? "justify-start" : "justify-center"
+                  }`}
+                >
+                  <i className={`${item.icon} text-lg`}></i>
+                  {isSidebarVisible && (
+                    <span className="ml-3">{item.label}</span>
+                  )}
+                </Link>
+              </li>
+            ))}
         </ul>
       </div>
 

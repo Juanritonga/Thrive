@@ -50,7 +50,8 @@ const App = () => {
           <Route path="master-data" element={<MasterData />}>
             <Route path="user" element={<User />} />
             <Route path="project" element={<Project />} />
-            <Route path="finance" element={<FinanceMasterData />}>
+            <Route path="finance" element={<FinanceMasterData />}>   
+            <Route index element={<Navigate to="classF" replace />} />
               <Route path="bank" element={<Bank />} />
               <Route path="classF" element={<ClassF />} />
               <Route path="chart" element={<Chart />} />
