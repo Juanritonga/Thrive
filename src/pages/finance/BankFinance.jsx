@@ -1,64 +1,74 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const BankFinance = () => {
-  const [banks, setBanks] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const dummyBanks = [
+    {
+      bank_id: "BNK001",
+      bank: "BCA",
+      account_number: "4440000333311",
+      created_by: "Jon Pantau",
+      updated_at: "2024-01-01",
+      status: "Active",
+    },
+    {
+      bank_id: "BNK001",
+      bank: "BCA",
+      account_number: "4440000333311",
+      created_by: "Jon Pantau",
+      updated_at: "2024-01-02",
+      status: "Inactive",
+    },
+    {
+      bank_id: "BNK001",
+      bank: "BCA",
+      account_number: "4440000333311",
+      created_by: "Jon Pantau",
+      updated_at: "2024-01-03",
+      status: "Inactive",
+    },
+    {
+      bank_id: "BNK001",
+      bank: "BCA",
+      account_number: "4440000333311",
+      created_by: "Jon Pantau",
+      updated_at: "2024-01-03",
+      status: "Inactive",
+    },
+    {
+      bank_id: "BNK001",
+      bank: "BCA",
+      account_number: "4440000333311",
+      created_by: "Jon Pantau",
+      updated_at: "2024-01-03",
+      status: "Active",
+    },
+    {
+      bank_id: "BNK001",
+      bank: "BCA",
+      account_number: "4440000333311",
+      created_by: "Jon Pantau",
+      updated_at: "2024-01-03",
+      status: "Active",
+    },
+  ];
+
+  const [banks, setBanks] = useState(dummyBanks);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [limit, setLimit] = useState(10);
   const [showModal, setShowModal] = useState(false);
+  const [newBank, setNewBank] = useState({
+    bank_id: "",
+    bank: "",
+    account_number: "",
+    created_by: "",
+    updated_at: new Date().toISOString().split("T")[0],
+    status: "Active",
+  });
+  const [editMode, setEditMode] = useState(false);
 
   const indexOfLastItem = currentPage * limit;
   const indexOfFirstItem = indexOfLastItem - limit;
-
-  useEffect(() => {
-    const fetchBanks = async () => {
-      setLoading(true);
-      try {
-        const token = sessionStorage.getItem("authToken");
-        if (!token) {
-          throw new Error("Authorization token is missing.");
-        }
-
-        const response = await axios.get(
-          "https://thrive-be.app-dev.altru.id/api/v1/banks",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            params: {
-              page: currentPage,
-              limit: limit,
-            },
-          }
-        );
-
-        if (response.data.success) {
-          setBanks(response.data.data.items);
-          setTotalPages(response.data.data.total_pages || 1);
-        } else {
-          throw new Error(
-            response.data.message || "Unexpected response format."
-          );
-        }
-      } catch (err) {
-        console.error("Error:", err.response || err.message);
-        setError(
-          err.response?.data?.message ||
-            err.message ||
-            "An unexpected error occurred."
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBanks();
-  }, [currentPage, limit]);
 
   const filteredData = banks.filter((bank) =>
     Object.values(bank)
@@ -66,6 +76,8 @@ const BankFinance = () => {
       .toLowerCase()
       .includes(searchQuery.toLowerCase())
   );
+  const paginatedData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredData.length / limit);
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -75,26 +87,56 @@ const BankFinance = () => {
 
   const handleTambahBaru = () => {
     setShowModal(true);
+    setEditMode(false);
+    setNewBank({
+      bank_id: "",
+      bank: "",
+      account_number: "",
+      created_by: "",
+      updated_at: new Date().toISOString().split("T")[0],
+      status: "Active",
+    });
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
+    setNewBank({
+      bank_id: "",
+      bank: "",
+      account_number: "",
+      created_by: "",
+      updated_at: new Date().toISOString().split("T")[0],
+      status: "Active",
+    });
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-white-100">
-        <div className="flex flex-col items-center">
-          <div className="w-16 h-16 border-4 border-custom-blue border-dashed rounded-full animate-spin"></div>
-          <p className="mt-4 text-lg font-medium text-gray-700">Loading...</p>
-        </div>
-      </div>
-    );
-  }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewBank((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-  if (error) {
-    return <div style={{ color: "red" }}>{error}</div>;
-  }
+  const handleSaveNewBank = (e) => {
+    e.preventDefault();
+    if (editMode) {
+      setBanks((prev) =>
+        prev.map((bank) =>
+          bank.bank_id === newBank.bank_id ? { ...newBank } : bank
+        )
+      );
+    } else {
+      setBanks((prev) => [...prev, newBank]);
+    }
+    setShowModal(false);
+  };
+
+  const handleEdit = (bank) => {
+    setNewBank(bank);
+    setEditMode(true);
+    setShowModal(true);
+  };
 
   return (
     <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
@@ -117,16 +159,15 @@ const BankFinance = () => {
         </button>
       </div>
       <div className="overflow-auto shadow-sm mb-6">
-        {filteredData.length === 0 ? (
-          <p>No users found.</p>
+        {paginatedData.length === 0 ? (
+          <p>No banks found.</p>
         ) : (
           <table className="min-w-full bg-white border rounded-lg">
             <thead>
               <tr className="text-custom-blue bg-gray-200">
                 <th className="py-3 px-4 border">Bank ID</th>
-                <th className="py-3 px-4 border">Bank</th>
-                <th className="py-3 px-4 border">Entitas</th>
-                <th className="py-3 px-4 border">No. Rekening</th>
+                <th className="py-3 px-4 border">Bank Name</th>
+                <th className="py-3 px-4 border">Acct. Number</th>
                 <th className="py-3 px-4 border">Dibuat Oleh</th>
                 <th className="py-3 px-4 border">Tanggal Update</th>
                 <th className="py-3 px-4 border">Status</th>
@@ -134,24 +175,37 @@ const BankFinance = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredData.map((bank) => (
+              {paginatedData.map((bank) => (
                 <tr
                   key={bank.bank_id}
                   className="cursor-pointer border-t text-center text-custom-blue2"
                 >
                   <td className="py-3 px-4">{bank.bank_id}</td>
                   <td className="py-3 px-4">{bank.bank}</td>
-                  <td className="py-3 px-4">{bank.entity}</td>
                   <td className="py-3 px-4">{bank.account_number}</td>
                   <td className="py-3 px-4">{bank.created_by}</td>
                   <td className="py-3 px-4">
                     {new Date(bank.updated_at)
                       .toLocaleDateString("en-GB")
                       .replace(/\//g, "-")}
-                  </td>{" "}
-                  <td className="py-3 px-4">{bank.status}</td>
+                  </td>
+                  {/* Dynamic Status */}
+                  <td className="py-3 px-4 text-center">
+                    <span
+                      className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+                        bank.status.toLowerCase() === "active"
+                          ? "bg-green-200 text-green-600"
+                          : "bg-red-200 text-red-600"
+                      }`}
+                    >
+                      {bank.status}
+                    </span>
+                  </td>
                   <td className="py-3 px-4">
-                    <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12">
+                    <button
+                      onClick={() => handleEdit(bank)}
+                      className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12"
+                    >
                       <i className="fas fa-edit"></i>
                     </button>
                   </td>
@@ -166,52 +220,50 @@ const BankFinance = () => {
       <div className="flex flex-wrap justify-between items-center gap-4">
         <span className="text-sm text-gray-500">
           Showing {indexOfFirstItem + 1} to{" "}
-          {Math.min(indexOfLastItem, banks.length)} of {banks.length} entries
+          {Math.min(indexOfLastItem, filteredData.length)} of{" "}
+          {filteredData.length} entries
         </span>
         <div className="flex items-center gap-4 ml-auto">
-          <div className="flex items-center space-x-3">
+          <button
+            className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+          >
+            &lt;
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => (
             <button
-              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
-              disabled={currentPage === 1}
-              onClick={() => handlePageChange(currentPage - 1)}
+              key={index}
+              className={`px-4 py-2 border rounded-md ${
+                currentPage === index + 1
+                  ? "bg-custom-blue text-white"
+                  : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+              }`}
+              onClick={() => handlePageChange(index + 1)}
             >
-              &lt;
+              {index + 1}
             </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index}
-                className={`px-4 py-2 border rounded-md ${
-                  currentPage === index + 1
-                    ? "bg-custom-blue text-white"
-                    : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                }`}
-                onClick={() => handlePageChange(index + 1)}
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div>
-          <div className="flex items-center space-x-2">
-            <select
-              className="px-4 py-2 border rounded-md text-white bg-custom-blue"
-              value={limit}
-              onChange={(e) =>
-                setCurrentPage(1) || setLimit(Number(e.target.value))
-              }
-            >
-              <option value={10}>10 Baris</option>
-              <option value={20}>20 Baris</option>
-              <option value={50}>50 Baris</option>
-            </select>
-          </div>
+          ))}
+          <button
+            className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            &gt;
+          </button>
         </div>
+        <select
+          className="px-4 py-2 border rounded-md text-white bg-custom-blue"
+          value={limit}
+          onChange={(e) => {
+            setCurrentPage(1);
+            setLimit(Number(e.target.value));
+          }}
+        >
+          <option value={10}>10 Rows</option>
+          <option value={20}>20 Rows</option>
+          <option value={50}>50 Rows</option>
+        </select>
       </div>
 
       {/* Modal */}
@@ -231,48 +283,65 @@ const BankFinance = () => {
               &times;
             </button>
             <h2 className="text-xl font-bold text-custom-blue mb-4">
-              Tambah Baru
+              {editMode ? "Edit Bank" : "Tambah Baru"}
             </h2>
-            <form>
+            <form onSubmit={handleSaveNewBank}>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block mb-1 font-bold">Bank ID</label>
                   <input
                     type="text"
+                    name="bank_id"
                     className="border rounded-md p-2 w-full"
+                    value={newBank.bank_id}
+                    onChange={handleInputChange}
+                    required
+                    disabled={editMode}
                   />
                 </div>
                 <div>
                   <label className="block mb-1 font-bold">Bank Name</label>
                   <input
                     type="text"
+                    name="bank"
                     className="border rounded-md p-2 w-full"
+                    value={newBank.bank}
+                    onChange={handleInputChange}
+                    required
                   />
                 </div>
                 <div>
                   <label className="block mb-1 font-bold">Account No.</label>
                   <input
                     type="text"
+                    name="account_number"
                     className="border rounded-md p-2 w-full"
+                    value={newBank.account_number}
+                    onChange={handleInputChange}
+                    required
                   />
                 </div>
                 <div>
-                  <label className="block mb-1 font-bold">Currency</label>
-                  <select className="border rounded-md p-2 w-full">
-                    <option>Rupiah</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block mb-1 font-bold">Entitas</label>
-                  <select className="border rounded-md p-2 w-full">
-                    <option>Entitas</option>
-                  </select>
+                  <label className="block mb-1 font-bold">Created By</label>
+                  <input
+                    type="text"
+                    name="created_by"
+                    className="border rounded-md p-2 w-full"
+                    value={newBank.created_by}
+                    onChange={handleInputChange}
+                    required
+                  />
                 </div>
                 <div>
                   <label className="block mb-1 font-bold">Status</label>
-                  <select className="border rounded-md p-2 w-full">
-                    <option>Active</option>
-                    <option>Inactive</option>
+                  <select
+                    name="status"
+                    className="border rounded-md p-2 w-full"
+                    value={newBank.status}
+                    onChange={handleInputChange}
+                  >
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
                   </select>
                 </div>
               </div>
