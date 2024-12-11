@@ -134,7 +134,19 @@ const Currency = () => {
                       .toLocaleDateString("en-GB")
                       .replace(/\//g, "-")}
                   </td>{" "}
-                  <td className="py-3 px-4">{currency.status}</td>
+                  <td className="py-3 px-4">
+                    <td className="py-3 px-4">
+                      <span
+                        className={`inline-block px-6 py-1 rounded-full font-bold w-max ${
+                          currency.status.toLowerCase() === "active"
+                            ? "bg-green-200 text-green-600"
+                            : "bg-red-200 text-red-600"
+                        }`}
+                      >
+                        {currency.status}
+                      </span>
+                    </td>
+                  </td>
                   <td className="py-3 px-4">
                     <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12">
                       <i className="fas fa-edit"></i>
@@ -150,7 +162,8 @@ const Currency = () => {
       <div className="flex flex-wrap justify-between items-center gap-4">
         <span className="text-sm text-gray-500">
           Showing {indexOfFirstItem + 1} to{" "}
-          {Math.min(indexOfLastItem, currencys.length)} of {currencys.length} entries
+          {Math.min(indexOfLastItem, currencys.length)} of {currencys.length}{" "}
+          entries
         </span>
         <div className="flex items-center gap-4 ml-auto">
           {" "}

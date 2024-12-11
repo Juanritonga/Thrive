@@ -7,7 +7,7 @@ const FinanceMasterData = () => {
         <NavLink
           to="classF"
           className={({ isActive }) =>
-            `font-bold flex-1 px-3 py-3 bg-white text-custom-blue border rounded text-center ${isActive ? 'bg-gray-300' : 'hover:bg-gray-300'}`
+            `font-bold flex-1 px-3 py-3 bg-white text-custom-blue border rounded text-center ${isActive ? 'bg-gray-300' : 'hover:bg-gray-300'}` 
           }
         >
           Class Master
@@ -15,7 +15,7 @@ const FinanceMasterData = () => {
         <NavLink
           to="chart"
           className={({ isActive }) =>
-            `font-bold flex-1 px-3 py-3 bg-white text-custom-blue border rounded text-center ${isActive ? 'bg-gray-300' : 'hover:bg-gray-300'}`
+            `font-bold flex-1 px-3 py-3 bg-white text-custom-blue border rounded text-center ${isActive ? 'bg-gray-300' : 'hover:bg-gray-300'}` 
           }
         >
           Chart of Acc.
