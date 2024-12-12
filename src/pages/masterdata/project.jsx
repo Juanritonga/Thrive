@@ -379,10 +379,10 @@ const Project = () => {
                       .toLocaleDateString("en-GB")
                       .replace(/\//g, "-")}
                   </td>
-                  <td className="py-3 px-4">
+                  <td className="py-3 px-4 text-center">
                     <span
-                      className={`inline-block px-6 py-1 rounded-full font-bold w-max ${
-                        project.status === "active"
+                      className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+                        project.status.toLowerCase() === "active"
                           ? "bg-green-200 text-green-600"
                           : "bg-red-200 text-red-600"
                       }`}

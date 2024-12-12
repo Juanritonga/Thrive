@@ -135,17 +135,17 @@ const Currency = () => {
                       .replace(/\//g, "-")}
                   </td>{" "}
                   <td className="py-3 px-4">
-                    <td className="py-3 px-4">
-                      <span
-                        className={`inline-block px-6 py-1 rounded-full font-bold w-max ${
-                          currency.status.toLowerCase() === "active"
-                            ? "bg-green-200 text-green-600"
-                            : "bg-red-200 text-red-600"
-                        }`}
-                      >
-                        {currency.status}
-                      </span>
-                    </td>
+                  <td className="py-3 px-4 text-center">
+                    <span
+                      className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+                        currency.status.toLowerCase() === "active"
+                          ? "bg-green-200 text-green-600"
+                          : "bg-red-200 text-red-600"
+                      }`}
+                    >
+                      {currency.status}
+                    </span>
+                  </td>
                   </td>
                   <td className="py-3 px-4">
                     <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12">

@@ -1,45 +1,39 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import AddClassFinance from "./AddClassFinance";
 
-const ClassF = () => {
+const ClassFinance = () => {
   const [classFs, setClassFs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(100);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newClassF, setNewClassF] = useState({
     name: "",
     code: "",
     status: "",
   });
+
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
-  const indexOfLastItem = currentPage * limit;
-  const indexOfFirstItem = indexOfLastItem - limit;
 
-  useEffect(() => {
+
     const fetchClassFs = async () => {
       setLoading(true);
       try {
         const token = sessionStorage.getItem("authToken");
-        if (!token) {
-          throw new Error("Authorization token is missing.");
-        }
+        if (!token) throw new Error("Authorization token is missing.");
 
         const response = await axios.get(
           "https://thrive-be.app-dev.altru.id/api/v1/finance/classes",
           {
             headers: {
-              "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            params: {
-              page: currentPage,
-              limit: limit,
-            },
+            params: { page: currentPage, limit },
           }
         );
 
@@ -52,91 +46,50 @@ const ClassF = () => {
           );
         }
       } catch (err) {
-        console.error("Error:", err.response || err.message);
         setError(
-          err.response?.data?.message ||
-            err.message ||
-            "An unexpected error occurred."
+          err.response?.data?.message || err.message || "An error occurred."
         );
       } finally {
         setLoading(false);
       }
     };
+  useEffect(() => {
 
     fetchClassFs();
   }, [currentPage, limit]);
 
-  const handleAddClassF = async () => {
-    try {
-      // Get the auth token from sessionStorage
-      const token = sessionStorage.getItem("authToken");
-      if (!token) throw new Error("Authorization token is missing.");
-  
-      // Validation for empty fields
-      if (
-        !newClassF.name.trim() ||
-        !newClassF.code.trim() ||
-        !newClassF.status.trim()
-      ) {
-        alert("Isi Terlebih Dahulu");
-        return;
-      }
-  
-      // Send POST request to add the class
-      const response = await axios.post(
-        "https://thrive-be.app-dev.altru.id/api/v1/finance/classes",
-        {
-          name: newClassF.name.trim(),
-          code: newClassF.code.trim(),
-          status: newClassF.status.trim(),
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-  
-      if (response.data.success) {
-        const newAddedClassF = response.data.data;
-  
-        // Update class list with the new added class
-        setClassFs((prevClassFs) => [newAddedClassF, ...prevClassFs]);
-  
-        // Reset form fields
-        setNewClassF({
-          name: "",
-          code: "",
-          status: "",
-        });
-        setError(null);
-  
-        // Close modal after successfully saving
-        handleCloseModal();
-      } else {
-        setError(response.data.message || "Unexpected response format.");
-      }
-    } catch (err) {
-      setError(
-        err.response?.data?.message || err.message || "An error occurred."
-      );
-    }
+  const handleAddClass = async () => {
+    setLoading(true); // Set loading to true when starting the request
+    await AddClassFinance(
+      newClassF,
+      setClassFs,
+      setNewClassF,
+      setError,
+      handleCloseModal
+    );
+    fetchClassFs(); // Call this after adding a class to refresh the data
   };
   
 
-  const filteredData = classFs.filter((classF) =>
-    Object.values(classF)
-      .join(" ")
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
+  // Check for null or undefined before calling Object.values
+  const filteredData = classFs.filter(
+    (classF) =>
+      classF &&
+      Object.values(classF)
+        .join(" ")
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
   );
 
   const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
+
+  const indexOfFirstItem = (currentPage - 1) * limit;
+  const indexOfLastItem = Math.min(
+    indexOfFirstItem + limit,
+    filteredData.length
+  );
 
   if (loading) {
     return (
@@ -150,7 +103,7 @@ const ClassF = () => {
   }
 
   if (error) {
-    return <div style={{ color: "red" }}>{error}</div>;
+    return <div className="text-red-600">{error}</div>;
   }
 
   return (
@@ -164,69 +117,120 @@ const ClassF = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <i className="fa-solid fa-magnifying-glass absolute right-2 top-1/2 transform -translate-y-1/2 text-custom-blue"></i>
         </div>
         <button
-          className="bg-custom-blue text-white px-2 py-2 p-4 rounded-lg w-full sm:w-auto flex items-center justify-center space-x-2"
+          className="bg-custom-blue text-white px-2 py-2 rounded-lg w-full sm:w-auto"
           onClick={handleOpenModal}
         >
-          <i className="fa-solid fa-plus text-white"></i>
-          <span>Tambah Baru</span>
+          Tambah Baru
         </button>
       </div>
       <div className="overflow-auto shadow-sm mb-6">
         {filteredData.length === 0 ? (
-          <p>No users found.</p>
+          <p>No data found.</p>
         ) : (
           <table className="min-w-full bg-white border rounded-lg">
-  <thead>
-    <tr className="text-custom-blue bg-gray-200">
-      <td className="py-3 px-4 border">Class ID</td>
-      <td className="py-3 px-4 border">Nama Kelas</td>
-      <td className="py-3 px-4 border">Kode</td>
-      <td className="py-3 px-4 border">Dibuat Oleh</td>
-      <td className="py-3 px-4 border">Tanggal Update</td>
-      <td className="py-3 px-4 border">Status</td>
-      <td className="py-3 px-4 border">Action</td>
-    </tr>
-  </thead>
-  <tbody>
-    {filteredData.map((classF) => (
-      <tr
-        key={classF.id}
-        className="cursor-pointer border-t text-center text-custom-blue2"
-      >
-        <td className="py-3 px-4">{classF.class_id}</td>
-        <td className="py-3 px-4">{classF.name}</td>
-        <td className="py-3 px-4">{classF.code}</td>
-        <td className="py-3 px-4">{classF.created_by}</td>
-        <td className="py-3 px-4">
-          {new Date(classF.updated_at)
-            .toLocaleDateString("en-GB")
-            .replace(/\//g, "-")}
-        </td>
-        <td className="py-3 px-4">
-          <span
-            className={`inline-block px-6 py-1 rounded-full font-bold w-max ${
-              classF.status.toLowerCase() === "active"
-                ? "bg-green-200 text-green-600"
-                : "bg-red-200 text-red-600"
-            }`}
-          >
-            {classF.status}
-          </span>
-        </td>
-        <td className="py-3 px-4">
-          <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12">
-            <i className="fas fa-edit"></i>
-          </button>
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-
+            <thead>
+              <tr className="text-custom-blue bg-gray-200">
+                <th className="py-3 px-4 border">Class ID</th>
+                <th className="py-3 px-4 border">Nama Kelas</th>
+                <th className="py-3 px-4 border">Kode</th>
+                <th className="py-3 px-4 border">Dibuat Oleh</th>
+                <th className="py-3 px-4 border">Tanggal Update</th>
+                <th className="py-3 px-4 border">Status</th>
+                <th className="py-3 px-4 border">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData
+                .slice(indexOfFirstItem, indexOfLastItem)
+                .map((classF) => (
+                  <tr
+                    key={classF.id}
+                    className="cursor-pointer border-t text-center text-custom-blue2"
+                  >
+                    <td className="py-3 px-4">{classF.class_id}</td>
+                    <td className="py-3 px-4">{classF.name}</td>
+                    <td className="py-3 px-4">{classF.code}</td>
+                    <td className="py-3 px-4">{classF.created_by}</td>
+                    <td className="py-3 px-4">
+                      {new Date(classF.updated_at)
+                        .toLocaleDateString("en-GB")
+                        .replace(/\//g, "-")}
+                    </td>
+                    <td className="py-3 px-4 text-center">
+                      <span
+                        className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+                          classF.status.toLowerCase() === "active"
+                            ? "bg-green-200 text-green-600"
+                            : "bg-red-200 text-red-600"
+                        }`}
+                      >
+                        {classF.status}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4">
+                      <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12">
+                        <i className="fas fa-edit"></i>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
         )}
+      </div>
+
+      <div className="flex flex-wrap justify-between items-center gap-4">
+        <span className="text-sm text-gray-500">
+          Showing {indexOfFirstItem + 1} to{" "}
+          {Math.min(indexOfLastItem, filteredData.length)} of{" "}
+          {filteredData.length} entries
+        </span>
+        <div className="flex items-center gap-4 ml-auto">
+          <div className="flex items-center space-x-3">
+            <button
+              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              &lt;
+            </button>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index}
+                className={`px-4 py-2 border rounded-md ${
+                  currentPage === index + 1
+                    ? "bg-custom-blue text-white"
+                    : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                }`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              &gt;
+            </button>
+          </div>
+          <div className="flex items-center space-x-2">
+            <select
+              className="px-4 py-2 border rounded-md text-white bg-custom-blue"
+              value={limit}
+              onChange={(e) =>
+                setCurrentPage(1) || setLimit(Number(e.target.value))
+              }
+            >
+              <option value={10}>10 Baris</option>
+              <option value={20}>20 Baris</option>
+              <option value={50}>50 Baris</option>
+            </select>
+          </div>
+        </div>
       </div>
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
@@ -325,9 +329,8 @@ const ClassF = () => {
                 ) : (
                   <button
                     className="w-full sm:w-1/2 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all"
-                    onClick={handleAddClassF}
+                    onClick={handleAddClass}
                   >
-                    <i className="fa-solid fa-plus text-white mr-2"></i>
                     Simpan
                   </button>
                 )}
@@ -336,61 +339,8 @@ const ClassF = () => {
           </div>
         </div>
       )}
-
-      <div className="flex flex-wrap justify-between items-center gap-4">
-        <span className="text-sm text-gray-500">
-          Showing {indexOfFirstItem + 1} to{" "}
-          {Math.min(indexOfLastItem, classFs.length)} of {classFs.length}{" "}
-          entries
-        </span>
-        <div className="flex items-center gap-4 ml-auto">
-          {" "}
-          <div className="flex items-center space-x-3">
-            <button
-              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
-              disabled={currentPage === 1}
-              onClick={() => handlePageChange(currentPage - 1)}
-            >
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index}
-                className={`px-4 py-2 border rounded-md ${
-                  currentPage === index + 1
-                    ? "bg-custom-blue text-white"
-                    : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                }`}
-                onClick={() => handlePageChange(index + 1)}
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div>
-          <div className="flex items-center space-x-2">
-            <select
-              className="px-4 py-2 border rounded-md text-white bg-custom-blue"
-              value={limit}
-              onChange={(e) =>
-                setCurrentPage(1) || setLimit(Number(e.target.value))
-              }
-            >
-              <option value={10}>10 Baris</option>
-              <option value={20}>20 Baris</option>
-              <option value={50}>50 Baris</option>
-            </select>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
 
-export default ClassF;
+export default ClassFinance;

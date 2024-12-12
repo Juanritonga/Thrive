@@ -125,9 +125,9 @@ const User = () => {
                   <td className="py-3 px-4">{user.full_name}</td>
                   <td className="py-3 px-4">{user.role}</td>
                   <td className="py-3 px-4">{user.entity}</td>
-                  <td className="py-3 px-4">
+                  <td className="py-3 px-4 text-center">
                     <span
-                      className={`inline-block px-6 py-1 rounded-full font-bold w-max ${
+                      className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
                         user.status.toLowerCase() === "active"
                           ? "bg-green-200 text-green-600"
                           : "bg-red-200 text-red-600"

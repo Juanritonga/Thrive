@@ -18,7 +18,7 @@ import Reimbursement from "./pages/cashbook/reimbursement";
 import EntryCashAdvance from "./pages/cashbook/Entry/entryca";
 import Dashboard from "./pages/dashboard";
 import Bank from "./pages/masterdata/finance/BankMasterData";
-import ClassF from "./pages/masterdata/finance/classF";
+import ClassF from "./pages/masterdata/finance/ClassFinance/ClassFinance";
 import Chart from "./pages/masterdata/finance/chart";
 import Currency from "./pages/masterdata/finance/currency";
 import Tax from "./pages/masterdata/finance/tax";
@@ -50,10 +50,10 @@ const App = () => {
           <Route path="master-data" element={<MasterData />}>
             <Route path="user" element={<User />} />
             <Route path="project" element={<Project />} />
-            <Route path="finance" element={<FinanceMasterData />}>   
-            <Route index element={<Navigate to="classF" replace />} />
+            <Route path="finance" element={<FinanceMasterData />}>
+              <Route index element={<Navigate to="ClassFinance" replace />} />
               <Route path="bank" element={<Bank />} />
-              <Route path="classF" element={<ClassF />} />
+              <Route path="ClassFinance" element={<ClassF />} />
               <Route path="chart" element={<Chart />} />
               <Route path="currency" element={<Currency />} />
               <Route path="tax" element={<Tax />} />
@@ -61,7 +61,7 @@ const App = () => {
           </Route>
 
           <Route path="finance" element={<Finance />}>
-          <Route index element={<Navigate to="bank" replace />} />
+            <Route index element={<Navigate to="bank" replace />} />
             <Route path="bank" element={<BankFinance />} />
             <Route path="transcode" element={<TranscodeFinance />} />
           </Route>

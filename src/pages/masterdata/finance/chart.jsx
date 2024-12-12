@@ -119,42 +119,41 @@ const Chart = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredData.map((chart) => (
-                <tr
-                  key={chart.id}
-                  className="cursor-pointer border-t text-center text-custom-blue2"
-                >
-                  <td className="py-3 px-4">{chart.acc_id}</td>
-                  <td className="py-3 px-4">{chart.name}</td>
-                  <td className="py-3 px-4">{chart.class_name}</td>
-                  <td className="py-3 px-4">{chart.class_code}</td>
-                  <td className="py-3 px-4">{chart.created_by}</td>
-                  <td className="py-3 px-4">
-                    {new Date(chart.updated_at)
-                      .toLocaleDateString("en-GB")
-                      .replace(/\//g, "-")}
-                  </td>{" "}
-                  <td className="py-3 px-4">
-                    <td className="py-3 px-4">
-                      <span
-                        className={`inline-block px-6 py-1 rounded-full font-bold w-max ${
-                          chart.status.toLowerCase() === "active"
-                            ? "bg-green-200 text-green-600"
-                            : "bg-red-200 text-red-600"
-                        }`}
-                      >
-                        {chart.status}
-                      </span>
-                    </td>
-                  </td>
-                  <td className="py-3 px-4">
-                    <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12">
-                      <i className="fas fa-edit"></i>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+  {filteredData.map((chart) => (
+    <tr
+      key={chart.id}
+      className="cursor-pointer border-t text-center text-custom-blue2"
+    >
+      <td className="py-3 px-4">{chart.acc_id}</td>
+      <td className="py-3 px-4">{chart.name}</td>
+      <td className="py-3 px-4">{chart.class_name}</td>
+      <td className="py-3 px-4">{chart.class_code}</td>
+      <td className="py-3 px-4">{chart.created_by}</td>
+      <td className="py-3 px-4">
+        {new Date(chart.updated_at)
+          .toLocaleDateString("en-GB")
+          .replace(/\//g, "-")}
+      </td>
+      <td className="py-3 px-4">
+        <span
+          className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+            chart.status.toLowerCase() === "active"
+              ? "bg-green-200 text-green-600"
+              : "bg-red-200 text-red-600"
+          }`}
+        >
+          {chart.status}
+        </span>
+      </td>
+      <td className="py-3 px-4">
+        <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12">
+          <i className="fas fa-edit"></i>
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
           </table>
         )}
       </div>
