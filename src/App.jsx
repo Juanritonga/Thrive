@@ -22,6 +22,12 @@ import ClassF from "./pages/masterdata/finance/ClassFinance/ClassFinance";
 import Chart from "./pages/masterdata/finance/chart";
 import Currency from "./pages/masterdata/finance/currency";
 import Tax from "./pages/masterdata/finance/tax";
+import GeneralLedgerDashboard from "./pages/generalledger/GeneralLedgerDashboard";
+import Setup from "./pages/generalledger/Setup";
+import COAMapping from "./pages/generalledger/COAMapping";
+import TransactionType from "./pages/generalledger/Setup/TransactionType";
+import BudgetGroup from "./pages/generalledger/Setup/BudgetGroup";
+import AccountPeriod from "./pages/generalledger/Setup/AccountPeriod";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -79,6 +85,19 @@ const App = () => {
             </Route>
             <Route path="reimbursement" element={<Reimbursement />}>
               <Route path=":id" element={<EntryCashAdvance />} />
+            </Route>
+          </Route>
+
+          <Route path="general-ledger" element={<GeneralLedgerDashboard />}>
+            <Route path="coa-mapping" element={<COAMapping />} />
+            <Route path="setup" element={<Setup />}>
+              <Route
+                index
+                element={<Navigate to="transaction-type" replace />}
+              />
+              <Route path="transaction-type" element={<TransactionType />} />
+              <Route path="budget-group" element={<BudgetGroup />} />
+              <Route path="account-period" element={<AccountPeriod />} />
             </Route>
           </Route>
         </Route>
