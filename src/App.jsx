@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import Login from "./pages/login";
 import Layout from "./pages/layout";
 import MasterData from "./pages/masterdata/master-data";
-import User from "./pages/masterdata/user";
 import Project from "./pages/masterdata/project";
 import FinanceMasterData from "./pages/masterdata/FinanceMasterData";
 import Finance from "./pages/finance/Finance";
@@ -22,6 +21,12 @@ import ClassF from "./pages/masterdata/finance/ClassFinance/ClassFinance";
 import Chart from "./pages/masterdata/finance/chart";
 import Currency from "./pages/masterdata/finance/currency";
 import Tax from "./pages/masterdata/finance/tax";
+import UserData from "./pages/masterdata/User/UserData";
+import UserRole from "./pages/masterdata/User/UserRole";
+import Division from "./pages/masterdata/User/Division";
+import RoleAccess from "./pages/masterdata/User/RoleAccess";
+import Departement from "./pages/masterdata/User/Departement";
+import UserMasterData from "./pages/masterdata/UserMasterData";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -48,7 +53,14 @@ const App = () => {
           />
 
           <Route path="master-data" element={<MasterData />}>
-            <Route path="user" element={<User />} />
+            <Route path="User" element={<UserMasterData />}>
+              <Route index element={<Navigate to="UserData" replace />} />
+              <Route path="UserData" element={<UserData />} />
+              <Route path="UserRole" element={<UserRole />} />
+              <Route path="Division" element={<Division />} />
+              <Route path="RoleAccess" element={<RoleAccess />} />
+              <Route path="Departement" element={<Departement />} />
+            </Route>
             <Route path="project" element={<Project />} />
             <Route path="finance" element={<FinanceMasterData />}>
               <Route index element={<Navigate to="ClassFinance" replace />} />

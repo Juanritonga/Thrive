@@ -1,17 +1,21 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import AddClassFinance from "./AddClassFinance";
+import addClassFinance from "./AddClassFinance";
+import updatedClassFinance from "./UpdatedClassFinance";
 
 const ClassFinance = () => {
-  const [classFs, setClassFs] = useState([]);
+  const [ClassFinances, setClassFinances] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [limit, setLimit] = useState(100);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newClassF, setNewClassF] = useState({
+  const [newClassFinance, setNewClassFinance] = useState({
+    name: "",
+    code: "",
+    status: "",
+  });
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editClassFinance, setEditClassFinance] = useState({
     name: "",
     code: "",
     status: "",
@@ -20,76 +24,118 @@ const ClassFinance = () => {
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
+  const handleOpenEditModal = (ClassFinance) => {
+    setEditClassFinance({
+      ...ClassFinance,
+    });
+    setIsEditModalOpen(true);
+  };
 
-    const fetchClassFs = async () => {
-      setLoading(true);
-      try {
-        const token = sessionStorage.getItem("authToken");
-        if (!token) throw new Error("Authorization token is missing.");
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+  };
 
-        const response = await axios.get(
-          "https://thrive-be.app-dev.altru.id/api/v1/finance/classes",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            params: { page: currentPage, limit },
-          }
-        );
-
-        if (response.data.success) {
-          setClassFs(response.data.data.items);
-          setTotalPages(response.data.data.total_pages || 1);
-        } else {
-          throw new Error(
-            response.data.message || "Unexpected response format."
-          );
-        }
-      } catch (err) {
-        setError(
-          err.response?.data?.message || err.message || "An error occurred."
-        );
-      } finally {
-        setLoading(false);
+  const fetchClassFinances = async () => {
+    setLoading(true);
+    try {
+      const token = sessionStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token is missing.");
       }
-    };
-  useEffect(() => {
 
-    fetchClassFs();
-  }, [currentPage, limit]);
+      const response = await axios.get(
+        "https://thrive-be.app-dev.altru.id/api/v1/finance/classes",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          params: { page: 1, limit: 20 },
+        }
+      );
 
-  const handleAddClass = async () => {
+      if (response.data.success) {
+        setClassFinances(response.data.data.items);
+      } else {
+        throw new Error(response.data.message || "Unexpected response format.");
+      }
+    } catch (err) {
+      console.error("Error:", err.response || err.message);
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "An unexpected error occurred."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteClassFinance = async () => {
+    setLoading(true);
+    try {
+      const token = sessionStorage.getItem("authToken");
+      if (!token) throw new Error("Authorization token is missing.");
+
+      const response = await axios.delete(
+        `https://thrive-be.app-dev.altru.id/api/v1/finance/classes/${editClassFinance.id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        // Refresh the user roles list
+        fetchClassFinances();
+        handleCloseEditModal();
+      } else {
+        throw new Error(response.data.message || "Failed to delete role.");
+      }
+    } catch (err) {
+      setError(
+        err.response?.data?.message || err.message || "An error occurred."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateClassFinance = async () => {
     setLoading(true); // Set loading to true when starting the request
-    await AddClassFinance(
-      newClassF,
-      setClassFs,
-      setNewClassF,
+    await updatedClassFinance(
+      editClassFinance,
+      setClassFinances,
+      setError,
+      handleCloseEditModal
+    );
+    fetchClassFinances();
+  };
+
+  const handleAddClassFinance = async () => {
+    setLoading(true); // Set loading to true when starting the request
+    await addClassFinance(
+      newClassFinance,
+      setClassFinances,
+      setNewClassFinance,
       setError,
       handleCloseModal
     );
-    fetchClassFs(); // Call this after adding a class to refresh the data
-  };
-  
-
-  // Check for null or undefined before calling Object.values
-  const filteredData = classFs.filter(
-    (classF) =>
-      classF &&
-      Object.values(classF)
-        .join(" ")
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase())
-  );
-
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) setCurrentPage(page);
+    fetchClassFinances(); // Call this after adding a role to refresh the data
   };
 
-  const indexOfFirstItem = (currentPage - 1) * limit;
-  const indexOfLastItem = Math.min(
-    indexOfFirstItem + limit,
-    filteredData.length
+  const filteredData = ClassFinances.filter((ClassFinance) =>
+    Object.values(ClassFinance)
+      .join(" ")
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
   );
+
+  useEffect(() => {
+    fetchClassFinances();
+  }, []);
 
   if (loading) {
     return (
@@ -103,7 +149,7 @@ const ClassFinance = () => {
   }
 
   if (error) {
-    return <div className="text-red-600">{error}</div>;
+    return <div style={{ color: "red" }}>{error}</div>;
   }
 
   return (
@@ -117,6 +163,7 @@ const ClassFinance = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+          <i className="fa-solid fa-magnifying-glass absolute right-2 top-1/2 transform -translate-y-1/2 text-custom-blue"></i>
         </div>
         <button
           className="bg-custom-blue text-white px-2 py-2 rounded-lg w-full sm:w-auto"
@@ -127,7 +174,7 @@ const ClassFinance = () => {
       </div>
       <div className="overflow-auto shadow-sm mb-6">
         {filteredData.length === 0 ? (
-          <p>No data found.</p>
+          <p>No users found.</p>
         ) : (
           <table className="min-w-full bg-white border rounded-lg">
             <thead>
@@ -142,96 +189,46 @@ const ClassFinance = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredData
-                .slice(indexOfFirstItem, indexOfLastItem)
-                .map((classF) => (
-                  <tr
-                    key={classF.id}
-                    className="cursor-pointer border-t text-center text-custom-blue2"
-                  >
-                    <td className="py-3 px-4">{classF.class_id}</td>
-                    <td className="py-3 px-4">{classF.name}</td>
-                    <td className="py-3 px-4">{classF.code}</td>
-                    <td className="py-3 px-4">{classF.created_by}</td>
-                    <td className="py-3 px-4">
-                      {new Date(classF.updated_at)
-                        .toLocaleDateString("en-GB")
-                        .replace(/\//g, "-")}
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <span
-                        className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
-                          classF.status.toLowerCase() === "active"
-                            ? "bg-green-200 text-green-600"
-                            : "bg-red-200 text-red-600"
-                        }`}
-                      >
-                        {classF.status}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4">
-                      <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12">
-                        <i className="fas fa-edit"></i>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+              {filteredData.map((ClassFinance) => (
+                <tr
+                  key={ClassFinance.id}
+                  className="cursor-pointer border-t text-center text-custom-blue2"
+                >
+                  <td className="py-3 px-4">{ClassFinance.class_id}</td>
+                  <td className="py-3 px-4">{ClassFinance.name}</td>
+                  <td className="py-3 px-4">{ClassFinance.code}</td>
+                  <td className="py-3 px-4">{ClassFinance.created_by}</td>
+                  <td className="py-3 px-4">
+                    {new Date(ClassFinance.updated_at)
+                      .toLocaleDateString("en-GB")
+                      .replace(/\//g, "-")}
+                  </td>
+                  <td className="py-3 px-4 text-center">
+                    <span
+                      className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+                        ClassFinance.status.toLowerCase() === "active"
+                          ? "bg-green-200 text-green-600"
+                          : "bg-red-200 text-red-600"
+                      }`}
+                    >
+                      {ClassFinance.status}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4">
+                    <button
+                      className="font-bold bg-gray-200 text-gray-400 p-3 rounded-lg w-10 h-10 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                      onClick={() => handleOpenEditModal(ClassFinance)}
+                    >
+                      <i className="fas fa-edit"></i>
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         )}
       </div>
 
-      <div className="flex flex-wrap justify-between items-center gap-4">
-        <span className="text-sm text-gray-500">
-          Showing {indexOfFirstItem + 1} to{" "}
-          {Math.min(indexOfLastItem, filteredData.length)} of{" "}
-          {filteredData.length} entries
-        </span>
-        <div className="flex items-center gap-4 ml-auto">
-          <div className="flex items-center space-x-3">
-            <button
-              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
-              disabled={currentPage === 1}
-              onClick={() => handlePageChange(currentPage - 1)}
-            >
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index}
-                className={`px-4 py-2 border rounded-md ${
-                  currentPage === index + 1
-                    ? "bg-custom-blue text-white"
-                    : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                }`}
-                onClick={() => handlePageChange(index + 1)}
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div>
-          <div className="flex items-center space-x-2">
-            <select
-              className="px-4 py-2 border rounded-md text-white bg-custom-blue"
-              value={limit}
-              onChange={(e) =>
-                setCurrentPage(1) || setLimit(Number(e.target.value))
-              }
-            >
-              <option value={10}>10 Baris</option>
-              <option value={20}>20 Baris</option>
-              <option value={50}>50 Baris</option>
-            </select>
-          </div>
-        </div>
-      </div>
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg w-98">
@@ -246,7 +243,6 @@ const ClassFinance = () => {
 
             <div className="p-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                {/* Entitas */}
                 <div>
                   <label
                     htmlFor="ClassName"
@@ -259,14 +255,17 @@ const ClassFinance = () => {
                     id="ClassName"
                     placeholder="Class Name"
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                    value={newClassF.name}
+                    value={newClassFinance.name}
                     onChange={(e) =>
-                      setNewClassF({ ...newClassF, name: e.target.value })
+                      setNewClassFinance({
+                        ...newClassFinance,
+                        name: e.target.value,
+                      })
                     }
                   />
                 </div>
 
-                {/* Nama Project */}
+                {/* Division */}
                 <div>
                   <label
                     htmlFor="code"
@@ -279,63 +278,165 @@ const ClassFinance = () => {
                     id="code"
                     placeholder="class"
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                    value={newClassF.code}
+                    value={newClassFinance.code}
                     onChange={(e) =>
-                      setNewClassF({ ...newClassF, code: e.target.value })
+                      setNewClassFinance({
+                        ...newClassFinance,
+                        code: e.target.value,
+                      })
                     }
                   />
                 </div>
+
+                {/* Status */}
+                <div>
+                  <label
+                    htmlFor="status"
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    Status
+                  </label>
+                  <select
+                    id="status"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
+                    value={newClassFinance.status || ""}
+                    onChange={(e) =>
+                      setNewClassFinance({
+                        ...newClassFinance,
+                        status: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="" disabled>
+                      Select Status
+                    </option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                </div>
               </div>
 
-              {/* Description */}
-              <div className="mb-4">
-                <label
-                  htmlFor="status"
-                  className="block text-gray-700 font-medium mb-2"
-                >
-                  Status
-                </label>
-                <select
-                  id="status"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                  value={newClassF.status}
-                  onChange={(e) =>
-                    setNewClassF({ ...newClassF, status: e.target.value })
-                  }
-                >
-                  <option value="" disabled>
-                    Select Status
-                  </option>
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
-              </div>
-
-              {/* Tombol Aksi */}
-              <div className="flex flex-col sm:flex-row justify-between gap-4">
+              {/* Button */}
+              <div className="flex justify-end space-x-2">
                 <button
-                  className="w-full sm:w-1/2 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-all"
+                  className="bg-gray-300 text-gray-700 py-2 px-4 rounded-md"
                   onClick={handleCloseModal}
                 >
                   Cancel
                 </button>
-                {loading ? (
-                  <button
-                    className="w-full sm:w-1/2 py-2 bg-gray-400 text-white rounded-md cursor-not-allowed"
-                    disabled
-                  >
-                    Processing...
-                  </button>
-                ) : (
-                  <button
-                    className="w-full sm:w-1/2 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all"
-                    onClick={handleAddClass}
-                  >
-                    Simpan
-                  </button>
-                )}
+                <button
+                  className="bg-blue-600 text-white py-2 px-4 rounded-md"
+                  onClick={handleAddClassFinance}
+                >
+                  Save
+                </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {isEditModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white rounded-lg w-98">
+            <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
+              <h2 className="text-lg">Edit User Role</h2>
+              <button className="text-white" onClick={handleCloseEditModal}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label
+                    htmlFor="ClassName"
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    Nama Project
+                  </label>
+                  <input
+                    type="text"
+                    id="ClassName"
+                    placeholder="Class Name"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
+                    value={editClassFinance.name}
+                    onChange={(e) =>
+                      setEditClassFinance({
+                        ...editClassFinance,
+                        name: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                {/* Division */}
+                <div>
+                  <label
+                    htmlFor="code"
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    Code
+                  </label>
+                  <input
+                    type="text"
+                    id="code"
+                    placeholder="class"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
+                    value={editClassFinance.code}
+                    onChange={(e) =>
+                      setEditClassFinance({
+                        ...editClassFinance,
+                        code: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                {/* Status */}
+                <div>
+                  <label
+                    htmlFor="status"
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    Status
+                  </label>
+                  <select
+                    id="status"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
+                    value={editClassFinance.status || ""}
+                    onChange={(e) =>
+                      setEditClassFinance({
+                        ...editClassFinance,
+                        status: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="" disabled>
+                      Select Status
+                    </option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Button */}
+              <div className="flex justify-end">
+                <button
+                  className="bg-red-600 text-white py-2 px-4 rounded-md"
+                  onClick={() => handleDeleteClassFinance(editClassFinance.id)}
+                >
+                  Delete
+                </button>
+                <button
+                  className="bg-custom-blue text-white py-2 px-6 rounded-lg"
+                  onClick={handleUpdateClassFinance}
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+           
           </div>
         </div>
       )}
