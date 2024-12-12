@@ -2,19 +2,27 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 const Tax = () => {
-  const [taxs, setTaxs] = useState([]);
+  const [taxes, setTaxes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [showModal, setShowModal] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
+  const [newTax, setNewTax] = useState({
+    id: "",
+    name: "",
+    amount: "",
+    status: "active",
+  });
+  const [editMode, setEditMode] = useState(false);
 
   const indexOfLastItem = currentPage * limit;
   const indexOfFirstItem = indexOfLastItem - limit;
 
   useEffect(() => {
-    const fetchTaxs = async () => {
+    const fetchTaxes = async () => {
       setLoading(true);
       try {
         const token = sessionStorage.getItem("authToken");
@@ -37,7 +45,7 @@ const Tax = () => {
         );
 
         if (response.data.success) {
-          setTaxs(response.data.data.items);
+          setTaxes(response.data.data.items);
           setTotalPages(response.data.data.total_pages || 1);
         } else {
           throw new Error(
@@ -56,20 +64,108 @@ const Tax = () => {
       }
     };
 
-    fetchTaxs();
+    fetchTaxes();
   }, [currentPage, limit]);
 
-  const filteredData = taxs.filter((tax) =>
-    Object.values(tax)
-      .join(" ")
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
-  );
+  const filteredData = taxes.filter((tax) => {
+    const values = Object.values(tax || {}).map((value) => value || "");
+    return values.join(" ").toLowerCase().includes(searchQuery.toLowerCase());
+  });
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
+  };
+
+  const handleTambahBaru = () => {
+    setShowModal(true);
+    setEditMode(false);
+    setNewTax({
+      id: "",
+      name: "",
+      amount: "",
+      status: "Active",
+    });
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewTax((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSaveTax = async (e) => {
+    e.preventDefault();
+    try {
+      const token = sessionStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token is missing.");
+      }
+  
+      const payload = {
+        name: newTax.name,
+        amount: parseFloat(newTax.amount),
+        status: newTax.status.toLowerCase(),
+      };
+  
+      if (editMode) {
+        await axios.put(
+          `https://thrive-be.app-dev.altru.id/api/v1/taxes/${newTax.id}`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+  
+        setTaxes((prev) =>
+          prev.map((tax) =>
+            tax.id === newTax.id ? { ...tax, ...payload } : tax
+          )
+        );
+      } else {
+        const response = await axios.post(
+          "https://thrive-be.app-dev.altru.id/api/v1/taxes",
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+  
+        const newTaxData = response.data.data;
+        setTaxes((prev) => [newTaxData, ...prev]); // Data baru langsung muncul
+      }
+  
+      setShowModal(false); // Tutup modal
+      setNewTax({ id: "", name: "", amount: "", status: "Active" }); // Reset form
+    } catch (err) {
+      console.error("Error in handleSaveTax:", err.response || err.message);
+      alert("An error occurred while saving tax data. Please try again.");
+    }
+  };
+  
+
+  const handleEdit = (tax) => {
+    setNewTax({
+      id: tax.id,
+      name: tax.name,
+      amount: tax.amount,
+      status: tax.status,
+    });
+    setEditMode(true);
+    setShowModal(true);
   };
 
   if (loading) {
@@ -83,6 +179,31 @@ const Tax = () => {
     );
   }
 
+  const handleDeleteTax = async () => {
+    try {
+      const token = sessionStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token is missing.");
+      }
+
+      await axios.delete(
+        `https://thrive-be.app-dev.altru.id/api/v1/taxes/${newTax.id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setTaxes((prev) => prev.filter((tax) => tax.id !== newTax.id));
+      setShowModal(false);
+    } catch (err) {
+      console.error("Error:", err.response || err.message);
+      alert("Failed to delete tax. Please try again.");
+    }
+  };
+
   if (error) {
     return <div style={{ color: "red" }}>{error}</div>;
   }
@@ -93,119 +214,198 @@ const Tax = () => {
         <div className="relative w-full sm:w-[300px]">
           <input
             type="text"
-            placeholder="Cari"
+            placeholder="Cari Tax"
             className="pl-6 pr-10 py-3 w-full border rounded-md"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <i className="fa-solid fa-magnifying-glass absolute right-2 top-1/2 transform -translate-y-1/2 text-custom-blue"></i>
         </div>
+        <button
+          onClick={handleTambahBaru}
+          className="bg-custom-blue text-white py-2 px-4 rounded-md hover:bg-blue-600"
+        >
+          + Tambah Baru
+        </button>
       </div>
       <div className="overflow-auto shadow-sm mb-6">
         {filteredData.length === 0 ? (
-          <p>No users found.</p>
+          <p>No taxes found.</p>
         ) : (
           <table className="min-w-full bg-white border rounded-lg">
             <thead>
               <tr className="text-custom-blue bg-gray-200">
                 <th className="py-3 px-4 border">Tax ID</th>
-                <th className="py-3 px-4 border">Tax Nama</th>
+                <th className="py-3 px-4 border">Name</th>
                 <th className="py-3 px-4 border">Amount</th>
                 <th className="py-3 px-4 border">Dibuat Oleh</th>
-                <th className="py-3 px-4 border">Tanggal Update</th>
+                <th className="py-3 px-4 border">Updated At</th>
                 <th className="py-3 px-4 border">Status</th>
                 <th className="py-3 px-4 border">Action</th>
               </tr>
             </thead>
             <tbody>
-              {filteredData.map((tax) => (
-                <tr
-                  key={tax.id}
-                  className="cursor-pointer border-t text-center text-custom-blue2"
-                >
-                  <td className="py-3 px-4">{tax.tax_id}</td>
-                  <td className="py-3 px-4">{tax.name}</td>
-                  <td className="py-3 px-4">{tax.amount}</td>
-                  <td className="py-3 px-4">{tax.created_by}</td>
-                  <td className="py-3 px-4">
-                    {new Date(tax.updated_at)
-                      .toLocaleDateString("en-GB")
-                      .replace(/\//g, "-")}
-                  </td>{" "}
-                  <td className="py-3 px-4 text-center">
-                    <span
-                      className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
-                        tax.status.toLowerCase() === "active"
-                          ? "bg-green-200 text-green-600"
-                          : "bg-red-200 text-red-600"
-                      }`}
-                    >
-                      {tax.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12">
-                      <i className="fas fa-edit"></i>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+  {filteredData.map((tax, index) => (
+    <tr key={tax.id || index} className="cursor-pointer border-t text-center text-custom-blue2">
+      <td className="py-3 px-4">{tax.tax_id}</td>
+      <td className="py-3 px-4">{tax.name}</td>
+      <td className="py-3 px-4">{tax.amount}</td>
+      <td className="py-3 px-4">{tax.created_by || "N/A"}</td>
+      <td className="py-3 px-4">
+        {new Date(tax.updated_at)
+          .toLocaleDateString("en-GB")
+          .replace(/\//g, "-")}
+      </td>
+      <td className="py-3 px-4">
+        <span
+          className={`inline-flex items-center justify-center px-6 py-2 rounded-full font-bold ${
+            tax.status?.toLowerCase() === "active"
+              ? "bg-green-200 text-green-600"
+              : "bg-red-200 text-red-600"
+          }`}
+        >
+          {tax.status || "N/A"}
+        </span>
+      </td>
+      <td className="py-3 px-4">
+        <button
+          onClick={() => handleEdit(tax)}
+          className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12"
+        >
+          <i className="fas fa-edit"></i>
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
           </table>
         )}
       </div>
-
       <div className="flex flex-wrap justify-between items-center gap-4">
         <span className="text-sm text-gray-500">
           Showing {indexOfFirstItem + 1} to{" "}
-          {Math.min(indexOfLastItem, taxs.length)} of {taxs.length} entries
+          {Math.min(indexOfLastItem, filteredData.length)} of{" "}
+          {filteredData.length} entries
         </span>
         <div className="flex items-center gap-4 ml-auto">
-          {" "}
-          <div className="flex items-center space-x-3">
+          <button
+            className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+          >
+            &lt;
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => (
             <button
-              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
-              disabled={currentPage === 1}
-              onClick={() => handlePageChange(currentPage - 1)}
+              key={index}
+              className={`px-4 py-2 border rounded-md ${
+                currentPage === index + 1
+                  ? "bg-custom-blue text-white"
+                  : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+              }`}
+              onClick={() => handlePageChange(index + 1)}
             >
-              &lt;
+              {index + 1}
             </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index}
-                className={`px-4 py-2 border rounded-md ${
-                  currentPage === index + 1
-                    ? "bg-custom-blue text-white"
-                    : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                }`}
-                onClick={() => handlePageChange(index + 1)}
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div>
-          <div className="flex items-center space-x-2">
-            <select
-              className="px-4 py-2 border rounded-md text-white bg-custom-blue"
-              value={limit}
-              onChange={(e) =>
-                setCurrentPage(1) || setLimit(Number(e.target.value))
-              }
-            >
-              <option value={10}>10 Baris</option>
-              <option value={20}>20 Baris</option>
-              <option value={50}>50 Baris</option>
-            </select>
-          </div>
+          ))}
+          <button
+            className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            &gt;
+          </button>
+          <select
+            className="px-4 py-2 border rounded-md text-white bg-custom-blue"
+            value={limit}
+            onChange={(e) => {
+              setCurrentPage(1);
+              setLimit(Number(e.target.value));
+            }}
+          >
+            <option value={5}>5 Rows</option>
+            <option value={10}>10 Rows</option>
+            <option value={20}>20 Rows</option>
+          </select>
         </div>
       </div>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg w-[600px] p-6 relative">
+            <button
+              onClick={handleCloseModal}
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+              style={{
+                fontSize: "24px",
+                fontWeight: "bold",
+                padding: "8px",
+                borderRadius: "50%",
+              }}
+            >
+              &times;
+            </button>
+            <h2 className="text-xl font-bold text-custom-blue mb-4">
+              {editMode ? "Edit Tax" : "Tambah Baru"}
+            </h2>
+            <form onSubmit={handleSaveTax}>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block mb-1 font-bold">Tax Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    className="border rounded-md p-2 w-full"
+                    value={newTax.name}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1 font-bold">Amount</label>
+                  <input
+                    type="number"
+                    name="amount"
+                    className="border rounded-md p-2 w-full"
+                    value={newTax.amount}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1 font-bold">Status</label>
+                  <select
+                    name="status"
+                    className="border rounded-md p-2 w-full"
+                    value={newTax.status}
+                    onChange={handleInputChange}
+                  >
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>
+              <div className="flex justify-end gap-4 mt-4">
+                {editMode && (
+                  <button
+                    type="button"
+                    className="bg-red-500 text-white py-2 px-4 rounded-md"
+                    onClick={handleDeleteTax}
+                  >
+                    Delete
+                  </button>
+                )}
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-white py-2 px-4 rounded-md"
+                >
+                  Simpan
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
