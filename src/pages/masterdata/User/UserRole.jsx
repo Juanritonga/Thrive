@@ -1,33 +1,33 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import addChart from "./Chart/AddChart";
-import updatedChart from "./Chart/UpdatedChart";
+import addUserRole from "./UserRole/AddUserRole";
+import updatedUserRole from "./UserRole/UpdatedUserRole";
 
-const Chart = () => {
-  const [Chart, setChart] = useState([]);
+const UserRole = () => {
+  const [userRoles, setUserRoles] = useState([]);
+  const [divisions, setDivisions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [classFinances, setClassFinances] = useState([]);
-  const [newChart, setNewChart] = useState({
-    name: "",
-    class_id: "",
+  const [newUserRole, setNewUserRole] = useState({
+    role_name: "",
+    division_id: "",
     status: "",
   });
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editChart, setEditChart] = useState({
-    name: "",
-    class_id: "",
+  const [editUserRole, setEditUserRole] = useState({
+    role_name: "",
+    division_id: "",
     status: "",
   });
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const handleOpenEditModal = (Chart) => {
-    setEditChart({
-      ...Chart,
+  const handleOpenEditModal = (userRole) => {
+    setEditUserRole({
+      ...userRole,
     });
     setIsEditModalOpen(true);
   };
@@ -36,7 +36,7 @@ const Chart = () => {
     setIsEditModalOpen(false);
   };
 
-  const fetchCharts = async () => {
+  const fetchUserRoles = async () => {
     setLoading(true);
     try {
       const token = sessionStorage.getItem("authToken");
@@ -45,7 +45,7 @@ const Chart = () => {
       }
 
       const response = await axios.get(
-        "https://thrive-be.app-dev.altru.id/api/v1/finance/acc",
+        "https://thrive-be.app-dev.altru.id/api/v1/roles",
         {
           headers: {
             "Content-Type": "application/json",
@@ -56,7 +56,7 @@ const Chart = () => {
       );
 
       if (response.data.success) {
-        setChart(response.data.data.items);
+        setUserRoles(response.data.data.items);
       } else {
         throw new Error(response.data.message || "Unexpected response format.");
       }
@@ -71,13 +71,14 @@ const Chart = () => {
       setLoading(false);
     }
   };
-  const fetchClassFinances = async () => {
+
+  const fetchDivisions = async () => {
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
       const response = await axios.get(
-        "https://thrive-be.app-dev.altru.id/api/v1/finance/classes",
+        "https://thrive-be.app-dev.altru.id/api/v1/divisions",
         {
           headers: {
             "Content-Type": "application/json",
@@ -90,12 +91,11 @@ const Chart = () => {
       console.log("Divisions fetched:", response.data.data.items);
 
       if (response.data.success) {
-        setClassFinances(response.data.data.items); // Set fetched class finances
-
-        if (!newChart.class_id) {
-          setNewChart((prev) => ({
+        setDivisions(response.data.data.items);
+        if (!newUserRole.division_id) {
+          setNewUserRole((prev) => ({
             ...prev,
-            class_id: response.data.data.items[0]?.id || "", // Set class_id if not already set
+            division_id: response.data.data.items[0]?.id || "", // Set division_id if not set
           }));
         }
       } else {
@@ -107,15 +107,14 @@ const Chart = () => {
       );
     }
   };
-
-  const handleDeleteChart = async () => {
+  const handleDeleteUserRole = async () => {
     setLoading(true);
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
       const response = await axios.delete(
-        `https://thrive-be.app-dev.altru.id/api/v1/finance/acc/${editChart.id}`,
+        `https://thrive-be.app-dev.altru.id/api/v1/roles/${editUserRole.id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -126,7 +125,7 @@ const Chart = () => {
 
       if (response.data.success) {
         // Refresh the user roles list
-        fetchCharts();
+        fetchUserRoles();
         handleCloseEditModal();
       } else {
         throw new Error(response.data.message || "Failed to delete role.");
@@ -140,29 +139,40 @@ const Chart = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCharts();
-    fetchClassFinances();
-  }, []);
-
-  const handleAddChart = async () => {
-    setLoading(true);
-    await addChart(newChart, setChart, setNewChart, setError, handleCloseModal);
-    fetchCharts();
-  };
-
-  const handleUpdateChart = async () => {
+  const handleUpdateUserRole = async () => {
     setLoading(true); // Set loading to true when starting the request
-    await updatedChart(editChart, setChart, setError, handleCloseEditModal);
-    fetchCharts();
+    await updatedUserRole(
+      editUserRole,
+      setUserRoles,
+      setError,
+      handleCloseEditModal
+    );
+    fetchUserRoles();
   };
 
-  const filteredData = Chart.filter((Chart) =>
-    Object.values(Chart)
+  const handleAddUserRole = async () => {
+    setLoading(true); // Set loading to true when starting the request
+    await addUserRole(
+      newUserRole,
+      setUserRoles,
+      setNewUserRole,
+      setError,
+      handleCloseModal
+    );
+    fetchUserRoles(); // Call this after adding a role to refresh the data
+  };
+
+  const filteredData = userRoles.filter((userRole) =>
+    Object.values(userRole)
       .join(" ")
       .toLowerCase()
       .includes(searchQuery.toLowerCase())
   );
+
+  useEffect(() => {
+    fetchUserRoles();
+    fetchDivisions();
+  }, []);
 
   if (loading) {
     return (
@@ -206,46 +216,53 @@ const Chart = () => {
           <table className="min-w-full bg-white border rounded-lg">
             <thead>
               <tr className="text-custom-blue bg-gray-200">
-                <th className="py-3 px-4 border">ID Acc.</th>
-                <th className="py-3 px-4 border">Nama Acc.</th>
-                <th className="py-3 px-4 border">Kelas</th>
-                <th className="py-3 px-4 border">Kode</th>
-                <th className="py-3 px-4 border">Dibuat Oleh</th>
-                <th className="py-3 px-4 border">Tanggal Update</th>
+                <th className="py-3 px-4 border">Role ID</th>
+                <th className="py-3 px-4 border">Role Name</th>
+                <th className="py-3 px-4 border">Division ID</th>
+                <th className="py-3 px-4 border">Division Code</th>
+                <th className="py-3 px-4 border">Division Name</th>
                 <th className="py-3 px-4 border">Status</th>
+                <th className="py-3 px-4 border">Create</th>
+                <th className="py-3 px-4 border">Update</th>
                 <th className="py-3 px-4 border">Action</th>
               </tr>
             </thead>
             <tbody>
-              {filteredData.map((Chart) => (
+              {filteredData.map((userRole) => (
                 <tr
-                  key={Chart.id}
+                  key={userRole.id}
                   className="cursor-pointer border-t text-center text-custom-blue2"
-                > <td className="py-3 px-4">{Chart.acc_id}</td>
-                  <td className="py-3 px-4">{Chart.name}</td>
-                  <td className="py-3 px-4">{Chart.class_name}</td>
-                  <td className="py-3 px-4">{Chart.class_code}</td>
-                  <td className="py-3 px-4">{Chart.created_by}</td>
-                  <td className="py-3 px-4">
-                    {new Date(Chart.updated_at)
-                      .toLocaleDateString("en-GB")
-                      .replace(/\//g, "-")}
-                  </td>
-                  <td className="py-3 px-4">
+                >
+                  <td className="py-3 px-4">{userRole.role_id}</td>
+                  <td className="py-3 px-4">{userRole.role_name}</td>
+                  <td className="py-3 px-4">{userRole.division_id}</td>
+                  <td className="py-3 px-4">{userRole.division_code}</td>
+                  <td className="py-3 px-4">{userRole.division_name}</td>
+                  <td className="py-3 px-4 text-center">
                     <span
                       className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
-                        Chart.status.toLowerCase() === "active"
+                        userRole.status.toLowerCase() === "active"
                           ? "bg-green-200 text-green-600"
                           : "bg-red-200 text-red-600"
                       }`}
                     >
-                      {Chart.status}
+                      {userRole.status}
                     </span>
+                  </td>
+                  <td className="py-3 px-4">
+                    {new Date(userRole.created_at)
+                      .toLocaleDateString("en-GB")
+                      .replace(/\//g, "-")}
+                  </td>
+                  <td className="py-3 px-4">
+                    {new Date(userRole.updated_at)
+                      .toLocaleDateString("en-GB")
+                      .replace(/\//g, "-")}
                   </td>
                   <td className="py-3 px-4">
                     <button
                       className="font-bold bg-gray-200 text-gray-400 p-3 rounded-lg w-10 h-10 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                      onClick={() => handleOpenEditModal(Chart)}
+                      onClick={() => handleOpenEditModal(userRole)}
                     >
                       <i className="fas fa-edit"></i>
                     </button>
@@ -256,11 +273,14 @@ const Chart = () => {
           </table>
         )}
       </div>
+
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg w-98">
             <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
-              <h2 className="text-lg">Tambah Baru</h2>
+              <div className="flex items-center space-x-2">
+                <h2 className="text-lg">Tambah Baru</h2>
+              </div>
               <button className="text-white" onClick={handleCloseModal}>
                 <i className="fas fa-times"></i>
               </button>
@@ -270,49 +290,57 @@ const Chart = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label
-                    htmlFor="ChartName"
+                    htmlFor="RoleName"
                     className="block text-gray-700 font-medium mb-2"
                   >
-                    Chart Name
+                    Role Name
                   </label>
                   <input
                     type="text"
-                    id="ChartName"
-                    placeholder="Chart Name"
+                    id="RoleName"
+                    placeholder="Role Name"
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                    value={newChart.Chart_name}
+                    value={newUserRole.role_name}
                     onChange={(e) =>
-                      setNewChart({
-                        ...newChart,
-                        Chart_name: e.target.value,
+                      setNewUserRole({
+                        ...newUserRole,
+                        role_name: e.target.value,
                       })
                     }
                   />
                 </div>
+
+                {/* Division */}
                 <div>
                   <label
-                    htmlFor="class_id"
+                    htmlFor="division"
                     className="block text-gray-700 font-medium mb-2"
                   >
-                    Class Finance
+                    Division
                   </label>
                   <select
-                    id="class_id"
+                    id="division"
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                    value={newChart.class_id}
+                    value={newUserRole.division_id || ""}
                     onChange={(e) =>
-                      setNewChart({ ...newChart, class_id: e.target.value })
+                      setNewUserRole({
+                        ...newUserRole,
+                        division_id: e.target.value,
+                      })
                     }
                   >
-                    <option value="">Select Class</option>
-                    {classFinances.map((classFinance) => (
-                      <option key={classFinance.id} value={classFinance.id}>
-                        {classFinance.name}
+                    <option value="" disabled>
+                      Select Division
+                    </option>
+                    {divisions.map((division) => (
+                      <option key={division.id} value={division.id}>
+                        {division.division_name}
                       </option>
                     ))}
                   </select>
                 </div>
 
+                {/* Status */}
                 <div>
                   <label
                     htmlFor="status"
@@ -323,10 +351,10 @@ const Chart = () => {
                   <select
                     id="status"
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                    value={newChart.status || ""}
+                    value={newUserRole.status || ""}
                     onChange={(e) =>
-                      setNewChart({
-                        ...newChart,
+                      setNewUserRole({
+                        ...newUserRole,
                         status: e.target.value,
                       })
                     }
@@ -340,6 +368,7 @@ const Chart = () => {
                 </div>
               </div>
 
+              {/* Button */}
               <div className="flex justify-end space-x-2">
                 <button
                   className="bg-gray-300 text-gray-700 py-2 px-4 rounded-md"
@@ -349,7 +378,7 @@ const Chart = () => {
                 </button>
                 <button
                   className="bg-blue-600 text-white py-2 px-4 rounded-md"
-                  onClick={handleAddChart}
+                  onClick={handleAddUserRole}
                 >
                   Save
                 </button>
@@ -358,29 +387,28 @@ const Chart = () => {
           </div>
         </div>
       )}
+
       {isEditModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg w-98">
             <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
-              <div className="flex items-center space-x-2">
-                <h2 className="text-lg">Edit Divison</h2>
-              </div>
+              <h2 className="text-lg">Edit User Role</h2>
               <button className="text-white" onClick={handleCloseEditModal}>
                 <i className="fas fa-times"></i>
               </button>
             </div>
-            <div className="p-6">
+            <div className="p-8">
               <div className="mb-4">
                 <label className="block font-semibold text-gray-700">
-                  Chart Name
+                  Role Name
                 </label>
                 <input
                   type="text"
-                  value={editChart.Chart_name}
+                  value={editUserRole.role_name}
                   onChange={(e) =>
-                    setEditChart({
-                      ...editChart,
-                      Chart_name: e.target.value,
+                    setEditUserRole({
+                      ...editUserRole,
+                      role_name: e.target.value,
                     })
                   }
                   className="w-full px-4 py-2 border rounded-md"
@@ -389,28 +417,28 @@ const Chart = () => {
 
               <div>
                 <label
-                  htmlFor="ClassFinance"
+                  htmlFor="division"
                   className="block text-gray-700 font-medium mb-2"
                 >
-                  Class
+                  Division
                 </label>
                 <select
-                  id="ClassFinance"
+                  id="division"
                   className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                  value={editChart.class_id || ""}
+                  value={editUserRole.division_id || ""}
                   onChange={(e) =>
-                    setEditChart({
-                      ...editChart,
-                      class_id: e.target.value,
+                    setEditUserRole({
+                      ...editUserRole,
+                      division_id: e.target.value,
                     })
                   }
                 >
                   <option value="" disabled>
-                    Select Class
+                    Select Division
                   </option>
-                  {classFinances.map((ClassFinance) => (
-                    <option key={ClassFinance.id} value={ClassFinance.id}>
-                      {ClassFinance.class_name}
+                  {divisions.map((division) => (
+                    <option key={division.id} value={division.id}>
+                      {division.division_name}
                     </option>
                   ))}
                 </select>
@@ -422,10 +450,10 @@ const Chart = () => {
                 </label>
                 <select
                   className="w-full px-4 py-2 border rounded-md"
-                  value={editChart.status}
+                  value={editUserRole.status}
                   onChange={(e) =>
-                    setEditChart({
-                      ...editChart,
+                    setEditUserRole({
+                      ...editUserRole,
                       status: e.target.value,
                     })
                   }
@@ -434,20 +462,23 @@ const Chart = () => {
                   <option value="inactive">Inactive</option>
                 </select>
               </div>
+              <div className="flex justify-end gap-4 mt-4">
+              <button
+                className="bg-red-600 text-white py-2 px-4 rounded-md"
+                onClick={handleDeleteUserRole}
+              >
+                Delete
+              </button>
 
               <div className="flex justify-end">
                 <button
-                  className="bg-red-600 text-white py-2 px-4 rounded-md"
-                  onClick={() => handleDeleteChart(editChart.id)}
-                >
-                  Delete
-                </button>
-                <button
                   className="bg-custom-blue text-white py-2 px-6 rounded-lg"
-                  onClick={handleUpdateChart}
+                  onClick={handleUpdateUserRole}
                 >
                   Save
                 </button>
+              </div>
+
               </div>
             </div>
           </div>
@@ -457,4 +488,4 @@ const Chart = () => {
   );
 };
 
-export default Chart;
+export default UserRole;

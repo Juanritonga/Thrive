@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const addClassFinance = async (
-  newClassFinance,
-  setClassFinance,
-  setNewClassFinance,
+const addRoleAccess = async (
+  newRoleAccess,
+  setRoleAccess,
+  setNewRoleAccess,
   setError,
   handleCloseModal
 ) => {
@@ -12,8 +12,8 @@ const addClassFinance = async (
         if (!token) throw new Error("Authorization token is missing.");
       
         const response = await axios.post(
-          "https://thrive-be.app-dev.altru.id/api/v1/finance/classes",
-          newClassFinance,
+          "https://thrive-be.app-dev.altru.id/api/v1/role-access",
+          newRoleAccess,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -22,10 +22,10 @@ const addClassFinance = async (
         );
       
         if (response.data.success) {
-          setClassFinance((prevClassFinance) => [response.data.data, ...prevClassFinance]);
-          setNewClassFinance({
-            name: "",
-            code: "",
+          setRoleAccess((prevRoleAccess) => [response.data.data, ...prevRoleAccess]);
+          setNewRoleAccess({
+            role_id: "",
+            modules: "",
             status: "",
           });
           handleCloseModal();
@@ -48,4 +48,4 @@ const addClassFinance = async (
       
 };
 
-export default addClassFinance;
+export default addRoleAccess;
