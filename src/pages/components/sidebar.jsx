@@ -95,18 +95,47 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       icon: "fas fa-hand-holding-usd",
       indent: true,
     },
-    { role: "front end", label: "Reimbursement", path: "#", icon: "fas fa-receipt", indent: true },
-    { role: "front end", label: "Format", path: "#", icon: "fas fa-file-alt", indent: true },
-    { role: "front end", label: "General Ledger", path: "#", icon: "fas fa-book" },
     {
       role: "front end",
-      label: "Cash Advance",
+      label: "Reimbursement",
+      path: "#",
+      icon: "fas fa-receipt",
+      indent: true,
+    },
+    {
+      role: "front end",
+      label: "Format",
+      path: "#",
+      icon: "fas fa-file-alt",
+      indent: true,
+    },
+    {
+      role: "front end",
+      label: "General Ledger",
+      path: "/general-ledger",
+      icon: "fas fa-book",
+    },
+    {
+      role: "front end",
+      label: "Report",
       path: "#",
       icon: "fas fa-hand-holding-usd",
       indent: true,
     },
-    { role: "front end", label: "Reimbursement", path: "#", icon: "fas fa-receipt", indent: true },
-    { role: "front end", label: "Format", path: "#", icon: "fas fa-file-alt", indent: true },
+    {
+      role: "front end",
+      label: "COA Mapping",
+      path: "/general-ledger/coa-mapping",
+      icon: "fas fa-receipt",
+      indent: true,
+    },
+    {
+      role: "front end",
+      label: "Setup",
+      path: "/general-ledger/setup",
+      icon: "fas fa-file-alt",
+      indent: true,
+    },
   ];
 
   return (
