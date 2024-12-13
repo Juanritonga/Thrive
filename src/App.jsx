@@ -29,7 +29,9 @@ import Departement from "./pages/masterdata/User/Departement";
 import UserMasterData from "./pages/masterdata/UserMasterData";
 import GeneralLedgerDashboard from "./pages/generalledger/GeneralLedgerDashboard";
 import Setup from "./pages/generalledger/Setup";
-import COAMapping from "./pages/generalledger/COAMapping";
+import MainCOAMapping from "./pages/generalledger/COAMapping/MainCOAMapping";
+import SubCOAMapping from "./pages/generalledger/COAMapping/SubCOAMapping";
+import COADivision from "./pages/generalledger/COAMapping/COADivision";
 import TransactionType from "./pages/generalledger/Setup/TransactionType";
 import BudgetGroup from "./pages/generalledger/Setup/BudgetGroup";
 import AccountPeriod from "./pages/generalledger/Setup/AccountPeriod";
@@ -101,7 +103,14 @@ const App = () => {
           </Route>
 
           <Route path="general-ledger" element={<GeneralLedgerDashboard />}>
-            <Route path="coa-mapping" element={<COAMapping />} />
+          <Route path="main-coa-mapping" element={<MainCOAMapping />}>
+              <Route
+                index
+                element={<Navigate to="coa-mapping" replace />}
+              />
+              <Route path="coa-mapping" element={<SubCOAMapping />} />
+              <Route path="coa-division" element={<COADivision />} />
+            </Route>
             <Route path="setup" element={<Setup />}>
               <Route
                 index

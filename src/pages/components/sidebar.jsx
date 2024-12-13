@@ -125,7 +125,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
     {
       role: "front end",
       label: "COA Mapping",
-      path: "/general-ledger/coa-mapping",
+      path: "/general-ledger/main-coa-mapping",
       icon: "fas fa-receipt",
       indent: true,
     },
