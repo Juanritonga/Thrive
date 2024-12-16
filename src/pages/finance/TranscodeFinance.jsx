@@ -147,7 +147,7 @@ const TranscodeFinance = () => {
         </div>
         <button
           onClick={handleTambahBaru}
-          className="bg-custom-blue text-white py-2 px-4 rounded-md hover:bg-blue-600"
+          className="bg-custom-blue text-white py-2 px-4 rounded-md"
         >
           + Tambah Baru
         </button>
@@ -261,104 +261,109 @@ const TranscodeFinance = () => {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg w-[600px] p-6 relative">
-            <button
-              onClick={handleCloseModal}
-              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
-              style={{
-                fontSize: "24px",
-                fontWeight: "bold",
-                padding: "8px",
-                borderRadius: "50%",
-              }}
-            >
-              &times;
-            </button>
-            <h2 className="text-xl font-bold text-custom-blue mb-4">
-              {editMode ? "Edit Transcode" : "Tambah Baru"}
-            </h2>
-            <form onSubmit={handleSaveTranscode}>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block mb-1 font-bold">Transcode ID</label>
-                  <input
-                    type="text"
-                    name="transcode_id"
-                    className="border rounded-md p-2 w-full"
-                    value={newTranscode.transcode_id}
-                    onChange={handleInputChange}
-                    required
-                    disabled={editMode}
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1 font-bold">
-                    Transaction Type
-                  </label>
-                  <input
-                    type="text"
-                    name="transaction_type"
-                    className="border rounded-md p-2 w-full"
-                    value={newTranscode.transaction_type}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1 font-bold">Transcode</label>
-                  <input
-                    type="text"
-                    name="transcode"
-                    className="border rounded-md p-2 w-full"
-                    value={newTranscode.transcode}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1 font-bold">Created By</label>
-                  <input
-                    type="text"
-                    name="created_by"
-                    className="border rounded-md p-2 w-full"
-                    value={newTranscode.created_by}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1 font-bold">Status</label>
-                  <select
-                    name="status"
-                    className="border rounded-md p-2 w-full"
-                    value={newTranscode.status}
-                    onChange={handleInputChange}
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                  </select>
-                </div>
-              </div>
-              <div className="flex justify-end gap-4 mt-4">
-                <button
-                  type="button"
-                  className="bg-red-500 text-white py-2 px-4 rounded-md"
-                  onClick={handleCloseModal}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white py-2 px-4 rounded-md"
-                >
-                  Simpan
-                </button>
-              </div>
-            </form>
+  <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg w-[600px] relative">
+      {/* Header */}
+      <div className="bg-blue-900 text-white px-4 py-3 rounded-t-lg text-lg font-semibold text-left">
+        {editMode ? "Edit Transcode" : "Tambah Baru"}
+      </div>
+
+      {/* Close Button */}
+      <button
+        onClick={handleCloseModal}
+        className="absolute top-2 right-2 text-gray-300 hover:text-gray-100 text-2xl font-bold"
+        style={{
+          lineHeight: "1",
+          borderRadius: "50%",
+        }}
+      >
+        &times;
+      </button>
+
+      {/* Form */}
+      <div className="p-6">
+        <form onSubmit={handleSaveTranscode}>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block mb-1 font-bold">Transcode ID</label>
+              <input
+                type="text"
+                name="transcode_id"
+                className="border rounded-md p-2 w-full"
+                value={newTranscode.transcode_id}
+                onChange={handleInputChange}
+                required
+                disabled={editMode}
+              />
+            </div>
+            <div>
+              <label className="block mb-1 font-bold">Transaction Type</label>
+              <input
+                type="text"
+                name="transaction_type"
+                className="border rounded-md p-2 w-full"
+                value={newTranscode.transaction_type}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div>
+              <label className="block mb-1 font-bold">Transcode</label>
+              <input
+                type="text"
+                name="transcode"
+                className="border rounded-md p-2 w-full"
+                value={newTranscode.transcode}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div>
+              <label className="block mb-1 font-bold">Created By</label>
+              <input
+                type="text"
+                name="created_by"
+                className="border rounded-md p-2 w-full"
+                value={newTranscode.created_by}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div>
+              <label className="block mb-1 font-bold">Status</label>
+              <select
+                name="status"
+                className="border rounded-md p-2 w-full"
+                value={newTranscode.status}
+                onChange={handleInputChange}
+              >
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
           </div>
-        </div>
-      )}
+          {/* Footer */}
+          <div className="flex justify-end gap-4 mt-6">
+            <button
+              type="button"
+              className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
+              onClick={handleCloseModal}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+            >
+              Simpan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
