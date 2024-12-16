@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 const Tax = () => {
   const [taxes, setTaxes] = useState([]);
@@ -14,58 +14,59 @@ const Tax = () => {
     id: "",
     name: "",
     amount: "",
-    status: "active",
+    status: "Active",
   });
   const [editMode, setEditMode] = useState(false);
 
   const indexOfLastItem = currentPage * limit;
   const indexOfFirstItem = indexOfLastItem - limit;
 
-  useEffect(() => {
-    const fetchTaxes = async () => {
-      setLoading(true);
-      try {
-        const token = sessionStorage.getItem("authToken");
-        if (!token) {
-          throw new Error("Authorization token is missing.");
-        }
+  const fetchTaxes = useCallback(async () => {
+    setLoading(true);
+    setError(null);
 
-        const response = await axios.get(
-          "https://thrive-be.app-dev.altru.id/api/v1/taxes",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            params: {
-              page: currentPage,
-              limit: limit,
-            },
-          }
-        );
-
-        if (response.data.success) {
-          setTaxes(response.data.data.items);
-          setTotalPages(response.data.data.total_pages || 1);
-        } else {
-          throw new Error(
-            response.data.message || "Unexpected response format."
-          );
-        }
-      } catch (err) {
-        console.error("Error:", err.response || err.message);
-        setError(
-          err.response?.data?.message ||
-            err.message ||
-            "An unexpected error occurred."
-        );
-      } finally {
-        setLoading(false);
+    try {
+      const token = sessionStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token is missing.");
       }
-    };
 
-    fetchTaxes();
+      const response = await axios.get(
+        "https://thrive-be.app-dev.altru.id/api/v1/taxes",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            page: currentPage,
+            limit,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        const validTaxes = response.data.data.items.filter(
+          (tax) => tax && typeof tax === "object" && tax.tax_id
+        );
+        setTaxes(validTaxes);
+        setTotalPages(response.data.data.total_pages || 1);
+      } else {
+        throw new Error(response.data.message || "Unexpected response format.");
+      }
+    } catch (err) {
+      console.error("Error fetching taxes:", err.response || err.message);
+      setError(
+        err.response?.data?.message || err.message || "Failed to fetch taxes."
+      );
+    } finally {
+      setLoading(false);
+    }
   }, [currentPage, limit]);
+
+  useEffect(() => {
+    fetchTaxes();
+  }, [fetchTaxes]);
 
   const filteredData = taxes.filter((tax) => {
     const values = Object.values(tax || {}).map((value) => value || "");
@@ -108,13 +109,13 @@ const Tax = () => {
       if (!token) {
         throw new Error("Authorization token is missing.");
       }
-  
+
       const payload = {
         name: newTax.name,
         amount: parseFloat(newTax.amount),
         status: newTax.status.toLowerCase(),
       };
-  
+
       if (editMode) {
         await axios.put(
           `https://thrive-be.app-dev.altru.id/api/v1/taxes/${newTax.id}`,
@@ -126,14 +127,14 @@ const Tax = () => {
             },
           }
         );
-  
+
         setTaxes((prev) =>
           prev.map((tax) =>
             tax.id === newTax.id ? { ...tax, ...payload } : tax
           )
         );
       } else {
-        const response = await axios.post(
+        await axios.post(
           "https://thrive-be.app-dev.altru.id/api/v1/taxes",
           payload,
           {
@@ -143,19 +144,17 @@ const Tax = () => {
             },
           }
         );
-  
-        const newTaxData = response.data.data;
-        setTaxes((prev) => [newTaxData, ...prev]); // Data baru langsung muncul
+
+        fetchTaxes();
       }
-  
-      setShowModal(false); // Tutup modal
-      setNewTax({ id: "", name: "", amount: "", status: "Active" }); // Reset form
+
+      setShowModal(false);
+      setNewTax({ id: "", name: "", amount: "", status: "Active" });
     } catch (err) {
-      console.error("Error in handleSaveTax:", err.response || err.message);
-      alert("An error occurred while saving tax data. Please try again.");
+      console.error("Error saving tax:", err.response || err.message);
+      alert("Failed to save tax. Please try again.");
     }
   };
-  
 
   const handleEdit = (tax) => {
     setNewTax({
@@ -167,17 +166,6 @@ const Tax = () => {
     setEditMode(true);
     setShowModal(true);
   };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-white-100">
-        <div className="flex flex-col items-center">
-          <div className="w-16 h-16 border-4 border-custom-blue border-dashed rounded-full animate-spin"></div>
-          <p className="mt-4 text-lg font-medium text-gray-700">Loading...</p>
-        </div>
-      </div>
-    );
-  }
 
   const handleDeleteTax = async () => {
     try {
@@ -199,10 +187,21 @@ const Tax = () => {
       setTaxes((prev) => prev.filter((tax) => tax.id !== newTax.id));
       setShowModal(false);
     } catch (err) {
-      console.error("Error:", err.response || err.message);
+      console.error("Error deleting tax:", err.response || err.message);
       alert("Failed to delete tax. Please try again.");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-white-100">
+        <div className="flex flex-col items-center">
+          <div className="w-16 h-16 border-4 border-custom-blue border-dashed rounded-full animate-spin"></div>
+          <p className="mt-4 text-lg font-medium text-gray-700">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (error) {
     return <div style={{ color: "red" }}>{error}</div>;
@@ -245,39 +244,49 @@ const Tax = () => {
               </tr>
             </thead>
             <tbody>
-  {filteredData.map((tax, index) => (
-    <tr key={tax.id || index} className="cursor-pointer border-t text-center text-custom-blue2">
-      <td className="py-3 px-4">{tax.tax_id}</td>
-      <td className="py-3 px-4">{tax.name}</td>
-      <td className="py-3 px-4">{tax.amount}</td>
-      <td className="py-3 px-4">{tax.created_by || "N/A"}</td>
-      <td className="py-3 px-4">
-        {new Date(tax.updated_at)
-          .toLocaleDateString("en-GB")
-          .replace(/\//g, "-")}
-      </td>
-      <td className="py-3 px-4">
-        <span
-          className={`inline-flex items-center justify-center px-6 py-2 rounded-full font-bold ${
-            tax.status?.toLowerCase() === "active"
-              ? "bg-green-200 text-green-600"
-              : "bg-red-200 text-red-600"
-          }`}
-        >
-          {tax.status || "N/A"}
-        </span>
-      </td>
-      <td className="py-3 px-4">
-        <button
-          onClick={() => handleEdit(tax)}
-          className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12"
-        >
-          <i className="fas fa-edit"></i>
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
+              {filteredData.map((tax, index) => {
+                if (!tax || typeof tax !== "object") {
+                  return null;
+                }
+                return (
+                  <tr
+                    key={tax.id || index}
+                    className="cursor-pointer border-t text-center text-custom-blue2"
+                  >
+                    <td className="py-3 px-4">{tax.tax_id || "N/A"}</td>
+                    <td className="py-3 px-4">{tax.name || "N/A"}</td>
+                    <td className="py-3 px-4">{tax.amount || "N/A"}</td>
+                    <td className="py-3 px-4">{tax.created_by || "N/A"}</td>
+                    <td className="py-3 px-4">
+                      {tax.updated_at
+                        ? new Date(tax.updated_at)
+                            .toLocaleDateString("en-GB")
+                            .replace(/\//g, "-")
+                        : "N/A"}
+                    </td>
+                    <td className="py-3 px-4">
+                      <span
+                        className={`inline-flex items-center justify-center px-6 py-2 rounded-full font-bold ${
+                          tax.status?.toLowerCase() === "active"
+                            ? "bg-green-200 text-green-600"
+                            : "bg-red-200 text-red-600"
+                        }`}
+                      >
+                        {tax.status || "N/A"}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4">
+                      <button
+                        onClick={() => handleEdit(tax)}
+                        className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12"
+                      >
+                        <i className="fas fa-edit"></i>
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
           </table>
         )}
       </div>
