@@ -222,7 +222,7 @@ const Tax = () => {
         </div>
         <button
           onClick={handleTambahBaru}
-          className="bg-custom-blue text-white py-2 px-4 rounded-md hover:bg-blue-600"
+          className="bg-custom-blue text-white py-2 px-4 rounded-md"
         >
           + Tambah Baru
         </button>
@@ -255,7 +255,7 @@ const Tax = () => {
                   >
                     <td className="py-3 px-4">{tax.tax_id || "N/A"}</td>
                     <td className="py-3 px-4">{tax.name || "N/A"}</td>
-                    <td className="py-3 px-4">{tax.amount || "N/A"}</td>
+                    <td className="py-3 px-4">{Math.min(tax.amount, 100)}%</td>
                     <td className="py-3 px-4">{tax.created_by || "N/A"}</td>
                     <td className="py-3 px-4">
                       {tax.updated_at
@@ -332,86 +332,87 @@ const Tax = () => {
               setLimit(Number(e.target.value));
             }}
           >
-            <option value={5}>5 Rows</option>
             <option value={10}>10 Rows</option>
             <option value={20}>20 Rows</option>
+            <option value={50}>50 Rows</option>
           </select>
         </div>
       </div>
 
       {showModal && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg w-[600px] p-6 relative">
+          <div className="bg-white rounded-lg w-[600px] relative">
+            <div className="bg-custom-blue text-white px-4 py-3 rounded-t-lg text-lg font-semibold text-left">
+              {editMode ? "Edit Tax" : "Tambah Baru"}
+            </div>
             <button
               onClick={handleCloseModal}
-              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+              className="absolute top-2 right-2 text-gray-300 hover:text-gray-100 text-2xl font-bold"
               style={{
-                fontSize: "24px",
-                fontWeight: "bold",
-                padding: "8px",
+                lineHeight: "1",
                 borderRadius: "50%",
               }}
             >
               &times;
             </button>
-            <h2 className="text-xl font-bold text-custom-blue mb-4">
-              {editMode ? "Edit Tax" : "Tambah Baru"}
-            </h2>
-            <form onSubmit={handleSaveTax}>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block mb-1 font-bold">Tax Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    className="border rounded-md p-2 w-full"
-                    value={newTax.name}
-                    onChange={handleInputChange}
-                    required
-                  />
+            <div className="p-6">
+              <form onSubmit={handleSaveTax}>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block mb-1 font-bold">Tax Name</label>
+                    <input
+                      type="text"
+                      name="name"
+                      className="border rounded-md p-2 w-full"
+                      value={newTax.name}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-1 font-bold">Amount</label>
+                    <input
+                      type="number"
+                      name="amount"
+                      className="border rounded-md p-2 w-full"
+                      value={newTax.amount}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-1 font-bold">Status</label>
+                    <select
+                      name="status"
+                      className="border rounded-md p-2 w-full"
+                      value={newTax.status}
+                      onChange={handleInputChange}
+                    >
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                  </div>
                 </div>
-                <div>
-                  <label className="block mb-1 font-bold">Amount</label>
-                  <input
-                    type="number"
-                    name="amount"
-                    className="border rounded-md p-2 w-full"
-                    value={newTax.amount}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1 font-bold">Status</label>
-                  <select
-                    name="status"
-                    className="border rounded-md p-2 w-full"
-                    value={newTax.status}
-                    onChange={handleInputChange}
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                  </select>
-                </div>
-              </div>
-              <div className="flex justify-end gap-4 mt-4">
-                {editMode && (
+                {/* Footer */}
+                <div className="flex justify-end gap-4 mt-6">
+                  {editMode && (
+                    <button
+                      type="button"
+                      className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
+                      onClick={handleDeleteTax}
+                    >
+                      Delete
+                    </button>
+                  )}
                   <button
-                    type="button"
-                    className="bg-red-500 text-white py-2 px-4 rounded-md"
-                    onClick={handleDeleteTax}
+                    type="submit"
+                    className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
                   >
-                    Delete
+                    Simpan
                   </button>
-                )}
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white py-2 px-4 rounded-md"
-                >
-                  Simpan
-                </button>
-              </div>
-            </form>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}
