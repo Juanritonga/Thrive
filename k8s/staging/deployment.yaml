@@ -16,7 +16,7 @@ spec:
       serviceAccountName: custom-serviceaccount
       containers:
         - name: thrive-frontend
-          image: registry.gitlab.com/altru.id/Thrive/thrive-fe:<VERSION>
+          image: registry.gitlab.com/altru.id/thrive/thrive-fe:<VERSION>
           ports:
             - containerPort: 80
       imagePullSecrets:
