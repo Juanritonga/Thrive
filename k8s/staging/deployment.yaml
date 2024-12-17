@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thrive-frontend
+  namespace: altru-staging
+spec:
+  selector:
+    matchLabels:
+      app: thrive-frontend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: thrive-frontend
+    spec:
+      serviceAccountName: custom-serviceaccount
+      containers:
+        - name: thrive-frontend
+          image: registry.gitlab.com/altru.id/Thrive/thrive-fe:<VERSION>
+          ports:
+            - containerPort: 80
+      imagePullSecrets:
+        - name: regcred
