@@ -1,8 +1,10 @@
 import axios from 'axios';
+import { config } from '@/config/env';
+
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL,
-    timeout: 30000,
+    baseURL: config.api.baseURL,
+    timeout: config.api.timeout,
     headers: {
         'Content-Type': 'application/json',
     },
