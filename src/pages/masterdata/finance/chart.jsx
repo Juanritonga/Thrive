@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import addChart from "./Chart/AddChart";
 import updatedChart from "./Chart/UpdatedChart";
+import Table from "@/pages/components/Table";
 
 const Chart = () => {
   const [Chart, setChart] = useState([]);
@@ -164,6 +165,44 @@ const Chart = () => {
       .includes(searchQuery.toLowerCase())
   );
 
+  const columns = [
+    { header: "ID Acc.", accessor: "acc_id" },
+    { header: "Nama Acc.", accessor: "name" },
+    { header: "Kelas", accessor: "class_name" },
+    { header: "Kode", accessor: "class_code" },
+    { header: "Dibuat Oleh", accessor: "created_by" },
+    {
+      header: "Tanggal Update",
+      accessor: (chart) =>
+        chart.updated_at
+          ? new Date(chart.updated_at).toLocaleDateString("en-GB").replace(/\//g, "-")
+          : "N/A",
+    },
+    {
+      header: "Status",
+      accessor: (chart) => (
+        <span
+          className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+            chart.status.toLowerCase() === "active"
+              ? "bg-green-200 text-green-600"
+              : "bg-red-200 text-red-600"
+          }`}
+        >
+          {chart.status}
+        </span>
+      ),
+    },
+  ];
+  
+  const actions = [
+    {
+      label: "Edit",
+      icon: "fas fa-edit",
+      buttonClass: "bg-gray-200 text-gray-400",
+      handler: handleOpenEditModal,
+    },
+  ];
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-white-100">
@@ -203,57 +242,7 @@ const Chart = () => {
         {filteredData.length === 0 ? (
           <p>No users found.</p>
         ) : (
-          <table className="min-w-full bg-white border rounded-lg">
-            <thead>
-              <tr className="text-custom-blue bg-gray-200">
-                <th className="py-3 px-4 border">ID Acc.</th>
-                <th className="py-3 px-4 border">Nama Acc.</th>
-                <th className="py-3 px-4 border">Kelas</th>
-                <th className="py-3 px-4 border">Kode</th>
-                <th className="py-3 px-4 border">Dibuat Oleh</th>
-                <th className="py-3 px-4 border">Tanggal Update</th>
-                <th className="py-3 px-4 border">Status</th>
-                <th className="py-3 px-4 border">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.map((Chart) => (
-                <tr
-                  key={Chart.id}
-                  className="cursor-pointer border-t text-center text-custom-blue2"
-                > <td className="py-3 px-4">{Chart.acc_id}</td>
-                  <td className="py-3 px-4">{Chart.name}</td>
-                  <td className="py-3 px-4">{Chart.class_name}</td>
-                  <td className="py-3 px-4">{Chart.class_code}</td>
-                  <td className="py-3 px-4">{Chart.created_by}</td>
-                  <td className="py-3 px-4">
-                    {new Date(Chart.updated_at)
-                      .toLocaleDateString("en-GB")
-                      .replace(/\//g, "-")}
-                  </td>
-                  <td className="py-3 px-4">
-                    <span
-                      className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
-                        Chart.status.toLowerCase() === "active"
-                          ? "bg-green-200 text-green-600"
-                          : "bg-red-200 text-red-600"
-                      }`}
-                    >
-                      {Chart.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    <button
-                      className="font-bold bg-gray-200 text-gray-400 p-3 rounded-lg w-10 h-10 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                      onClick={() => handleOpenEditModal(Chart)}
-                    >
-                      <i className="fas fa-edit"></i>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <Table columns={columns} data={filteredData} actions={actions} />
         )}
       </div>
       {isModalOpen && (

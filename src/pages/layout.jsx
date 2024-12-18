@@ -19,8 +19,6 @@ const Layout = () => {
             setIsSidebarVisible={setIsSidebarVisible}
           />
         </div>
-
-        {/* Main content */}
         <div className="flex-1 w-auto overflow-y-auto bg-gray-100">
           <Outlet />
         </div>

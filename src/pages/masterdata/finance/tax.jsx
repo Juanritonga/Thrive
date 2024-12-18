@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect, useCallback } from "react";
+import Table from "../../components/Table";
 
 const Tax = () => {
   const [taxes, setTaxes] = useState([]);
@@ -167,6 +168,43 @@ const Tax = () => {
     setShowModal(true);
   };
 
+  const columns = [
+    { header: "Tax ID", accessor: "tax_id" },
+    { header: "Name", accessor: "name" },
+    { header: "Amount", accessor: (tax) => `${Math.min(tax.amount, 100)}%` },
+    { header: "Created By", accessor: "created_by" },
+    {
+      header: "Updated At",
+      accessor: (tax) =>
+        tax.updated_at
+          ? new Date(tax.updated_at).toLocaleDateString("en-GB").replace(/\//g, "-")
+          : "N/A",
+    },
+    {
+      header: "Status",
+      accessor: (tax) => (
+        <span
+          className={`inline-flex items-center justify-center px-6 py-2 rounded-full font-bold ${
+            tax.status?.toLowerCase() === "active"
+              ? "bg-green-200 text-green-600"
+              : "bg-red-200 text-red-600"
+          }`}
+        >
+          {tax.status || "N/A"}
+        </span>
+      ),
+    },
+  ];
+
+  const actions = [
+    {
+      label: "Edit",
+      icon: "fas fa-edit",
+      buttonClass: "bg-gray-200 text-gray-400",
+      handler: handleEdit,
+    },
+  ];
+
   const handleDeleteTax = async () => {
     try {
       const token = sessionStorage.getItem("authToken");
@@ -231,63 +269,7 @@ const Tax = () => {
         {filteredData.length === 0 ? (
           <p>No taxes found.</p>
         ) : (
-          <table className="min-w-full bg-white border rounded-lg">
-            <thead>
-              <tr className="text-custom-blue bg-gray-200">
-                <th className="py-3 px-4 border">Tax ID</th>
-                <th className="py-3 px-4 border">Name</th>
-                <th className="py-3 px-4 border">Amount</th>
-                <th className="py-3 px-4 border">Dibuat Oleh</th>
-                <th className="py-3 px-4 border">Updated At</th>
-                <th className="py-3 px-4 border">Status</th>
-                <th className="py-3 px-4 border">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.map((tax, index) => {
-                if (!tax || typeof tax !== "object") {
-                  return null;
-                }
-                return (
-                  <tr
-                    key={tax.id || index}
-                    className="cursor-pointer border-t text-center text-custom-blue2"
-                  >
-                    <td className="py-3 px-4">{tax.tax_id || "N/A"}</td>
-                    <td className="py-3 px-4">{tax.name || "N/A"}</td>
-                    <td className="py-3 px-4">{Math.min(tax.amount, 100)}%</td>
-                    <td className="py-3 px-4">{tax.created_by || "N/A"}</td>
-                    <td className="py-3 px-4">
-                      {tax.updated_at
-                        ? new Date(tax.updated_at)
-                            .toLocaleDateString("en-GB")
-                            .replace(/\//g, "-")
-                        : "N/A"}
-                    </td>
-                    <td className="py-3 px-4">
-                      <span
-                        className={`inline-flex items-center justify-center px-6 py-2 rounded-full font-bold ${
-                          tax.status?.toLowerCase() === "active"
-                            ? "bg-green-200 text-green-600"
-                            : "bg-red-200 text-red-600"
-                        }`}
-                      >
-                        {tax.status || "N/A"}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4">
-                      <button
-                        onClick={() => handleEdit(tax)}
-                        className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12"
-                      >
-                        <i className="fas fa-edit"></i>
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <Table columns={columns} data={filteredData} actions={actions} />
         )}
       </div>
       <div className="flex flex-wrap justify-between items-center gap-4">

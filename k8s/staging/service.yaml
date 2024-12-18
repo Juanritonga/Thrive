@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: thrive-frontend
+  namespace: altru-staging
+  labels:
+    run: thrive-frontend
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app:  thrive-frontend
+  type: ClusterIP

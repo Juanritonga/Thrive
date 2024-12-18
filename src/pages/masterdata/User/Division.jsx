@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import addDivision from "./Division/AddDivision";
 import updatedDivision from "./Division/UpdatedDivision";
+import Table from "@/pages/components/Table";
 
 const Division = () => {
   const [Division, setDivision] = useState([]);
@@ -145,6 +146,35 @@ const Division = () => {
       .includes(searchQuery.toLowerCase())
   );
 
+  const columns = [
+    { header: "Division ID", accessor: "division_id" },
+    { header: "Division Name", accessor: "division_name" },
+    { header: "Description", accessor: "description" },
+    {
+      header: "Status",
+      accessor: (division) => (
+        <span
+          className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+            division.status.toLowerCase() === "active"
+              ? "bg-green-200 text-green-600"
+              : "bg-red-200 text-red-600"
+          }`}
+        >
+          {division.status}
+        </span>
+      ),
+    },
+  ];
+  
+  const actions = [
+    {
+      label: "Edit",
+      icon: "fas fa-edit",
+      buttonClass: "bg-gray-200 text-gray-400 hover:bg-gray-300",
+      handler: (division) => handleOpenEditModal(division),
+    },
+  ];  
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-white-100">
@@ -184,48 +214,7 @@ const Division = () => {
         {filteredData.length === 0 ? (
           <p>No users found.</p>
         ) : (
-          <table className="min-w-full bg-white border rounded-lg">
-            <thead>
-              <tr className="text-custom-blue bg-gray-200">
-                <th className="py-3 px-4 border">Division ID</th>
-                <th className="py-3 px-4 border">Division Name</th>
-                <th className="py-3 px-4 border">Description</th>
-                <th className="py-3 px-4 border">Status</th>
-                <th className="py-3 px-4 border">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.map((Division) => (
-                <tr
-                  key={Division.id}
-                  className="cursor-pointer border-t text-center text-custom-blue2"
-                >
-                  <td className="py-3 px-4">{Division.division_id}</td>
-                  <td className="py-3 px-4">{Division.division_name}</td>
-                  <td className="py-3 px-4">{Division.description}</td>
-                  <td className="py-3 px-4 text-center">
-                    <span
-                      className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
-                        Division.status.toLowerCase() === "active"
-                          ? "bg-green-200 text-green-600"
-                          : "bg-red-200 text-red-600"
-                      }`}
-                    >
-                      {Division.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    <button
-                      className="font-bold bg-gray-200 text-gray-400 p-3 rounded-lg w-10 h-10 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                      onClick={() => handleOpenEditModal(Division)}
-                    >
-                      <i className="fas fa-edit"></i>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <Table columns={columns} data={filteredData} actions={actions} />
         )}
       </div>
       {isModalOpen && (

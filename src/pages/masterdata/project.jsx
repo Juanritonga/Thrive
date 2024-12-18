@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import Table from "../components/Table";
 
 const Project = () => {
   const [projects, setProjects] = useState([]);
@@ -311,6 +312,54 @@ const Project = () => {
     }
   };
 
+  const columns = [
+    { header: "Project ID", accessor: "project_id" },
+    { header: "Nama Project", accessor: "name" },
+    { header: "Dibuat Oleh", accessor: "created_by" },
+    {
+      header: "Tanggal Update",
+      accessor: (project) =>
+        new Date(project.updated_at)
+          .toLocaleDateString("en-GB")
+          .replace(/\//g, "-"),
+    },
+    {
+      header: "Status",
+      accessor: (project) => (
+        <span
+          className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+            project.status.toLowerCase() === "active"
+              ? "bg-green-200 text-green-600"
+              : "bg-red-200 text-red-600"
+          }`}
+        >
+          {project.status}
+        </span>
+      ),
+    },
+  ];
+  
+  const actions = [
+    {
+      label: "Update",
+      icon: "fas fa-edit",
+      buttonClass: "bg-blue-500 text-white hover:bg-blue-600",
+      handler: (project) => {
+        setSelectedProject(project);
+        setEditModalOpen(true);
+      },
+    },
+    {
+      label: "Delete",
+      icon: "fas fa-trash",
+      buttonClass: "bg-red-500 text-white hover:bg-red-600",
+      handler: (project) => {
+        setSelectedProject(project);
+        setDeleteModalOpen(true);
+      },
+    },
+  ]; 
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-white-100">
@@ -353,86 +402,7 @@ const Project = () => {
         {filteredData.length === 0 ? (
           <p>No projects found.</p>
         ) : (
-          <table className="min-w-full bg-white border rounded-lg">
-            <thead>
-              <tr className="text-custom-blue bg-gray-200">
-                <th className="py-3 px-4 border">Project ID</th>
-                <th className="py-3 px-4 border">Nama Project</th>
-                <th className="py-3 px-4 border">Dibuat Oleh</th>
-                <th className="py-3 px-4 border">Tanggal Update</th>
-                <th className="py-3 px-4 border">Status</th>
-                <th className="py-3 px-4 border">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedData.map((project) => (
-                <tr
-                  key={project.id}
-                  onClick={() => handleProjectClick(project.id)} // Tetap menangani klik pada baris
-                  className="cursor-pointer border-t text-center text-custom-blue2"
-                >
-                  <td className="py-3 px-4">{project.project_id}</td>
-                  <td className="py-3 px-4">{project.name}</td>
-                  <td className="py-3 px-4">{project.created_by}</td>
-                  <td className="py-3 px-4">
-                    {new Date(project.updated_at)
-                      .toLocaleDateString("en-GB")
-                      .replace(/\//g, "-")}
-                  </td>
-                  <td className="py-3 px-4 text-center">
-                    <span
-                      className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
-                        project.status.toLowerCase() === "active"
-                          ? "bg-green-200 text-green-600"
-                          : "bg-red-200 text-red-600"
-                      }`}
-                    >
-                      {project.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    <div className="relative flex justify-center">
-                      {actionOpenId === project.id ? (
-                        <div className="flex space-x-4">
-                          <button
-                            className="edit-button px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 ease-in-out"
-                            onClick={(e) => {
-                              e.stopPropagation(); // Hentikan propagasi klik ke baris
-                              setSelectedProject(project);
-                              setEditModalOpen(true);
-                            }}
-                          >
-                            Update
-                          </button>
-
-                          <button
-                            className="delete-button px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ease-in-out"
-                            onClick={(e) => {
-                              e.stopPropagation(); // Hentikan propagasi klik ke baris
-                              setSelectedProject(project);
-                              setDeleteModalOpen(true);
-                            }}
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      ) : (
-                        <button
-                          className="font-bold bg-gray-200 text-gray-400 p-3 rounded-lg w-10 h-10 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                          onClick={(e) => {
-                            e.stopPropagation(); // Hentikan propagasi klik ke baris
-                            handleActionToggle(project.id);
-                          }}
-                        >
-                          <i className="fas fa-edit"></i>
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <Table columns={columns} data={filteredData} actions={actions} />
         )}
       </div>
 

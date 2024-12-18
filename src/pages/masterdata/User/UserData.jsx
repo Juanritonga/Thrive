@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import addUserData from "./UserData/AddUserData";
 import updatedUserData from "./UserData/UpdatedUserData";
+import Table from "@/pages/components/Table";
 
 const User = () => {
   const [users, setUsers] = useState([]);
@@ -220,6 +221,37 @@ const User = () => {
       .includes(searchQuery.toLowerCase())
   );
 
+  const columns = [
+    { header: "User ID", accessor: "user_id" },
+    { header: "Full Name", accessor: "full_name" },
+    { header: "Role", accessor: "role" },
+    { header: "Entity", accessor: "entity" },
+    {
+      header: "Status",
+      accessor: (user) => (
+        <span
+          className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+            user.status.toLowerCase() === "active"
+              ? "bg-green-200 text-green-600"
+              : "bg-red-200 text-red-600"
+          }`}
+        >
+          {user.status}
+        </span>
+      ),
+    },
+  ];
+  
+  const actions = [
+    {
+      label: "Edit",
+      icon: "fas fa-edit",
+      buttonClass: "bg-gray-200 text-gray-400",
+      handler: (user) => handleOpenEditModal(user),
+    },
+  ];
+  
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-white-100">
@@ -259,50 +291,7 @@ const User = () => {
         {filteredData.length === 0 ? (
           <p>No users found.</p>
         ) : (
-          <table className="min-w-full bg-white border rounded-lg">
-            <thead>
-              <tr className="text-custom-blue bg-gray-200">
-                <th className="py-3 px-4 border">User ID</th>
-                <th className="py-3 px-4 border">Full Name</th>
-                <th className="py-3 px-4 border">Role</th>
-                <th className="py-3 px-4 border">Entity</th>
-                <th className="py-3 px-4 border">Status</th>
-                <th className="py-3 px-4 border">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.map((user) => (
-                <tr
-                  key={user.user_id}
-                  className="cursor-pointer border-t text-center text-custom-blue2"
-                >
-                  <td className="py-3 px-4">{user.user_id}</td>
-                  <td className="py-3 px-4">{user.full_name}</td>
-                  <td className="py-3 px-4">{user.role}</td>
-                  <td className="py-3 px-4">{user.entity}</td>
-                  <td className="py-3 px-4 text-center">
-                    <span
-                      className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
-                        user.status.toLowerCase() === "active"
-                          ? "bg-green-200 text-green-600"
-                          : "bg-red-200 text-red-600"
-                      }`}
-                    >
-                      {user.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    <button
-                      className="font-bold bg-gray-200 text-gray-400 p-3 rounded-lg w-10 h-10 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                      onClick={() => handleOpenEditModal(user)}
-                    >
-                      <i className="fas fa-edit"></i>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <Table columns={columns} data={filteredData} actions={actions} />
         )}
       </div>
       {isModalOpen && (
