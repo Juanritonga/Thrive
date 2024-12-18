@@ -189,7 +189,6 @@ const BankFinance = () => {
                       .toLocaleDateString("en-GB")
                       .replace(/\//g, "-")}
                   </td>
-                  {/* Dynamic Status */}
                   <td className="py-3 px-4 text-center">
                     <span
                       className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
@@ -215,8 +214,6 @@ const BankFinance = () => {
           </table>
         )}
       </div>
-
-      {/* Pagination */}
       <div className="flex flex-wrap justify-between items-center gap-4">
         <span className="text-sm text-gray-500">
           Showing {indexOfFirstItem + 1} to{" "}
@@ -268,110 +265,102 @@ const BankFinance = () => {
 
       {/* Modal */}
       {showModal && (
-  <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg w-[600px] relative">
-      {/* Header */}
-      <div className="bg-blue-900 text-white px-4 py-3 rounded-t-lg text-lg font-semibold text-left">
-        {editMode ? "Edit Bank" : "Tambah Baru"}
-      </div>
-
-      {/* Close Button */}
-      <button
-        onClick={handleCloseModal}
-        className="absolute top-2 right-2 text-gray-300 hover:text-gray-100 text-2xl font-bold"
-        style={{
-          lineHeight: "1",
-          borderRadius: "50%",
-        }}
-      >
-        &times;
-      </button>
-
-      {/* Content Form */}
-      <div className="p-6">
-        <form onSubmit={handleSaveNewBank}>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block mb-1 font-bold">Bank ID</label>
-              <input
-                type="text"
-                name="bank_id"
-                className="border rounded-md p-2 w-full"
-                value={newBank.bank_id}
-                onChange={handleInputChange}
-                required
-                disabled={editMode}
-              />
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg w-[600px] relative">
+            <div className="bg-blue-900 text-white px-4 py-3 rounded-t-lg text-lg font-semibold text-left">
+              {editMode ? "Edit Bank" : "Tambah Baru"}
             </div>
-            <div>
-              <label className="block mb-1 font-bold">Bank Name</label>
-              <input
-                type="text"
-                name="bank"
-                className="border rounded-md p-2 w-full"
-                value={newBank.bank}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-bold">Account No.</label>
-              <input
-                type="text"
-                name="account_number"
-                className="border rounded-md p-2 w-full"
-                value={newBank.account_number}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-bold">Created By</label>
-              <input
-                type="text"
-                name="created_by"
-                className="border rounded-md p-2 w-full"
-                value={newBank.created_by}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-bold">Status</label>
-              <select
-                name="status"
-                className="border rounded-md p-2 w-full"
-                value={newBank.status}
-                onChange={handleInputChange}
-              >
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Footer Buttons */}
-          <div className="flex justify-end gap-4 mt-6">
             <button
-              type="button"
-              className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
               onClick={handleCloseModal}
+              className="absolute top-2 right-2 text-gray-300 hover:text-gray-100 text-2xl font-bold"
+              style={{
+                lineHeight: "1",
+                borderRadius: "50%",
+              }}
             >
-              Cancel
+              &times;
             </button>
-            <button
-              type="submit"
-              className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
-            >
-              Simpan
-            </button>
+            <div className="p-6">
+              <form onSubmit={handleSaveNewBank}>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block mb-1 font-bold">Bank ID</label>
+                    <input
+                      type="text"
+                      name="bank_id"
+                      className="border rounded-md p-2 w-full"
+                      value={newBank.bank_id}
+                      onChange={handleInputChange}
+                      required
+                      disabled={editMode}
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-1 font-bold">Bank Name</label>
+                    <input
+                      type="text"
+                      name="bank"
+                      className="border rounded-md p-2 w-full"
+                      value={newBank.bank}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-1 font-bold">Account No.</label>
+                    <input
+                      type="text"
+                      name="account_number"
+                      className="border rounded-md p-2 w-full"
+                      value={newBank.account_number}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-1 font-bold">Created By</label>
+                    <input
+                      type="text"
+                      name="created_by"
+                      className="border rounded-md p-2 w-full"
+                      value={newBank.created_by}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-1 font-bold">Status</label>
+                    <select
+                      name="status"
+                      className="border rounded-md p-2 w-full"
+                      value={newBank.status}
+                      onChange={handleInputChange}
+                    >
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="flex justify-end gap-4 mt-6">
+                  <button
+                    type="button"
+                    className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
+                    onClick={handleCloseModal}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+                  >
+                    Simpan
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </form>
-      </div>
-    </div>
-  </div>
-)}
-
+        </div>
+      )}
     </div>
   );
 };

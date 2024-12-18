@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import addUserRole from "./UserRole/AddUserRole";
 import updatedUserRole from "./UserRole/UpdatedUserRole";
+import Table from "@/pages/components/Table";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL, 
@@ -168,6 +169,47 @@ const UserRole = () => {
     fetchDivisions();
   }, []);
 
+  const columns = [
+    { header: "Role ID", accessor: "role_id" },
+    { header: "Role Name", accessor: "role_name" },
+    { header: "Division ID", accessor: "division_id" },
+    { header: "Division Code", accessor: "division_code" },
+    { header: "Division Name", accessor: "division_name" },
+    {
+      header: "Status",
+      accessor: (userRole) => (
+        <span
+          className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+            userRole.status.toLowerCase() === "active"
+              ? "bg-green-200 text-green-600"
+              : "bg-red-200 text-red-600"
+          }`}
+        >
+          {userRole.status}
+        </span>
+      ),
+    },
+    {
+      header: "Create",
+      accessor: (userRole) =>
+        new Date(userRole.created_at).toLocaleDateString("en-GB"),
+    },
+    {
+      header: "Update",
+      accessor: (userRole) =>
+        new Date(userRole.updated_at).toLocaleDateString("en-GB"),
+    },
+  ];
+  
+  const actions = [
+    {
+      label: "Edit",
+      icon: "fas fa-edit",
+      buttonClass: "bg-gray-200 text-gray-400",
+      handler: (userRole) => handleOpenEditModal(userRole),
+    },
+  ];  
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-white-100">
@@ -207,64 +249,7 @@ const UserRole = () => {
         {filteredData.length === 0 ? (
           <p>No users found.</p>
         ) : (
-          <table className="min-w-full bg-white border rounded-lg">
-            <thead>
-              <tr className="text-custom-blue bg-gray-200">
-                <th className="py-3 px-4 border">Role ID</th>
-                <th className="py-3 px-4 border">Role Name</th>
-                <th className="py-3 px-4 border">Division ID</th>
-                <th className="py-3 px-4 border">Division Code</th>
-                <th className="py-3 px-4 border">Division Name</th>
-                <th className="py-3 px-4 border">Status</th>
-                <th className="py-3 px-4 border">Create</th>
-                <th className="py-3 px-4 border">Update</th>
-                <th className="py-3 px-4 border">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.map((userRole) => (
-                <tr
-                  key={userRole.id}
-                  className="cursor-pointer border-t text-center text-custom-blue2"
-                >
-                  <td className="py-3 px-4">{userRole.role_id}</td>
-                  <td className="py-3 px-4">{userRole.role_name}</td>
-                  <td className="py-3 px-4">{userRole.division_id}</td>
-                  <td className="py-3 px-4">{userRole.division_code}</td>
-                  <td className="py-3 px-4">{userRole.division_name}</td>
-                  <td className="py-3 px-4 text-center">
-                    <span
-                      className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
-                        userRole.status.toLowerCase() === "active"
-                          ? "bg-green-200 text-green-600"
-                          : "bg-red-200 text-red-600"
-                      }`}
-                    >
-                      {userRole.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    {new Date(userRole.created_at)
-                      .toLocaleDateString("en-GB")
-                      .replace(/\//g, "-")}
-                  </td>
-                  <td className="py-3 px-4">
-                    {new Date(userRole.updated_at)
-                      .toLocaleDateString("en-GB")
-                      .replace(/\//g, "-")}
-                  </td>
-                  <td className="py-3 px-4">
-                    <button
-                      className="font-bold bg-gray-200 text-gray-400 p-3 rounded-lg w-10 h-10 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                      onClick={() => handleOpenEditModal(userRole)}
-                    >
-                      <i className="fas fa-edit"></i>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <Table columns={columns} data={filteredData} actions={actions} />
         )}
       </div>
 
