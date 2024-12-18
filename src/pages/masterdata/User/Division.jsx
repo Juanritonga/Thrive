@@ -4,6 +4,13 @@ import addDivision from "./Division/AddDivision";
 import updatedDivision from "./Division/UpdatedDivision";
 import Table from "@/pages/components/Table";
 
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,  // This will now use the environment variable
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 const Division = () => {
   const [Division, setDivision] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,16 +51,13 @@ const Division = () => {
         throw new Error("Authorization token is missing.");
       }
 
-      const response = await axios.get(
-        "https://thrive-be.app-dev.altru.id/api/v1/divisions",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          params: { page: 1, limit: 20 },
-        }
-      );
+      const response = await api.get("/divisions", {  // Use 'api' instance here
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        params: { page: 1, limit: 20 },
+      });
 
       if (response.data.success) {
         setDivision(response.data.data.items);
@@ -83,8 +87,8 @@ const Division = () => {
           throw new Error("Authorization token is missing.");
         }
 
-        const response = await axios.delete(
-          `https://thrive-be.app-dev.altru.id/api/v1/divisions/${id}`,
+        const response = await api.delete(  // Use 'api' instance here
+          `/divisions/${id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -165,7 +169,7 @@ const Division = () => {
       ),
     },
   ];
-  
+
   const actions = [
     {
       label: "Edit",
@@ -173,7 +177,7 @@ const Division = () => {
       buttonClass: "bg-gray-200 text-gray-400 hover:bg-gray-300",
       handler: (division) => handleOpenEditModal(division),
     },
-  ];  
+  ];
 
   if (loading) {
     return (
@@ -318,69 +322,86 @@ const Division = () => {
           </div>
         </div>
       )}
+
       {isEditModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg w-98">
             <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
-              <div className="flex items-center space-x-2">
-                <h2 className="text-lg">Edit Divison</h2>
-              </div>
+              <h2 className="text-lg">Edit Division</h2>
               <button className="text-white" onClick={handleCloseEditModal}>
                 <i className="fas fa-times"></i>
               </button>
             </div>
+
             <div className="p-6">
-              <div className="mb-4">
-                <label className="block font-semibold text-gray-700">
-                  Division Name
-                </label>
-                <input
-                  type="text"
-                  value={editDivision.division_name}
-                  onChange={(e) =>
-                    setEditDivision({
-                      ...editDivision,
-                      division_name: e.target.value,
-                    })
-                  }
-                  className="w-full px-4 py-2 border rounded-md"
-                />
-              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label
+                    htmlFor="divisionName"
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    Division Name
+                  </label>
+                  <input
+                    type="text"
+                    id="divisionName"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
+                    value={editDivision.division_name}
+                    onChange={(e) =>
+                      setEditDivision({
+                        ...editDivision,
+                        division_name: e.target.value,
+                      })
+                    }
+                  />
+                </div>
 
-              <div className="mb-4">
-                <label className="block font-semibold text-gray-700">
-                  Description
-                </label>
-                <input
-                  type="text"
-                  value={editDivision.description}
-                  onChange={(e) =>
-                    setEditDivision({
-                      ...editDivision,
-                      description: e.target.value,
-                    })
-                  }
-                  className="w-full px-4 py-2 border rounded-md"
-                />
-              </div>
+                <div>
+                  <label
+                    htmlFor="description"
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    Description
+                  </label>
+                  <input
+                    type="text"
+                    id="description"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
+                    value={editDivision.description}
+                    onChange={(e) =>
+                      setEditDivision({
+                        ...editDivision,
+                        description: e.target.value,
+                      })
+                    }
+                  />
+                </div>
 
-              <div className="mb-4">
-                <label className="block font-semibold text-gray-700">
-                  Status
-                </label>
-                <select
-                  className="w-full px-4 py-2 border rounded-md"
-                  value={editDivision.status}
-                  onChange={(e) =>
-                    setEditDivision({
-                      ...editDivision,
-                      status: e.target.value,
-                    })
-                  }
-                >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
+                <div>
+                  <label
+                    htmlFor="status"
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    Status
+                  </label>
+                  <select
+                    id="status"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
+                    value={editDivision.status || ""}
+                    onChange={(e) =>
+                      setEditDivision({
+                        ...editDivision,
+                        status: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="" disabled>
+                      Select Status
+                    </option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                </div>
               </div>
 
               <div className="flex justify-end">
