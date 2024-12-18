@@ -3,6 +3,13 @@ import { useState, useEffect } from "react";
 import addUserRole from "./UserRole/AddUserRole";
 import updatedUserRole from "./UserRole/UpdatedUserRole";
 
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL, 
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 const UserRole = () => {
   const [userRoles, setUserRoles] = useState([]);
   const [divisions, setDivisions] = useState([]);
@@ -44,16 +51,12 @@ const UserRole = () => {
         throw new Error("Authorization token is missing.");
       }
 
-      const response = await axios.get(
-        "https://thrive-be.app-dev.altru.id/api/v1/roles",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          params: { page: 1, limit: 20 },
-        }
-      );
+      const response = await api.get("/roles", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: { page: 1, limit: 20 },
+      });
 
       if (response.data.success) {
         setUserRoles(response.data.data.items);
@@ -77,18 +80,12 @@ const UserRole = () => {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      const response = await axios.get(
-        "https://thrive-be.app-dev.altru.id/api/v1/divisions",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          params: { limit: 10 },
-        }
-      );
-
-      console.log("Divisions fetched:", response.data.data.items);
+      const response = await api.get("/divisions", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: { limit: 10 },
+      });
 
       if (response.data.success) {
         setDivisions(response.data.data.items);
@@ -107,21 +104,18 @@ const UserRole = () => {
       );
     }
   };
+
   const handleDeleteUserRole = async () => {
     setLoading(true);
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      const response = await axios.delete(
-        `https://thrive-be.app-dev.altru.id/api/v1/roles/${editUserRole.id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await api.delete(`/roles/${editUserRole.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (response.data.success) {
         // Refresh the user roles list
