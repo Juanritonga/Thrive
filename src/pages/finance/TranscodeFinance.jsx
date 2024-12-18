@@ -263,12 +263,9 @@ const TranscodeFinance = () => {
       {showModal && (
   <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
     <div className="bg-white rounded-lg w-[600px] relative">
-      {/* Header */}
       <div className="bg-blue-900 text-white px-4 py-3 rounded-t-lg text-lg font-semibold text-left">
         {editMode ? "Edit Transcode" : "Tambah Baru"}
       </div>
-
-      {/* Close Button */}
       <button
         onClick={handleCloseModal}
         className="absolute top-2 right-2 text-gray-300 hover:text-gray-100 text-2xl font-bold"
@@ -279,8 +276,6 @@ const TranscodeFinance = () => {
       >
         &times;
       </button>
-
-      {/* Form */}
       <div className="p-6">
         <form onSubmit={handleSaveTranscode}>
           <div className="grid grid-cols-2 gap-4">
@@ -342,7 +337,6 @@ const TranscodeFinance = () => {
               </select>
             </div>
           </div>
-          {/* Footer */}
           <div className="flex justify-end gap-4 mt-6">
             <button
               type="button"

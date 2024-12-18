@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import addClassFinance from "./AddClassFinance";
 import updatedClassFinance from "./UpdatedClassFinance";
+import Table from "../../../components/Table";
 
 const ClassFinance = () => {
   const [ClassFinances, setClassFinances] = useState([]);
@@ -20,6 +21,41 @@ const ClassFinance = () => {
     code: "",
     status: "",
   });
+  const columns = [
+    { header: "Class ID", accessor: "class_id" },
+    { header: "Nama Kelas", accessor: "name" },
+    { header: "Kode", accessor: "code" },
+    { header: "Dibuat Oleh", accessor: "created_by" },
+    {
+      header: "Tanggal Update",
+      accessor: (item) =>
+        new Date(item.updated_at)
+          .toLocaleDateString("en-GB")
+          .replace(/\//g, "-"),
+    },
+    {
+      header: "Status",
+      accessor: (item) => (
+        <span
+          className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+            item.status.toLowerCase() === "active"
+              ? "bg-green-200 text-green-600"
+              : "bg-red-200 text-red-600"
+          }`}
+        >
+          {item.status}
+        </span>
+      ),
+    },
+  ];
+  const actions = [
+    {
+      label: "Edit",
+      icon: "fas fa-edit",
+      buttonClass: "bg-gray-200 text-gray-400",
+      handler: (item) => handleOpenEditModal(item),
+    },
+  ];
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -88,7 +124,6 @@ const ClassFinance = () => {
       );
 
       if (response.data.success) {
-        // Refresh the user roles list
         fetchClassFinances();
         handleCloseEditModal();
       } else {
@@ -104,7 +139,7 @@ const ClassFinance = () => {
   };
 
   const handleUpdateClassFinance = async () => {
-    setLoading(true); // Set loading to true when starting the request
+    setLoading(true);
     await updatedClassFinance(
       editClassFinance,
       setClassFinances,
@@ -115,7 +150,7 @@ const ClassFinance = () => {
   };
 
   const handleAddClassFinance = async () => {
-    setLoading(true); // Set loading to true when starting the request
+    setLoading(true);
     await addClassFinance(
       newClassFinance,
       setClassFinances,
@@ -123,7 +158,7 @@ const ClassFinance = () => {
       setError,
       handleCloseModal
     );
-    fetchClassFinances(); // Call this after adding a role to refresh the data
+    fetchClassFinances();
   };
 
   const filteredData = ClassFinances.filter((ClassFinance) =>
@@ -176,56 +211,7 @@ const ClassFinance = () => {
         {filteredData.length === 0 ? (
           <p>No users found.</p>
         ) : (
-          <table className="min-w-full bg-white border rounded-lg">
-            <thead>
-              <tr className="text-custom-blue bg-gray-200">
-                <th className="py-3 px-4 border">Class ID</th>
-                <th className="py-3 px-4 border">Nama Kelas</th>
-                <th className="py-3 px-4 border">Kode</th>
-                <th className="py-3 px-4 border">Dibuat Oleh</th>
-                <th className="py-3 px-4 border">Tanggal Update</th>
-                <th className="py-3 px-4 border">Status</th>
-                <th className="py-3 px-4 border">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.map((ClassFinance) => (
-                <tr
-                  key={ClassFinance.id}
-                  className="cursor-pointer border-t text-center text-custom-blue2"
-                >
-                  <td className="py-3 px-4">{ClassFinance.class_id}</td>
-                  <td className="py-3 px-4">{ClassFinance.name}</td>
-                  <td className="py-3 px-4">{ClassFinance.code}</td>
-                  <td className="py-3 px-4">{ClassFinance.created_by}</td>
-                  <td className="py-3 px-4">
-                    {new Date(ClassFinance.updated_at)
-                      .toLocaleDateString("en-GB")
-                      .replace(/\//g, "-")}
-                  </td>
-                  <td className="py-3 px-4 text-center">
-                    <span
-                      className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
-                        ClassFinance.status.toLowerCase() === "active"
-                          ? "bg-green-200 text-green-600"
-                          : "bg-red-200 text-red-600"
-                      }`}
-                    >
-                      {ClassFinance.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    <button
-                      className="font-bold bg-gray-200 text-gray-400 p-3 rounded-lg w-10 h-10 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                      onClick={() => handleOpenEditModal(ClassFinance)}
-                    >
-                      <i className="fas fa-edit"></i>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <Table columns={columns} data={filteredData} actions={actions} />
         )}
       </div>
 
