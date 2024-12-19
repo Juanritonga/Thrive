@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import addDivision from "./Division/AddDivision";
 import updatedDivision from "./Division/UpdatedDivision";
 import Table from "@/components/Table";
+import SearchBar from "@/components/SearchBar";
 
 const api = axios.create({ 
   baseURL: import.meta.env.VITE_API_BASE_URL, 
@@ -133,7 +134,7 @@ const Division = () => {
   };
 
   const handleUpdateDivision = async () => {
-    setLoading(true); // Set loading to true when starting the request
+    setLoading(true);
     await updatedDivision(
       editDivision,
       setDivision,
@@ -197,23 +198,18 @@ const Division = () => {
   return (
     <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
       <div className="flex flex-wrap justify-between items-center mb-6 gap-2">
-        <div className="relative w-full sm:w-[300px]">
-          <input
-            type="text"
-            placeholder="Cari"
-            className="pl-6 pr-10 py-3 w-full border rounded-md"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <i className="fa-solid fa-magnifying-glass absolute right-2 top-1/2 transform -translate-y-1/2 text-custom-blue"></i>
-        </div>
-        <button
-          className="bg-custom-blue text-white px-2 py-2 rounded-lg w-full sm:w-auto"
-          onClick={handleOpenModal}
-        >
-          Tambah Baru
-        </button>
-      </div>
+  <SearchBar
+    value={searchQuery}
+    onChange={setSearchQuery}
+    placeholder="Cari Division"
+  />
+  <button
+    className="bg-custom-blue text-white px-2 py-2 rounded-lg w-full sm:w-auto"
+    onClick={handleOpenModal}
+  >
+    Tambah Baru
+  </button>
+</div>
       <div className="overflow-auto shadow-sm mb-6">
         {filteredData.length === 0 ? (
           <p>No users found.</p>

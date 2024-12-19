@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import addUserRole from "./UserRole/AddUserRole";
 import updatedUserRole from "./UserRole/UpdatedUserRole";
 import Table from "@/components/Table";
+import SearchBar from "@/components/SearchBar";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -228,16 +229,11 @@ const UserRole = () => {
   return (
     <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
       <div className="flex flex-wrap justify-between items-center mb-6 gap-2">
-        <div className="relative w-full sm:w-[300px]">
-          <input
-            type="text"
-            placeholder="Cari"
-            className="pl-6 pr-10 py-3 w-full border rounded-md"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <i className="fa-solid fa-magnifying-glass absolute right-2 top-1/2 transform -translate-y-1/2 text-custom-blue"></i>
-        </div>
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Cari"
+        />
         <button
           className="bg-custom-blue text-white px-2 py-2 rounded-lg w-full sm:w-auto"
           onClick={handleOpenModal}
@@ -377,69 +373,73 @@ const UserRole = () => {
             <div className="p-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div>
-                <label htmlFor="RoleName"
-                    className="block text-gray-700 font-medium mb-2">
-                  Role Name
-                </label>
-                <input
-                  type="text"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                  value={editUserRole.role_name}
-                  onChange={(e) =>
-                    setEditUserRole({
-                      ...editUserRole,
-                      role_name: e.target.value,
-                    })
-                  }
+                  <label
+                    htmlFor="RoleName"
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    Role Name
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
+                    value={editUserRole.role_name}
+                    onChange={(e) =>
+                      setEditUserRole({
+                        ...editUserRole,
+                        role_name: e.target.value,
+                      })
+                    }
                   />
                 </div>
                 <div>
-                <label
-                  htmlFor="division"
-                  className="block text-gray-700 font-medium mb-2"
-                >
-                  Division
-                </label>
-                <select
-                  id="division"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                  value={editUserRole.division_id || ""}
-                  onChange={(e) =>
-                    setEditUserRole({
-                      ...editUserRole,
-                      division_id: e.target.value,
-                    })
-                  }
-                >
-                  <option value="" disabled>
-                    Select Division
-                  </option>
-                  {divisions.map((division) => (
-                    <option key={division.id} value={division.id}>
-                      {division.division_name}
+                  <label
+                    htmlFor="division"
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    Division
+                  </label>
+                  <select
+                    id="division"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
+                    value={editUserRole.division_id || ""}
+                    onChange={(e) =>
+                      setEditUserRole({
+                        ...editUserRole,
+                        division_id: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="" disabled>
+                      Select Division
                     </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label htmlFor="status"
-                    className="block text-gray-700 font-medium mb-2">
-                  Status
-                </label>
-                <select
-                  className="w-full px-4 py-2 border rounded-md"
-                  value={editUserRole.status}
-                  onChange={(e) =>
-                    setEditUserRole({
-                      ...editUserRole,
-                      status: e.target.value,
-                    })
-                  }
-                >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
-              </div>
+                    {divisions.map((division) => (
+                      <option key={division.id} value={division.id}>
+                        {division.division_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label
+                    htmlFor="status"
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    Status
+                  </label>
+                  <select
+                    className="w-full px-4 py-2 border rounded-md"
+                    value={editUserRole.status}
+                    onChange={(e) =>
+                      setEditUserRole({
+                        ...editUserRole,
+                        status: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
               </div>
               <div className="flex justify-end gap-4 mt-4">
                 <button

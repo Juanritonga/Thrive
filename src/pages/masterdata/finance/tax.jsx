@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect, useCallback } from "react";
 import Table from "@/components/Table";
 import ModalCRUD from "@/components/ModalCRUD";
+import SearchBar from "@/components/SearchBar";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -277,16 +278,11 @@ const Tax = () => {
   return (
     <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
       <div className="flex flex-wrap justify-between items-center mb-6 gap-2">
-        <div className="relative w-full sm:w-[300px]">
-          <input
-            type="text"
-            placeholder="Cari Tax"
-            className="pl-6 pr-10 py-3 w-full border rounded-md"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <i className="fa-solid fa-magnifying-glass absolute right-2 top-1/2 transform -translate-y-1/2 text-custom-blue"></i>
-        </div>
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Cari Tax"
+        />
         <button
           onClick={handleTambahBaru}
           className="bg-custom-blue text-white py-2 px-4 rounded-md"
@@ -351,82 +347,81 @@ const Tax = () => {
       </div>
 
       {showModal && (
-  <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg w-[600px] relative">
-      <div className="bg-blue-900 text-white px-4 py-3 rounded-t-lg text-lg font-semibold">
-        Tambah Baru
-      </div>
-      <button
-        onClick={handleCloseModal}
-        className="absolute top-2 right-2 text-gray-300 hover:text-gray-100 text-2xl font-bold"
-        style={{
-          lineHeight: "1",
-          borderRadius: "50%",
-        }}
-      >
-        &times;
-      </button>
-      <div className="p-6">
-        <form onSubmit={handleSaveTax}>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block mb-1 font-bold">Tax Name</label>
-              <input
-                type="text"
-                name="name"
-                className="border rounded-md p-2 w-full"
-                value={newTax.name}
-                onChange={handleInputChange}
-                required
-              />
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg w-[600px] relative">
+            <div className="bg-blue-900 text-white px-4 py-3 rounded-t-lg text-lg font-semibold">
+              Tambah Baru
             </div>
-            <div>
-              <label className="block mb-1 font-bold">Amount</label>
-              <input
-                type="number"
-                name="amount"
-                className="border rounded-md p-2 w-full"
-                value={newTax.amount}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-bold">Status</label>
-              <select
-                name="status"
-                className="border rounded-md p-2 w-full"
-                value={newTax.status}
-                onChange={handleInputChange}
-              >
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
-          <div className="flex justify-end gap-4 mt-6">
-            {editMode && (
-              <button
-                type="button"
-                className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
-                onClick={handleDeleteTax}
-              >
-                Delete
-              </button>
-            )}
             <button
-              type="submit"
-              className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+              onClick={handleCloseModal}
+              className="absolute top-2 right-2 text-gray-300 hover:text-gray-100 text-2xl font-bold"
+              style={{
+                lineHeight: "1",
+                borderRadius: "50%",
+              }}
             >
-              Simpan
+              &times;
             </button>
+            <div className="p-6">
+              <form onSubmit={handleSaveTax}>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block mb-1 font-bold">Tax Name</label>
+                    <input
+                      type="text"
+                      name="name"
+                      className="border rounded-md p-2 w-full"
+                      value={newTax.name}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-1 font-bold">Amount</label>
+                    <input
+                      type="number"
+                      name="amount"
+                      className="border rounded-md p-2 w-full"
+                      value={newTax.amount}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-1 font-bold">Status</label>
+                    <select
+                      name="status"
+                      className="border rounded-md p-2 w-full"
+                      value={newTax.status}
+                      onChange={handleInputChange}
+                    >
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="flex justify-end gap-4 mt-6">
+                  {editMode && (
+                    <button
+                      type="button"
+                      className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
+                      onClick={handleDeleteTax}
+                    >
+                      Delete
+                    </button>
+                  )}
+                  <button
+                    type="submit"
+                    className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+                  >
+                    Simpan
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </form>
-      </div>
-    </div>
-  </div>
-)}
-
+        </div>
+      )}
     </div>
   );
 };

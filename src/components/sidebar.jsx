@@ -10,7 +10,6 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
     const handleResize = () => setIsSmallScreen(window.innerWidth <= 768);
     window.addEventListener("resize", handleResize);
 
-    // Sync sidebar visibility with screen size
     if (window.innerWidth <= 768) {
       setIsSidebarVisible(false);
     }
@@ -251,7 +250,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
             className={`fas ${
               isSidebarVisible ? "fa-chevron-left" : "fa-chevron-right"
             }`}
-          ></i>
+          />
         </button>
       )}
     </div>
