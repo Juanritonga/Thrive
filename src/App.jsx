@@ -93,7 +93,7 @@ const App = () => {
 
           <Route path="cashbook" element={<CashBook />}>
             <Route path="format" element={<Format />} />
-            <Route path="bankchasbook" element={<BankC />}>
+            <Route path="bankcashbook" element={<BankC />}>
               <Route path=":id" element={<EntryCashAdvance />} />
             </Route>
             <Route path="pettycash" element={<PettyCash />}>
@@ -107,20 +107,20 @@ const App = () => {
             </Route>
           </Route>
 
-          <Route path="general-ledger" element={<GeneralLedgerDashboard />}>
-            <Route path="main-coa-mapping" element={<MainCOAMapping />}>
-              <Route index element={<Navigate to="coa-mapping" replace />} />
-              <Route path="coa-mapping" element={<SubCOAMapping />} />
-              <Route path="coa-division" element={<COADivision />} />
+          <Route path="generalledger" element={<GeneralLedgerDashboard />}>
+            <Route path="maincoamapping" element={<MainCOAMapping />}>
+              <Route index element={<Navigate to="coamapping" replace />} />
+              <Route path="coamapping" element={<SubCOAMapping />} />
+              <Route path="coadivision" element={<COADivision />} />
             </Route>
             <Route path="setup" element={<Setup />}>
               <Route
                 index
-                element={<Navigate to="transaction-type" replace />}
+                element={<Navigate to="transactiontype" replace />}
               />
-              <Route path="transaction-type" element={<TransactionType />} />
-              <Route path="budget-group" element={<BudgetGroup />} />
-              <Route path="account-period" element={<AccountPeriod />} />
+              <Route path="transactiontype" element={<TransactionType />} />
+              <Route path="budgetgroup" element={<BudgetGroup />} />
+              <Route path="accountperiod" element={<AccountPeriod />} />
             </Route>
           </Route>
         </Route>
