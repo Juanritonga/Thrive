@@ -175,7 +175,7 @@ const Project = () => {
   };
 
   const handleProjectClick = (projectId) => {
-    fetchProjectDetail(projectId); // Mengambil detail proyek saat diklik
+    fetchProjectDetail(projectId);
   };
 
   const handleEditProject = async (projectId, updatedData) => {
@@ -402,7 +402,7 @@ const Project = () => {
         {filteredData.length === 0 ? (
           <p>No projects found.</p>
         ) : (
-          <Table columns={columns} data={filteredData} actions={actions} />
+          <Table columns={columns} data={filteredData} actions={actions} onRowClick={(project) => handleProjectClick(project.id)} />
         )}
       </div>
 
