@@ -18,18 +18,15 @@ const Tax = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [showModal, setShowModal] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
-  const [newTax, setNewTax] = useState({
+  const [showModal, setShowModal] = useState(false);
+  const [currentTax, setCurrentTax] = useState({
     id: "",
     name: "",
     amount: "",
     status: "Active",
   });
   const [editMode, setEditMode] = useState(false);
-
-  const indexOfLastItem = currentPage * limit;
-  const indexOfFirstItem = indexOfLastItem - limit;
 
   const fetchTaxes = useCallback(async () => {
     setLoading(true);
@@ -43,7 +40,6 @@ const Tax = () => {
 
       const response = await api.get("/taxes", {
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         params: {
@@ -75,34 +71,27 @@ const Tax = () => {
     fetchTaxes();
   }, [fetchTaxes]);
 
-  const filteredData = taxes.filter((tax) => {
-    const values = Object.values(tax || {}).map((value) => value || "");
-    return values.join(" ").toLowerCase().includes(searchQuery.toLowerCase());
-  });
-
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
+  const handleOpenModal = (mode = "create", data = null) => {
+    if (mode === "edit") {
+      setCurrentTax(data);
+      setEditMode(true);
+    } else {
+      setCurrentTax({
+        id: "",
+        name: "",
+        amount: "",
+        status: "Active",
+      });
+      setEditMode(false);
     }
-  };
-
-  const handleTambahBaru = () => {
     setShowModal(true);
-    setEditMode(false);
-    setNewTax({
-      id: "",
-      name: "",
-      amount: "",
-      status: "Active",
-    });
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
   };
 
-  const handleSaveTax = async (e) => {
-    e.preventDefault();
+  const handleSaveTax = async () => {
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) {
@@ -110,61 +99,97 @@ const Tax = () => {
       }
 
       const payload = {
-        name: newTax.name,
-        amount: parseFloat(newTax.amount),
-        status: newTax.status.toLowerCase(),
+        name: currentTax.name,
+        amount: parseFloat(currentTax.amount),
+        status: currentTax.status.toLowerCase(),
       };
 
       if (editMode) {
-        await axios.put(
-          `https://thrive-be.app-dev.altru.id/api/v1/taxes/${newTax.id}`,
-          payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        await api.put(`/taxes/${currentTax.id}`, payload, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         setTaxes((prev) =>
           prev.map((tax) =>
-            tax.id === newTax.id ? { ...tax, ...payload } : tax
+            tax.id === currentTax.id ? { ...tax, ...payload } : tax
           )
         );
       } else {
-        await axios.post(
-          "https://thrive-be.app-dev.altru.id/api/v1/taxes",
-          payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        await api.post("/taxes", payload, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         fetchTaxes();
       }
 
       setShowModal(false);
-      setNewTax({ id: "", name: "", amount: "", status: "Active" });
+      setCurrentTax({ id: "", name: "", amount: "", status: "Active" });
     } catch (err) {
       console.error("Error saving tax:", err.response || err.message);
       alert("Failed to save tax. Please try again.");
     }
   };
 
-  const handleEdit = (tax) => {
-    setNewTax({
-      id: tax.id,
-      name: tax.name,
-      amount: tax.amount,
-      status: tax.status,
-    });
-    setEditMode(true);
-    setShowModal(true);
+  const handleDeleteTax = async () => {
+    try {
+      const token = sessionStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token is missing.");
+      }
+
+      await api.delete(`/taxes/${currentTax.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setTaxes((prev) => prev.filter((tax) => tax.id !== currentTax.id));
+      setShowModal(false);
+    } catch (err) {
+      console.error("Error deleting tax:", err.response || err.message);
+      alert("Failed to delete tax. Please try again.");
+    }
   };
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const filteredData = taxes.filter((tax) => {
+    const values = Object.values(tax || {}).map((value) => value || "");
+    return values.join(" ").toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
+  const formFields = [
+    {
+      name: "name",
+      label: "Tax Name",
+      type: "text",
+      value: currentTax.name,
+      onChange: (e) =>
+        setCurrentTax((prev) => ({ ...prev, name: e.target.value })),
+    },
+    {
+      name: "amount",
+      label: "Amount",
+      type: "number",
+      value: currentTax.amount,
+      onChange: (e) =>
+        setCurrentTax((prev) => ({ ...prev, amount: e.target.value })),
+    },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      value: currentTax.status,
+      options: [
+        { value: "Active", label: "Active" },
+        { value: "Inactive", label: "Inactive" },
+      ],
+      onChange: (e) =>
+        setCurrentTax((prev) => ({ ...prev, status: e.target.value })),
+    },
+  ];
 
   const columns = [
     { header: "Tax ID", accessor: "tax_id" },
@@ -198,67 +223,12 @@ const Tax = () => {
 
   const actions = [
     {
-      label: "Edit",
       icon: "fas fa-edit",
-      buttonClass: "bg-gray-200 text-gray-400",
-      handler: handleEdit,
+      buttonClass:
+        "bg-gray-200 text-gray-400 p-3 rounded-lg flex items-center justify-center w-10 h-10",
+      handler: (item) => handleOpenModal("edit", item),
     },
   ];
-
-  const formFields = [
-    {
-      name: "name",
-      label: "Tax Name",
-      type: "text",
-      value: newTax.name,
-      onChange: (e) => setNewTax((prev) => ({ ...prev, name: e.target.value })),
-    },
-    {
-      name: "amount",
-      label: "Amount",
-      type: "number",
-      value: newTax.amount,
-      onChange: (e) =>
-        setNewTax((prev) => ({ ...prev, amount: e.target.value })),
-    },
-    {
-      name: "status",
-      label: "Status",
-      type: "select",
-      value: newTax.status,
-      options: [
-        { value: "Active", label: "Active" },
-        { value: "Inactive", label: "Inactive" },
-      ],
-      onChange: (e) =>
-        setNewTax((prev) => ({ ...prev, status: e.target.value })),
-    },
-  ];
-
-  const handleDeleteTax = async () => {
-    try {
-      const token = sessionStorage.getItem("authToken");
-      if (!token) {
-        throw new Error("Authorization token is missing.");
-      }
-
-      await axios.delete(
-        `https://thrive-be.app-dev.altru.id/api/v1/taxes/${newTax.id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setTaxes((prev) => prev.filter((tax) => tax.id !== newTax.id));
-      setShowModal(false);
-    } catch (err) {
-      console.error("Error deleting tax:", err.response || err.message);
-      alert("Failed to delete tax. Please try again.");
-    }
-  };
 
   if (loading) {
     return (
@@ -284,7 +254,7 @@ const Tax = () => {
           placeholder="Cari Tax"
         />
         <button
-          onClick={handleTambahBaru}
+          onClick={() => handleOpenModal("create")}
           className="bg-custom-blue text-white py-2 px-4 rounded-md"
         >
           + Tambah Baru
@@ -299,9 +269,8 @@ const Tax = () => {
       </div>
       <div className="flex flex-wrap justify-between items-center gap-4">
         <span className="text-sm text-gray-500">
-          Showing {indexOfFirstItem + 1} to{" "}
-          {Math.min(indexOfLastItem, filteredData.length)} of{" "}
-          {filteredData.length} entries
+          Showing {(currentPage - 1) * limit + 1} to{" "}
+          {Math.min(currentPage * limit, taxes.length)} of {taxes.length} entries
         </span>
         <div className="flex items-center gap-4 ml-auto">
           <button
@@ -346,82 +315,15 @@ const Tax = () => {
         </div>
       </div>
 
-      {showModal && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg w-[600px] relative">
-            <div className="bg-blue-900 text-white px-4 py-3 rounded-t-lg text-lg font-semibold">
-              Tambah Baru
-            </div>
-            <button
-              onClick={handleCloseModal}
-              className="absolute top-2 right-2 text-gray-300 hover:text-gray-100 text-2xl font-bold"
-              style={{
-                lineHeight: "1",
-                borderRadius: "50%",
-              }}
-            >
-              &times;
-            </button>
-            <div className="p-6">
-              <form onSubmit={handleSaveTax}>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block mb-1 font-bold">Tax Name</label>
-                    <input
-                      type="text"
-                      name="name"
-                      className="border rounded-md p-2 w-full"
-                      value={newTax.name}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block mb-1 font-bold">Amount</label>
-                    <input
-                      type="number"
-                      name="amount"
-                      className="border rounded-md p-2 w-full"
-                      value={newTax.amount}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block mb-1 font-bold">Status</label>
-                    <select
-                      name="status"
-                      className="border rounded-md p-2 w-full"
-                      value={newTax.status}
-                      onChange={handleInputChange}
-                    >
-                      <option value="Active">Active</option>
-                      <option value="Inactive">Inactive</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="flex justify-end gap-4 mt-6">
-                  {editMode && (
-                    <button
-                      type="button"
-                      className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
-                      onClick={handleDeleteTax}
-                    >
-                      Delete
-                    </button>
-                  )}
-                  <button
-                    type="submit"
-                    className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
-                  >
-                    Simpan
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
+      <ModalCRUD
+        isOpen={showModal}
+        title={editMode ? "Edit Tax" : "Tambah Baru"}
+        onClose={handleCloseModal}
+        onSave={handleSaveTax}
+        onDelete={editMode ? handleDeleteTax : null}
+        formFields={formFields}
+        editMode={editMode}
+      />
     </div>
   );
 };

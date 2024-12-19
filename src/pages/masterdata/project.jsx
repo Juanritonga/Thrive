@@ -84,7 +84,7 @@ const Project = () => {
         if (!newProject.entity_id) {
           setNewProject((prev) => ({
             ...prev,
-            entity_id: response.data.data.items[0]?.id || "", // Set entity_id awal jika belum ada
+            entity_id: response.data.data.items[0]?.id || "",
           }));
         }
       } else {
@@ -162,7 +162,7 @@ const Project = () => {
       });
 
       if (response.data.success) {
-        setProjectDetail(response.data.data); // Menyimpan detail proyek ke state
+        setProjectDetail(response.data.data);
       } else {
         throw new Error(response.data.message || "Unexpected response format.");
       }
@@ -184,7 +184,6 @@ const Project = () => {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      // Validate the required fields before making the request
       if (
         !updatedData.name.trim() ||
         !updatedData.entity_id ||
@@ -195,14 +194,12 @@ const Project = () => {
         return;
       }
 
-      // Optimistically update the project in the UI before the API request
       setProjects((prevProjects) =>
         prevProjects.map((project) =>
           project.id === projectId ? { ...project, ...updatedData } : project
         )
       );
 
-      // Make the API request to update the project
       const response = await api.put(
         `/projects/${projectId}`,
         {
@@ -218,11 +215,9 @@ const Project = () => {
         }
       );
 
-      // Check the response success
       if (response.data.success) {
         const updatedProject = response.data.data;
 
-        // Update project list with the new data after a successful update
         setProjects((prevProjects) =>
           prevProjects.map((project) =>
             project.id === projectId ? updatedProject : project
@@ -235,7 +230,6 @@ const Project = () => {
         throw new Error(response.data.message || "Unexpected response format.");
       }
     } catch (err) {
-      // If an error occurs, revert the optimistic update and show an error message
       setProjects((prevProjects) =>
         prevProjects.map((project) =>
           project.id === projectId
@@ -268,7 +262,7 @@ const Project = () => {
         setProjects((prevProjects) =>
           prevProjects.filter((project) => project.id !== projectId)
         );
-        setActionOpenId(null); // Close the action dropdown after deletion
+        setActionOpenId(null);
         setError(null);
       } else {
         setError(response.data.message || "Unexpected response format.");
@@ -373,18 +367,18 @@ const Project = () => {
   return (
     <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
       <div className="flex flex-wrap justify-between items-center mb-6 gap-2">
-  <SearchBar
-    value={searchQuery}
-    onChange={setSearchQuery}
-    placeholder="Cari Project"
-  />
-  <button
-    className="bg-custom-blue text-white px-2 py-2 rounded-lg w-full sm:w-auto"
-    onClick={handleOpenModal}
-  >
-    Tambah Baru
-  </button>
-</div>
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Cari Project"
+        />
+        <button
+          className="bg-custom-blue text-white px-2 py-2 rounded-lg w-full sm:w-auto"
+          onClick={handleOpenModal}
+        >
+          Tambah Baru
+        </button>
+      </div>
       <div className="overflow-auto shadow-sm mb-6">
         {filteredData.length === 0 ? (
           <p>No projects found.</p>
@@ -397,7 +391,6 @@ const Project = () => {
           />
         )}
       </div>
-
       <div className="flex flex-wrap justify-between items-center gap-4">
         <span className="text-sm text-gray-500">
           Showing {indexOfFirstItem + 1} to{" "}
@@ -449,6 +442,7 @@ const Project = () => {
           </div>
         </div>
       </div>
+
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg w-98">
@@ -460,10 +454,8 @@ const Project = () => {
                 <i className="fas fa-times"></i>
               </button>
             </div>
-
             <div className="p-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                {/* Entitas */}
                 <div>
                   <label
                     htmlFor="entity"
@@ -492,8 +484,6 @@ const Project = () => {
                     ))}
                   </select>
                 </div>
-
-                {/* Nama Project */}
                 <div>
                   <label
                     htmlFor="projectName"
@@ -513,8 +503,6 @@ const Project = () => {
                   />
                 </div>
               </div>
-
-              {/* Description */}
               <div className="mb-4">
                 <label
                   htmlFor="status"
@@ -537,8 +525,6 @@ const Project = () => {
                   <option value="inactive">Inactive</option>
                 </select>
               </div>
-
-              {/* Tombol Aksi */}
               <div className="flex flex-col sm:flex-row justify-between gap-4">
                 <button
                   className="w-full sm:w-1/2 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-all"
@@ -575,27 +561,21 @@ const Project = () => {
               <h2 className="text-lg font-semibold">Project Detail</h2>
               <button
                 className="text-white hover:text-gray-200"
-                onClick={() => setProjectDetail(null)} // Close modal
+                onClick={() => setProjectDetail(null)}
               >
                 <i className="fas fa-times text-xl"></i>
               </button>
             </div>
-
             <div className="p-6">
               <div className="grid grid-cols-1 text-sm text-gray-600">
-                {/* Project ID */}
                 <div className="flex justify-between">
                   <p className="font-semibold text-gray-800">Project ID :</p>
                   <p className="text-gray-700">{projectDetail.project_id}</p>
                 </div>
-
-                {/* Project Name */}
                 <div className="flex justify-between">
                   <p className="font-semibold text-gray-800">Name :</p>
                   <p className="text-gray-700">{projectDetail.name}</p>
                 </div>
-
-                {/* Status */}
                 <div className="flex justify-between">
                   <p className="font-semibold text-gray-800">Status :</p>
                   <p
@@ -607,22 +587,16 @@ const Project = () => {
                       projectDetail.status.slice(1)}
                   </p>
                 </div>
-
-                {/* Created By */}
                 <div className="flex justify-between">
                   <p className="font-semibold text-gray-800">Created By :</p>
                   <p className="text-gray-700">{projectDetail.created_by}</p>
                 </div>
-
-                {/* Created At */}
                 <div className="flex justify-between">
                   <p className="font-semibold text-gray-800">Created At :</p>
                   <p className="text-gray-700">
                     {new Date(projectDetail.created_at).toLocaleString()}
                   </p>
                 </div>
-
-                {/* Updated At */}
                 <div className="flex justify-between">
                   <p className="font-semibold text-gray-800">Updated At :</p>
                   <p className="text-gray-700">
@@ -642,20 +616,18 @@ const Project = () => {
               <h2 className="text-lg">Edit Project</h2>
               <button
                 className="text-white"
-                onClick={() => setEditModalOpen(false)} // Close modal without saving
+                onClick={() => setEditModalOpen(false)}
               >
                 <i className="fas fa-times"></i>
               </button>
             </div>
-
             <div className="p-6">
               <form
                 onSubmit={(e) => {
-                  e.preventDefault(); // Prevent default form submission
-                  handleEditProject(selectedProject.id, updatedProject); // Submit the data
+                  e.preventDefault();
+                  handleEditProject(selectedProject.id, updatedProject);
                 }}
               >
-                {/* Nama Project */}
                 <div className="mb-4">
                   <label
                     htmlFor="editName"
@@ -677,8 +649,6 @@ const Project = () => {
                     }
                   />
                 </div>
-
-                {/* Entitas */}
                 <div className="mb-4">
                   <label
                     htmlFor="editEntity"
@@ -700,7 +670,6 @@ const Project = () => {
                       })
                     }
                   >
-                    {/* Pastikan entities tidak kosong */}
                     {entities && entities.length > 0 ? (
                       entities.map((entity) => (
                         <option key={entity.id} value={entity.id}>
@@ -712,8 +681,6 @@ const Project = () => {
                     )}
                   </select>
                 </div>
-
-                {/* Status */}
                 <div className="mb-4">
                   <label
                     htmlFor="editStatus"
@@ -736,13 +703,11 @@ const Project = () => {
                     <option value="inactive">Inactive</option>
                   </select>
                 </div>
-
-                {/* Buttons */}
                 <div className="flex justify-end gap-4 mt-4">
                   <button
                     type="button"
                     className="py-2 px-4 bg-red-500 text-white rounded-md hover:bg-red-600 transition-all"
-                    onClick={() => setEditModalOpen(false)} // Close modal without saving
+                    onClick={() => setEditModalOpen(false)}
                   >
                     Cancel
                   </button>
@@ -771,7 +736,6 @@ const Project = () => {
                 <i className="fas fa-times"></i>
               </button>
             </div>
-
             <div className="p-6 text-center">
               <p className="text-lg">
                 Apakah Anda yakin ingin menghapus project ini?

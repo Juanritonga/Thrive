@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import addChart from "./Chart/AddChart";
+import updatedChart from "./Chart/UpdatedChart";
 import Table from "@/components/Table";
 import SearchBar from "@/components/SearchBar";
 import ModalCRUD from "@/components/ModalCRUD";
@@ -11,21 +13,22 @@ const api = axios.create({
   },
 });
 
-const UserRole = () => {
-  const [userRoles, setUserRoles] = useState([]);
-  const [divisions, setDivisions] = useState([]);
+const Chart = () => {
+  const [charts, setCharts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [currentRole, setCurrentRole] = useState({
-    role_name: "",
-    division_id: "",
+  const [classFinances, setClassFinances] = useState([]);
+  const [currentChart, setCurrentChart] = useState({
+    id: "",
+    name: "",
+    class_id: "",
     status: "Active",
   });
+  const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
-  const fetchUserRoles = async () => {
+  const fetchCharts = async () => {
     setLoading(true);
     try {
       const token = sessionStorage.getItem("authToken");
@@ -33,55 +36,54 @@ const UserRole = () => {
         throw new Error("Authorization token is missing.");
       }
 
-      const response = await api.get("/roles", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const response = await api.get("/finance/acc", {
+        headers: { Authorization: `Bearer ${token}` },
         params: { page: 1, limit: 20 },
       });
 
       if (response.data.success) {
-        setUserRoles(response.data.data.items);
+        setCharts(response.data.data.items);
       } else {
         throw new Error(response.data.message || "Unexpected response format.");
       }
     } catch (err) {
-      console.error("Error fetching user roles:", err.message);
-      setError(err.message);
+      console.error("Error fetching charts:", err.response || err.message);
+      setError(err.response?.data?.message || err.message || "An error occurred.");
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchDivisions = async () => {
+  const fetchClassFinances = async () => {
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      const response = await api.get("/divisions", {
+      const response = await api.get("/finance/classes", {
         headers: { Authorization: `Bearer ${token}` },
         params: { limit: 10 },
       });
 
       if (response.data.success) {
-        setDivisions(response.data.data.items);
+        setClassFinances(response.data.data.items);
       } else {
         throw new Error(response.data.message || "Unexpected response format.");
       }
     } catch (err) {
-      console.error("Error fetching divisions:", err.message);
-      setError(err.message);
+      console.error("Error fetching class finances:", err.response || err.message);
+      setError(err.response?.data?.message || err.message || "An error occurred.");
     }
   };
 
   const handleOpenModal = (mode = "create", data = null) => {
     if (mode === "edit") {
-      setCurrentRole(data);
+      setCurrentChart(data);
       setEditMode(true);
     } else {
-      setCurrentRole({
-        role_name: "",
-        division_id: divisions[0]?.id || "",
+      setCurrentChart({
+        id: "",
+        name: "",
+        class_id: classFinances[0]?.id || "",
         status: "Active",
       });
       setEditMode(false);
@@ -93,57 +95,49 @@ const UserRole = () => {
     setShowModal(false);
   };
 
-  const handleSaveRole = async () => {
+  const handleSaveChart = async () => {
+    setLoading(true);
     try {
-      const token = sessionStorage.getItem("authToken");
-      if (!token) throw new Error("Authorization token is missing.");
-
       if (editMode) {
-        await api.put(`/roles/${currentRole.id}`, currentRole, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUserRoles((prev) =>
-          prev.map((role) =>
-            role.id === currentRole.id ? { ...role, ...currentRole } : role
-          )
-        );
+        await updatedChart(currentChart, setCharts, setError, handleCloseModal);
       } else {
-        const response = await api.post("/roles", currentRole, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUserRoles((prev) => [...prev, response.data.data]);
+        await addChart(currentChart, setCharts, setError, handleCloseModal);
       }
-      handleCloseModal();
+      fetchCharts();
     } catch (err) {
-      console.error("Error saving role:", err.message);
-      setError(err.message);
+      console.error("Error saving chart:", err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleDeleteRole = async () => {
+  const handleDeleteChart = async () => {
+    setLoading(true);
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      await api.delete(`/roles/${currentRole.id}`, {
+      await api.delete(`/finance/acc/${currentChart.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setUserRoles((prev) => prev.filter((role) => role.id !== currentRole.id));
+      setCharts((prev) => prev.filter((chart) => chart.id !== currentChart.id));
       handleCloseModal();
     } catch (err) {
-      console.error("Error deleting role:", err.message);
-      setError(err.message);
+      console.error("Error deleting chart:", err.response || err.message);
+      setError(err.response?.data?.message || err.message || "An error occurred.");
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchUserRoles();
-    fetchDivisions();
+    fetchCharts();
+    fetchClassFinances();
   }, []);
 
-  const filteredData = userRoles.filter((userRole) =>
-    Object.values(userRole)
+  const filteredData = charts.filter((chart) =>
+    Object.values(chart)
       .join(" ")
       .toLowerCase()
       .includes(searchQuery.toLowerCase())
@@ -151,53 +145,67 @@ const UserRole = () => {
 
   const formFields = [
     {
-      name: "role_name",
-      label: "Role Name",
+      name: "name",
+      label: "Chart Name",
       type: "text",
-      value: currentRole.role_name,
+      value: currentChart.name,
       onChange: (e) =>
-        setCurrentRole((prev) => ({ ...prev, role_name: e.target.value })),
+        setCurrentChart((prev) => ({ ...prev, name: e.target.value })),
     },
     {
-      name: "division_id",
-      label: "Division",
+      name: "class_id",
+      label: "Class Finance",
       type: "select",
-      value: currentRole.division_id,
-      options: divisions.map((division) => ({
-        value: division.id,
-        label: division.division_name,
+      value: currentChart.class_id,
+      options: classFinances.map((classFinance) => ({
+        value: classFinance.id,
+        label: classFinance.name,
       })),
       onChange: (e) =>
-        setCurrentRole((prev) => ({ ...prev, division_id: e.target.value })),
+        setCurrentChart((prev) => ({ ...prev, class_id: e.target.value })),
     },
     {
       name: "status",
       label: "Status",
       type: "select",
-      value: currentRole.status,
+      value: currentChart.status,
       options: [
         { value: "Active", label: "Active" },
         { value: "Inactive", label: "Inactive" },
       ],
       onChange: (e) =>
-        setCurrentRole((prev) => ({ ...prev, status: e.target.value })),
+        setCurrentChart((prev) => ({ ...prev, status: e.target.value })),
     },
   ];
 
   const columns = [
-    { header: "Role ID", accessor: "role_id" },
-    { header: "Role Name", accessor: "role_name" },
-    { header: "Division Name", accessor: "division_name" },
-    { header: "Status", accessor: (role) => role.status },
+    { header: "ID Acc.", accessor: "acc_id" },
+    { header: "Nama Acc.", accessor: "name" },
+    { header: "Kelas", accessor: "class_name" },
+    { header: "Kode", accessor: "class_code" },
+    { header: "Dibuat Oleh", accessor: "created_by" },
     {
-      header: "Created At",
-      accessor: (role) =>
-        new Date(role.created_at).toLocaleDateString("en-GB"),
+      header: "Tanggal Update",
+      accessor: (chart) =>
+        chart.updated_at
+          ? new Date(chart.updated_at)
+              .toLocaleDateString("en-GB")
+              .replace(/\//g, "-")
+          : "N/A",
     },
     {
-      header: "Updated At",
-      accessor: (role) =>
-        new Date(role.updated_at).toLocaleDateString("en-GB"),
+      header: "Status",
+      accessor: (chart) => (
+        <span
+          className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+            chart.status.toLowerCase() === "active"
+              ? "bg-green-200 text-green-600"
+              : "bg-red-200 text-red-600"
+          }`}
+        >
+          {chart.status}
+        </span>
+      ),
     },
   ];
 
@@ -206,7 +214,7 @@ const UserRole = () => {
       icon: "fas fa-edit",
       buttonClass:
         "bg-gray-200 text-gray-400 p-3 rounded-lg flex items-center justify-center w-10 h-10",
-      handler: (role) => handleOpenModal("edit", role),
+      handler: (item) => handleOpenModal("edit", item),
     },
   ];
 
@@ -231,7 +239,7 @@ const UserRole = () => {
         <SearchBar
           value={searchQuery}
           onChange={setSearchQuery}
-          placeholder="Search Roles"
+          placeholder="Cari Acc."
         />
         <button
           className="bg-custom-blue text-white px-2 py-2 rounded-lg w-full sm:w-auto"
@@ -242,7 +250,7 @@ const UserRole = () => {
       </div>
       <div className="overflow-auto shadow-sm mb-6">
         {filteredData.length === 0 ? (
-          <p>No user roles found.</p>
+          <p>No charts found.</p>
         ) : (
           <Table columns={columns} data={filteredData} actions={actions} />
         )}
@@ -250,10 +258,10 @@ const UserRole = () => {
 
       <ModalCRUD
         isOpen={showModal}
-        title={editMode ? "Edit Role" : "Tambah Baru"}
+        title={editMode ? "Edit Chart" : "Tambah Baru"}
         onClose={handleCloseModal}
-        onSave={handleSaveRole}
-        onDelete={editMode ? handleDeleteRole : null}
+        onSave={handleSaveChart}
+        onDelete={editMode ? handleDeleteChart : null}
         formFields={formFields}
         editMode={editMode}
       />
@@ -261,4 +269,4 @@ const UserRole = () => {
   );
 };
 
-export default UserRole;
+export default Chart;
