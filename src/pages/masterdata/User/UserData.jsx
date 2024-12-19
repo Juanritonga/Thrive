@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import addUserData from "./UserData/AddUserData";
 import updatedUserData from "./UserData/UpdatedUserData";
 import Table from "@/components/Table";
+import SearchBar from "@/components/SearchBar";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -108,7 +109,7 @@ const User = () => {
         if (!newUserData.role_id) {
           setNewUserData((prev) => ({
             ...prev,
-            role_id: response.data.data.items[0]?.id || "", // Set entity_id awal jika belum ada
+            role_id: response.data.data.items[0]?.id || "",
           }));
         }
       } else {
@@ -144,7 +145,7 @@ const User = () => {
         if (!newUserData.entity_id) {
           setNewUserData((prev) => ({
             ...prev,
-            entity_id: response.data.data.items[0]?.id || "", // Set entity_id awal jika belum ada
+            entity_id: response.data.data.items[0]?.id || "",
           }));
         }
       } else {
@@ -173,7 +174,6 @@ const User = () => {
       );
 
       if (response.data.success) {
-        // Refresh the user roles list
         fetchUsers();
         handleCloseEditModal();
       } else {
@@ -194,7 +194,7 @@ const User = () => {
   }, []);
 
   const handleUpdateUserData = async () => {
-    setLoading(true); // Set loading to true when starting the request
+    setLoading(true);
     await updatedUserData(
       editUserData,
       setUsers,
@@ -204,7 +204,7 @@ const User = () => {
     fetchUsers();
   };
   const handleAddUserData = async () => {
-    setLoading(true); // Set loading to true when starting the request
+    setLoading(true);
     await addUserData(
       newUserData,
       setUsers,
@@ -212,7 +212,7 @@ const User = () => {
       setError,
       handleCloseModal
     );
-    fetchUsers(); // Call this after adding a class to refresh the data
+    fetchUsers();
   };
 
   const filteredData = users.filter((user) =>
@@ -270,16 +270,11 @@ const User = () => {
   return (
     <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
       <div className="flex flex-wrap justify-between items-center mb-6 gap-2">
-        <div className="relative w-full sm:w-[300px]">
-          <input
-            type="text"
-            placeholder="Cari"
-            className="pl-6 pr-10 py-3 w-full border rounded-md"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <i className="fa-solid fa-magnifying-glass absolute right-2 top-1/2 transform -translate-y-1/2 text-custom-blue"></i>
-        </div>
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Cari"
+        />
         <button
           className="bg-custom-blue text-white px-2 py-2 rounded-lg w-full sm:w-auto"
           onClick={handleOpenModal}
@@ -307,7 +302,7 @@ const User = () => {
             </div>
 
             <div className="p-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">    
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label
                     htmlFor="FullName"
@@ -345,7 +340,7 @@ const User = () => {
                     onChange={(e) =>
                       setNewUserData({
                         ...newUserData,
-                        position: e.target.value, 
+                        position: e.target.value,
                       })
                     }
                   />
@@ -371,15 +366,11 @@ const User = () => {
                     <option value="" disabled>
                       Select Role
                     </option>
-                    {roles.map(
-                      (
-                        role
-                      ) => (
-                        <option key={role.id} value={role.id}>
-                          {role.role_name}
-                        </option>
-                      )
-                    )}
+                    {roles.map((role) => (
+                      <option key={role.id} value={role.id}>
+                        {role.role_name}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -430,63 +421,66 @@ const User = () => {
                   />
                 </div>
                 <div>
-                <label
-                  htmlFor="phone"
-                  className="block text-gray-700 font-medium mb-2"
-                >
-                  Phone
-                </label>
-                <input
-                  type="text"
-                  id="phone"
-                  placeholder="Enter your phone number"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                  value={newUserData.phone}
-                  onChange={(e) =>
-                    setNewUserData({ ...newUserData, phone: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="addres"
-                  className="block text-gray-700 font-medium mb-2"
-                >
-                  Alamat
-                </label>
-                <input
-                  type="text"
-                  id="addres"
-                  placeholder="Alamat"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                  value={newUserData.address}
-                  onChange={(e) =>
-                    setNewUserData({ ...newUserData, address: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="status"
-                  className="block text-gray-700 font-medium mb-2"
-                >
-                  Status
-                </label>
-                <select
-                  id="status"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                  value={newUserData.status}
-                  onChange={(e) =>
-                    setNewUserData({ ...newUserData, status: e.target.value })
-                  }
-                >
-                  <option value="" disabled>
-                    Select Status
-                  </option>
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
-              </div>
+                  <label
+                    htmlFor="phone"
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    Phone
+                  </label>
+                  <input
+                    type="text"
+                    id="phone"
+                    placeholder="Enter your phone number"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
+                    value={newUserData.phone}
+                    onChange={(e) =>
+                      setNewUserData({ ...newUserData, phone: e.target.value })
+                    }
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="addres"
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    Alamat
+                  </label>
+                  <input
+                    type="text"
+                    id="addres"
+                    placeholder="Alamat"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
+                    value={newUserData.address}
+                    onChange={(e) =>
+                      setNewUserData({
+                        ...newUserData,
+                        address: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="status"
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    Status
+                  </label>
+                  <select
+                    id="status"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
+                    value={newUserData.status}
+                    onChange={(e) =>
+                      setNewUserData({ ...newUserData, status: e.target.value })
+                    }
+                  >
+                    <option value="" disabled>
+                      Select Status
+                    </option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
               </div>
               <div className="mb-4">
                 <label
@@ -506,8 +500,6 @@ const User = () => {
                   }
                 />
               </div>
-
-              {/* Tombol Aksi */}
               <div className="flex flex-col sm:flex-row justify-between gap-4">
                 <button
                   className="w-full sm:w-1/2 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-all"
@@ -545,7 +537,6 @@ const User = () => {
               </button>
             </div>
             <div className="p-8">
-              {/* Full Name */}
               <div className="mb-4">
                 <label className="block font-semibold text-gray-700">
                   Full Name
@@ -562,8 +553,6 @@ const User = () => {
                   className="w-full px-4 py-2 border rounded-md"
                 />
               </div>
-
-              {/* Position */}
               <div className="mb-4">
                 <label className="block font-semibold text-gray-700">
                   Position
@@ -609,8 +598,6 @@ const User = () => {
                   ))}
                 </select>
               </div>
-
-              {/* Entity ID */}
               <div>
                 <label
                   htmlFor="entity"
@@ -639,8 +626,6 @@ const User = () => {
                   ))}
                 </select>
               </div>
-
-              {/* Email */}
               <div className="mb-4">
                 <label className="block font-semibold text-gray-700">
                   Email
@@ -654,8 +639,6 @@ const User = () => {
                   className="w-full px-4 py-2 border rounded-md"
                 />
               </div>
-
-              {/* Phone */}
               <div className="mb-4">
                 <label className="block font-semibold text-gray-700">
                   Phone
@@ -669,8 +652,6 @@ const User = () => {
                   className="w-full px-4 py-2 border rounded-md"
                 />
               </div>
-
-              {/* Address */}
               <div className="mb-4">
                 <label className="block font-semibold text-gray-700">
                   Address
@@ -687,8 +668,6 @@ const User = () => {
                   className="w-full px-4 py-2 border rounded-md"
                 />
               </div>
-
-              {/* Status */}
               <div className="mb-4">
                 <label className="block font-semibold text-gray-700">
                   Status
@@ -704,8 +683,6 @@ const User = () => {
                   <option value="inactive">Inactive</option>
                 </select>
               </div>
-
-              {/* Action Buttons */}
               <div className="flex justify-end gap-4 mt-4">
                 <button
                   className="bg-red-600 text-white py-2 px-4 rounded-md"
