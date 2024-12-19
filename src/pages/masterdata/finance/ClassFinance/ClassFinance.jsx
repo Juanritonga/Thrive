@@ -19,17 +19,13 @@ const ClassFinance = () => {
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newClassFinance, setNewClassFinance] = useState({
-    name: "",
-    code: "",
-    status: "",
-  });
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editClassFinance, setEditClassFinance] = useState({
+  const [currentFinance, setCurrentFinance] = useState({
     name: "",
     code: "",
     status: "",
   });
+
   const columns = [
     { header: "Class ID", accessor: "class_id" },
     { header: "Nama Kelas", accessor: "name" },
@@ -57,12 +53,13 @@ const ClassFinance = () => {
       ),
     },
   ];
+
   const actions = [
     {
-      label: "Edit",
       icon: "fas fa-edit",
-      buttonClass: "bg-gray-200 text-gray-400",
-      handler: (item) => handleOpenEditModal(item),
+      buttonClass:
+        "bg-gray-200 text-gray-400 p-3 rounded-lg flex items-center justify-center w-10 h-10",
+      handler: (item) => handleOpenModal("edit", item),
     },
   ];
 
@@ -71,43 +68,48 @@ const ClassFinance = () => {
       name: "name",
       label: "Nama Project",
       type: "text",
-      value: newClassFinance.name,
+      value: currentFinance.name,
       onChange: (e) =>
-        setNewClassFinance((prev) => ({ ...prev, name: e.target.value })),
+        setCurrentFinance((prev) => ({ ...prev, name: e.target.value })),
     },
     {
       name: "code",
       label: "Code",
       type: "text",
-      value: newClassFinance.code,
+      value: currentFinance.code,
       onChange: (e) =>
-        setNewClassFinance((prev) => ({ ...prev, code: e.target.value })),
+        setCurrentFinance((prev) => ({ ...prev, code: e.target.value })),
     },
     {
       name: "status",
       label: "Status",
       type: "select",
-      value: newClassFinance.status,
+      value: currentFinance.status,
       options: [
         { value: "Active", label: "Active" },
         { value: "Inactive", label: "Inactive" },
       ],
       onChange: (e) =>
-        setNewClassFinance((prev) => ({ ...prev, status: e.target.value })),
+        setCurrentFinance((prev) => ({ ...prev, status: e.target.value })),
     },
   ];
 
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
-
-  const handleOpenEditModal = (ClassFinance) => {
-    setEditClassFinance({
-      ...ClassFinance,
-    });
-    setIsEditModalOpen(true);
+  const handleOpenModal = (mode = "create", data = null) => {
+    if (mode === "edit") {
+      setCurrentFinance(data);
+      setIsEditModalOpen(true);
+    } else {
+      setCurrentFinance({
+        name: "",
+        code: "",
+        status: "",
+      });
+      setIsModalOpen(true);
+    }
   };
 
-  const handleCloseEditModal = () => {
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
     setIsEditModalOpen(false);
   };
 
@@ -119,15 +121,12 @@ const ClassFinance = () => {
         throw new Error("Authorization token is missing.");
       }
 
-      const response = await api.get("/finance/classes",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          params: { page: 1, limit: 20 },
-        }
-      );
+      const response = await api.get("/finance/classes", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: { page: 1, limit: 20 },
+      });
 
       if (response.data.success) {
         setClassFinances(response.data.data.items);
@@ -146,16 +145,42 @@ const ClassFinance = () => {
     }
   };
 
+  const handleSaveClassFinance = async () => {
+    setLoading(true);
+    try {
+      if (isEditModalOpen) {
+        await updatedClassFinance(
+          currentFinance,
+          setClassFinances,
+          setError,
+          handleCloseModal
+        );
+      } else {
+        await addClassFinance(
+          currentFinance,
+          setClassFinances,
+          setError,
+          handleCloseModal
+        );
+      }
+      fetchClassFinances();
+    } catch (err) {
+      setError("An error occurred while saving.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleDeleteClassFinance = async () => {
     setLoading(true);
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      const response = await api.delete(`/finance/classes/${editClassFinance.id}`,
+      const response = await api.delete(
+        `/finance/classes/${currentFinance.id}`,
         {
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
@@ -163,7 +188,7 @@ const ClassFinance = () => {
 
       if (response.data.success) {
         fetchClassFinances();
-        handleCloseEditModal();
+        handleCloseModal();
       } else {
         throw new Error(response.data.message || "Failed to delete role.");
       }
@@ -174,29 +199,6 @@ const ClassFinance = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleUpdateClassFinance = async () => {
-    setLoading(true);
-    await updatedClassFinance(
-      editClassFinance,
-      setClassFinances,
-      setError,
-      handleCloseEditModal
-    );
-    fetchClassFinances();
-  };
-
-  const handleAddClassFinance = async () => {
-    setLoading(true);
-    await addClassFinance(
-      newClassFinance,
-      setClassFinances,
-      setNewClassFinance,
-      setError,
-      handleCloseModal
-    );
-    fetchClassFinances();
   };
 
   const filteredData = ClassFinances.filter((ClassFinance) =>
@@ -228,18 +230,18 @@ const ClassFinance = () => {
   return (
     <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
       <div className="flex flex-wrap justify-between items-center mb-6 gap-2">
-  <SearchBar
-    value={searchQuery}
-    onChange={setSearchQuery}
-    placeholder="Cari Kelas"
-  />
-  <button
-    className="bg-custom-blue text-white px-2 py-2 rounded-lg w-full sm:w-auto"
-    onClick={handleOpenModal}
-  >
-    Tambah Baru
-  </button>
-</div>
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Cari Kelas"
+        />
+        <button
+          className="bg-custom-blue text-white px-2 py-2 rounded-lg w-full sm:w-auto"
+          onClick={() => handleOpenModal("create")}
+        >
+          Tambah Baru
+        </button>
+      </div>
       <div className="overflow-auto shadow-sm mb-6">
         {filteredData.length === 0 ? (
           <p>No users found.</p>
@@ -248,121 +250,15 @@ const ClassFinance = () => {
         )}
       </div>
 
-      {isModalOpen && (
-        <ModalCRUD
-        isOpen={isModalOpen}
+      <ModalCRUD
+        isOpen={isModalOpen || isEditModalOpen}
         title={isEditModalOpen ? "Edit Kelas Keuangan" : "Tambah Baru"}
         onClose={handleCloseModal}
-        onSave={handleAddClassFinance}
+        onSave={handleSaveClassFinance}
         onDelete={isEditModalOpen ? handleDeleteClassFinance : null}
         formFields={formFields}
+        editMode={isEditModalOpen}
       />
-      )}
-
-      {isEditModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white rounded-lg w-98">
-            <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
-              <h2 className="text-lg">Edit User Role</h2>
-              <button className="text-white" onClick={handleCloseEditModal}>
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label
-                    htmlFor="ClassName"
-                    className="block text-gray-700 font-medium mb-2"
-                  >
-                    Nama Project
-                  </label>
-                  <input
-                    type="text"
-                    id="ClassName"
-                    placeholder="Class Name"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                    value={editClassFinance.name}
-                    onChange={(e) =>
-                      setEditClassFinance({
-                        ...editClassFinance,
-                        name: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-
-                {/* Division */}
-                <div>
-                  <label
-                    htmlFor="code"
-                    className="block text-gray-700 font-medium mb-2"
-                  >
-                    Code
-                  </label>
-                  <input
-                    type="text"
-                    id="code"
-                    placeholder="class"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                    value={editClassFinance.code}
-                    onChange={(e) =>
-                      setEditClassFinance({
-                        ...editClassFinance,
-                        code: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-
-                {/* Status */}
-                <div>
-                  <label
-                    htmlFor="status"
-                    className="block text-gray-700 font-medium mb-2"
-                  >
-                    Status
-                  </label>
-                  <select
-                    id="status"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                    value={editClassFinance.status || ""}
-                    onChange={(e) =>
-                      setEditClassFinance({
-                        ...editClassFinance,
-                        status: e.target.value,
-                      })
-                    }
-                  >
-                    <option value="" disabled>
-                      Select Status
-                    </option>
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Button */}
-              <div className="flex justify-end">
-                <button
-                  className="bg-red-600 text-white py-2 px-4 rounded-md"
-                  onClick={() => handleDeleteClassFinance(editClassFinance.id)}
-                >
-                  Delete
-                </button>
-                <button
-                  className="bg-custom-blue text-white py-2 px-6 rounded-lg"
-                  onClick={handleUpdateClassFinance}
-                >
-                  Save
-                </button>
-              </div>
-            </div>
-           
-          </div>
-        </div>
-      )}
     </div>
   );
 };

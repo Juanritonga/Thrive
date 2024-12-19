@@ -1,6 +1,6 @@
 import React from "react";
 
-const SearchBar = ({ value, onChange, placeholder = "Search..." }) => {
+const SearchBar = ({ value, onChange, placeholder = "Cari" }) => {
   return (
     <div className="relative w-full sm:w-[300px]">
       <input
