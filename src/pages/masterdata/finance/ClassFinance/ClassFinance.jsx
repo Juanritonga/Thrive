@@ -2,7 +2,8 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import addClassFinance from "./AddClassFinance";
 import updatedClassFinance from "./UpdatedClassFinance";
-import Table from "../../../components/Table";
+import Table from "@/components/Table";
+import ModalCRUD from "@/components/ModalCRUD";
 
 const ClassFinance = () => {
   const [ClassFinances, setClassFinances] = useState([]);
@@ -54,6 +55,37 @@ const ClassFinance = () => {
       icon: "fas fa-edit",
       buttonClass: "bg-gray-200 text-gray-400",
       handler: (item) => handleOpenEditModal(item),
+    },
+  ];
+
+  const formFields = [
+    {
+      name: "name",
+      label: "Nama Project",
+      type: "text",
+      value: newClassFinance.name,
+      onChange: (e) =>
+        setNewClassFinance((prev) => ({ ...prev, name: e.target.value })),
+    },
+    {
+      name: "code",
+      label: "Code",
+      type: "text",
+      value: newClassFinance.code,
+      onChange: (e) =>
+        setNewClassFinance((prev) => ({ ...prev, code: e.target.value })),
+    },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      value: newClassFinance.status,
+      options: [
+        { value: "Active", label: "Active" },
+        { value: "Inactive", label: "Inactive" },
+      ],
+      onChange: (e) =>
+        setNewClassFinance((prev) => ({ ...prev, status: e.target.value })),
     },
   ];
 
@@ -216,110 +248,14 @@ const ClassFinance = () => {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white rounded-lg w-98">
-            <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
-              <div className="flex items-center space-x-2">
-                <h2 className="text-lg">Tambah Baru</h2>
-              </div>
-              <button className="text-white" onClick={handleCloseModal}>
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
-
-            <div className="p-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label
-                    htmlFor="ClassName"
-                    className="block text-gray-700 font-medium mb-2"
-                  >
-                    Nama Project
-                  </label>
-                  <input
-                    type="text"
-                    id="ClassName"
-                    placeholder="Class Name"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                    value={newClassFinance.name}
-                    onChange={(e) =>
-                      setNewClassFinance({
-                        ...newClassFinance,
-                        name: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-
-                {/* Division */}
-                <div>
-                  <label
-                    htmlFor="code"
-                    className="block text-gray-700 font-medium mb-2"
-                  >
-                    Code
-                  </label>
-                  <input
-                    type="text"
-                    id="code"
-                    placeholder="class"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                    value={newClassFinance.code}
-                    onChange={(e) =>
-                      setNewClassFinance({
-                        ...newClassFinance,
-                        code: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-
-                {/* Status */}
-                <div>
-                  <label
-                    htmlFor="status"
-                    className="block text-gray-700 font-medium mb-2"
-                  >
-                    Status
-                  </label>
-                  <select
-                    id="status"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                    value={newClassFinance.status || ""}
-                    onChange={(e) =>
-                      setNewClassFinance({
-                        ...newClassFinance,
-                        status: e.target.value,
-                      })
-                    }
-                  >
-                    <option value="" disabled>
-                      Select Status
-                    </option>
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Button */}
-              <div className="flex justify-end space-x-2">
-                <button
-                  className="bg-gray-300 text-gray-700 py-2 px-4 rounded-md"
-                  onClick={handleCloseModal}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="bg-blue-600 text-white py-2 px-4 rounded-md"
-                  onClick={handleAddClassFinance}
-                >
-                  Save
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ModalCRUD
+        isOpen={isModalOpen}
+        title={isEditModalOpen ? "Edit Kelas Keuangan" : "Tambah Baru"}
+        onClose={handleCloseModal}
+        onSave={handleAddClassFinance}
+        onDelete={isEditModalOpen ? handleDeleteClassFinance : null}
+        formFields={formFields}
+      />
       )}
 
       {isEditModalOpen && (

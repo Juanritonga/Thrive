@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import addUserData from "./UserData/AddUserData";
 import updatedUserData from "./UserData/UpdatedUserData";
-import Table from "@/pages/components/Table";
+import Table from "@/components/Table";
 
 const User = () => {
   const [users, setUsers] = useState([]);

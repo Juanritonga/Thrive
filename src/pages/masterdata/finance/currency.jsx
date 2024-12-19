@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import Table from "@/pages/components/Table";
+import Table from "@/components/Table";
 
 const Currency = () => {
   const [currencys, setCurrencys] = useState([]);

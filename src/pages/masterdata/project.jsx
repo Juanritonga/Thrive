@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import Table from "../components/Table";
+import Table from "../../components/Table";
 
 const Project = () => {
   const [projects, setProjects] = useState([]);

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect, useCallback } from "react";
-import Table from "../../components/Table";
+import Table from "@/components/Table";
+import ModalCRUD from "@/components/ModalCRUD";
 
 const Tax = () => {
   const [taxes, setTaxes] = useState([]);
@@ -95,14 +96,6 @@ const Tax = () => {
     setShowModal(false);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewTax((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
   const handleSaveTax = async (e) => {
     e.preventDefault();
     try {
@@ -177,7 +170,9 @@ const Tax = () => {
       header: "Updated At",
       accessor: (tax) =>
         tax.updated_at
-          ? new Date(tax.updated_at).toLocaleDateString("en-GB").replace(/\//g, "-")
+          ? new Date(tax.updated_at)
+              .toLocaleDateString("en-GB")
+              .replace(/\//g, "-")
           : "N/A",
     },
     {
@@ -202,6 +197,36 @@ const Tax = () => {
       icon: "fas fa-edit",
       buttonClass: "bg-gray-200 text-gray-400",
       handler: handleEdit,
+    },
+  ];
+
+  const formFields = [
+    {
+      name: "name",
+      label: "Tax Name",
+      type: "text",
+      value: newTax.name,
+      onChange: (e) => setNewTax((prev) => ({ ...prev, name: e.target.value })),
+    },
+    {
+      name: "amount",
+      label: "Amount",
+      type: "number",
+      value: newTax.amount,
+      onChange: (e) =>
+        setNewTax((prev) => ({ ...prev, amount: e.target.value })),
+    },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      value: newTax.status,
+      options: [
+        { value: "Active", label: "Active" },
+        { value: "Inactive", label: "Inactive" },
+      ],
+      onChange: (e) =>
+        setNewTax((prev) => ({ ...prev, status: e.target.value })),
     },
   ];
 
@@ -322,82 +347,15 @@ const Tax = () => {
       </div>
 
       {showModal && (
-  <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg w-[600px] relative">
-      <div className="bg-blue-900 text-white px-4 py-3 rounded-t-lg text-lg font-semibold">
-        Tambah Baru
-      </div>
-      <button
-        onClick={handleCloseModal}
-        className="absolute top-2 right-2 text-gray-300 hover:text-gray-100 text-2xl font-bold"
-        style={{
-          lineHeight: "1",
-          borderRadius: "50%",
-        }}
-      >
-        &times;
-      </button>
-      <div className="p-6">
-        <form onSubmit={handleSaveTax}>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block mb-1 font-bold">Tax Name</label>
-              <input
-                type="text"
-                name="name"
-                className="border rounded-md p-2 w-full"
-                value={newTax.name}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-bold">Amount</label>
-              <input
-                type="number"
-                name="amount"
-                className="border rounded-md p-2 w-full"
-                value={newTax.amount}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-bold">Status</label>
-              <select
-                name="status"
-                className="border rounded-md p-2 w-full"
-                value={newTax.status}
-                onChange={handleInputChange}
-              >
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
-          <div className="flex justify-end gap-4 mt-6">
-            {editMode && (
-              <button
-                type="button"
-                className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
-                onClick={handleDeleteTax}
-              >
-                Delete
-              </button>
-            )}
-            <button
-              type="submit"
-              className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
-            >
-              Simpan
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-)}
-
+        <ModalCRUD
+          isOpen={showModal}
+          title={editMode ? "Edit Tax" : "Tambah Baru"}
+          onClose={handleCloseModal}
+          onSave={handleSaveTax}
+          onDelete={editMode ? handleDeleteTax : null}
+          formFields={formFields}
+        />
+      )}
     </div>
   );
 };

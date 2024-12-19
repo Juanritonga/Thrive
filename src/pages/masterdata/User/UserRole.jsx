@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import addUserRole from "./UserRole/AddUserRole";
 import updatedUserRole from "./UserRole/UpdatedUserRole";
-import Table from "@/pages/components/Table";
+import Table from "@/components/Table";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL, 

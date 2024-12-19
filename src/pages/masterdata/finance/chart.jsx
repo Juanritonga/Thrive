@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import addChart from "./Chart/AddChart";
 import updatedChart from "./Chart/UpdatedChart";
-import Table from "@/pages/components/Table";
+import Table from "@/components/Table";
 
 const Chart = () => {
   const [Chart, setChart] = useState([]);
