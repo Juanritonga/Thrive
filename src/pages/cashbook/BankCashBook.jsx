@@ -20,34 +20,36 @@ const Bank = () => {
     status: "Active",
   });
 
-useEffect(() => {
-  const fetchItems = async () => {
-    const token = sessionStorage.getItem("authToken"); 
-    try {
-      const response = await fetch("https://thrive-be.app-dev.altru.id/api/v1/banks", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": token ? `Bearer ${token}` : "",  
-        },
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('API Error:', errorData); 
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-  
-      const data = await response.json();
-      console.log(data); 
-    } catch (error) {
-      console.error("Fetch error: ", error);
-    }
-  };
-  
+  useEffect(() => {
+    const fetchItems = async () => {
+      const token = sessionStorage.getItem("authToken");
+      try {
+        const response = await fetch(
+          "https://thrive-be.app-dev.altru.id/api/v1/banks",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
+        );
 
-  fetchItems();
-}, []);
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("API Error:", errorData);
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error("Fetch error: ", error);
+      }
+    };
+
+    fetchItems();
+  }, []);
 
   const handlePagination = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -58,7 +60,9 @@ useEffect(() => {
   };
 
   const paginatedItems = items
-    .filter(item => item.bank.toLowerCase().includes(searchQuery.toLowerCase()))
+    .filter((item) =>
+      item.bank.toLowerCase().includes(searchQuery.toLowerCase())
+    )
     .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
@@ -93,24 +97,32 @@ useEffect(() => {
               ))
             ) : (
               <tr>
-                <td colSpan="3" className="py-2 px-4 text-center">No matching banks found</td>
+                <td colSpan="3" className="py-2 px-4 text-center">
+                  No matching banks found
+                </td>
               </tr>
             )}
           </tbody>
         </table>
 
         <div className="flex justify-center mt-4">
-          {items.length > itemsPerPage && (
-            Array.from({ length: Math.ceil(items.length / itemsPerPage) }, (_, index) => (
-              <button
-                key={index}
-                className={`py-2 px-4 mx-2 ${currentPage === index + 1 ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                onClick={() => handlePagination(index + 1)}
-              >
-                {index + 1}
-              </button>
-            ))
-          )}
+          {items.length > itemsPerPage &&
+            Array.from(
+              { length: Math.ceil(items.length / itemsPerPage) },
+              (_, index) => (
+                <button
+                  key={index}
+                  className={`py-2 px-4 mx-2 ${
+                    currentPage === index + 1
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200"
+                  }`}
+                  onClick={() => handlePagination(index + 1)}
+                >
+                  {index + 1}
+                </button>
+              )
+            )}
         </div>
       </div>
     </div>

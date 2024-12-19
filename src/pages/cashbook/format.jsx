@@ -152,7 +152,7 @@ const Format = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState(testData);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [itemsPerPage, setItemsPerPage] = useState(10);  // Ubah jadi state
+  const [itemsPerPage, setItemsPerPage] = useState(10); // Ubah jadi state
 
   const [newItem, setNewItem] = useState({
     id: "",
@@ -321,7 +321,7 @@ const Format = () => {
             <select
               className="px-4 py-2 border rounded-md text-white bg-custom-blue "
               value={itemsPerPage}
-              onChange={(e) => setItemsPerPage(Number(e.target.value))} 
+              onChange={(e) => setItemsPerPage(Number(e.target.value))}
             >
               <option value={10}>10 Baris</option>
               <option value={20}>20 Baris</option>
@@ -332,7 +332,7 @@ const Format = () => {
         </div>
       </div>
 
-       {isModalOpen && (
+      {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg w-98">
             <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
@@ -424,4 +424,3 @@ const Format = () => {
 };
 
 export default Format;
-

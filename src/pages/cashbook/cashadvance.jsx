@@ -182,7 +182,7 @@ const CashAdvance = () => {
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleRowClick = (id) => {
-    navigate(`${id}`); 
+    navigate(`${id}`);
   };
 
   const handleInputChange = (e) => {
@@ -319,7 +319,7 @@ const CashAdvance = () => {
             <span className="text-sm text-gray-600"></span>
             <select
               className="px-4 py-2 border rounded-md text-white bg-custom-blue "
-              value={itemsPerPage} 
+              value={itemsPerPage}
               onChange={(e) => setItemsPerPage(Number(e.target.value))} // Mengubah state itemsPerPage
             >
               <option value={10}>10 Baris</option>

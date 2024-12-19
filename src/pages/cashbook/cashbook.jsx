@@ -11,9 +11,10 @@ const CashBook = () => {
       <Link
         key="dashboard"
         to="/"
-        className={`ml-4 fa-solid fa-calculator text-custom-blue ${location.pathname === "/" ? "font-bold" : ""}`}
-      >
-      </Link>
+        className={`ml-4 fa-solid fa-calculator text-custom-blue ${
+          location.pathname === "/" ? "font-bold" : ""
+        }`}
+      ></Link>
     );
 
     paths.forEach((path, index) => {
@@ -22,8 +23,10 @@ const CashBook = () => {
         <span key={to}>
           {" > "}
           <Link
-            to={to} 
-            className={`text-custom-blue ${location.pathname === to ? "font-bold" : "text-gray-500"}`}
+            to={to}
+            className={`text-custom-blue ${
+              location.pathname === to ? "font-bold" : "text-gray-500"
+            }`}
           >
             {path.charAt(0).toUpperCase() + path.slice(1)}
           </Link>
@@ -37,7 +40,9 @@ const CashBook = () => {
   return (
     <div className="flex flex-col h-screen">
       <div className="text-black">
-        <h1 className="text-2xl font-bold text-custom-blue ml-3 mt-4">CASH BOOK</h1>
+        <h1 className="text-2xl font-bold text-custom-blue ml-3 mt-4">
+          CASH BOOK
+        </h1>
         <div className="text-sm">{getBreadcrumbs()}</div>
       </div>
       <div className="flex-1">

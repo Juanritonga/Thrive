@@ -181,7 +181,7 @@ const PettyCash = () => {
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleRowClick = (id) => {
-    navigate(`${id}`); 
+    navigate(`${id}`);
   };
 
   const handleInputChange = (e) => {

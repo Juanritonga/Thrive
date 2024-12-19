@@ -182,7 +182,7 @@ const Reimbursement = () => {
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleRowClick = (id) => {
-    navigate(`${id}`); 
+    navigate(`${id}`);
   };
 
   const handleInputChange = (e) => {
@@ -253,7 +253,7 @@ const Reimbursement = () => {
               <tr
                 key={item.id}
                 className="cursor-pointer border-t text-center text-custom-blue2"
-                onClick={() => navigate(`${item.id}`)} 
+                onClick={() => navigate(`${item.id}`)}
               >
                 <td className="py-3 px-4">{item.id}</td>
                 <td className="py-3 px-4">{item.advanceTransaction}</td>
@@ -319,7 +319,7 @@ const Reimbursement = () => {
             <select
               className="px-4 py-2 border rounded-md text-white bg-custom-blue "
               value={itemsPerPage}
-              onChange={(e) => setItemsPerPage(Number(e.target.value))} 
+              onChange={(e) => setItemsPerPage(Number(e.target.value))}
             >
               <option value={10}>10 Baris</option>
               <option value={20}>20 Baris</option>

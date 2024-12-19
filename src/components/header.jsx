@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom"; // Untuk navigasi
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 const Header = () => {
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
-  const navigate = useNavigate(); // Hook untuk navigasi
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedName = sessionStorage.getItem("name");
@@ -14,15 +14,15 @@ const Header = () => {
       setName(storedName);
       setRole(storedRole);
     } else {
-      navigate("/login"); // Jika data tidak ditemukan, arahkan ke login
+      navigate("/login");
     }
   }, [navigate]);
 
   const handleLogout = () => {
-    sessionStorage.removeItem("token"); // Hapus token saat logout
-    sessionStorage.removeItem("name"); // Hapus nama pengguna
-    sessionStorage.removeItem("role"); // Hapus peran pengguna
-    navigate("/login"); // Arahkan ke halaman login setelah logout
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("name");
+    sessionStorage.removeItem("role");
+    navigate("/login");
   };
 
   return (
@@ -34,10 +34,10 @@ const Header = () => {
           className="h-full object-contain mr-4 ml-4"
         />
         {role !== "Super Admin" && (
-        <select className="bg-white text-gray-400 p-2 rounded w-full ml-40 sm:w-60">
-          <option>Project</option>
-        </select>
-      )}
+          <select className="bg-white text-gray-400 p-2 rounded w-full ml-40 sm:w-60">
+            <option>Project</option>
+          </select>
+        )}
       </div>
 
       <div className="flex items-center sm:mt-0">
