@@ -5,7 +5,7 @@ import updatedUserRole from "./UserRole/UpdatedUserRole";
 import Table from "@/pages/components/Table";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL, 
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -200,7 +200,7 @@ const UserRole = () => {
         new Date(userRole.updated_at).toLocaleDateString("en-GB"),
     },
   ];
-  
+
   const actions = [
     {
       label: "Edit",
@@ -208,7 +208,7 @@ const UserRole = () => {
       buttonClass: "bg-gray-200 text-gray-400",
       handler: (userRole) => handleOpenEditModal(userRole),
     },
-  ];  
+  ];
 
   if (loading) {
     return (
@@ -254,7 +254,7 @@ const UserRole = () => {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg w-98">
             <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
               <div className="flex items-center space-x-2">
@@ -288,8 +288,6 @@ const UserRole = () => {
                     }
                   />
                 </div>
-
-                {/* Division */}
                 <div>
                   <label
                     htmlFor="division"
@@ -368,7 +366,7 @@ const UserRole = () => {
       )}
 
       {isEditModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg w-98">
             <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
               <h2 className="text-lg">Edit User Role</h2>
@@ -376,13 +374,16 @@ const UserRole = () => {
                 <i className="fas fa-times"></i>
               </button>
             </div>
-            <div className="p-8">
-              <div className="mb-4">
-                <label className="block font-semibold text-gray-700">
+            <div className="p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                <label htmlFor="RoleName"
+                    className="block text-gray-700 font-medium mb-2">
                   Role Name
                 </label>
                 <input
                   type="text"
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
                   value={editUserRole.role_name}
                   onChange={(e) =>
                     setEditUserRole({
@@ -390,11 +391,9 @@ const UserRole = () => {
                       role_name: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-2 border rounded-md"
-                />
-              </div>
-
-              <div>
+                  />
+                </div>
+                <div>
                 <label
                   htmlFor="division"
                   className="block text-gray-700 font-medium mb-2"
@@ -422,9 +421,9 @@ const UserRole = () => {
                   ))}
                 </select>
               </div>
-
-              <div className="mb-4">
-                <label className="block font-semibold text-gray-700">
+              <div>
+                <label htmlFor="status"
+                    className="block text-gray-700 font-medium mb-2">
                   Status
                 </label>
                 <select
@@ -441,23 +440,23 @@ const UserRole = () => {
                   <option value="inactive">Inactive</option>
                 </select>
               </div>
-              <div className="flex justify-end gap-4 mt-4">
-              <button
-                className="bg-red-600 text-white py-2 px-4 rounded-md"
-                onClick={handleDeleteUserRole}
-              >
-                Delete
-              </button>
-
-              <div className="flex justify-end">
-                <button
-                  className="bg-custom-blue text-white py-2 px-6 rounded-lg"
-                  onClick={handleUpdateUserRole}
-                >
-                  Save
-                </button>
               </div>
+              <div className="flex justify-end gap-4 mt-4">
+                <button
+                  className="bg-red-600 text-white py-2 px-4 rounded-md"
+                  onClick={handleDeleteUserRole}
+                >
+                  Delete
+                </button>
 
+                <div className="flex justify-end">
+                  <button
+                    className="bg-custom-blue text-white py-2 px-6 rounded-lg"
+                    onClick={handleUpdateUserRole}
+                  >
+                    Save
+                  </button>
+                </div>
               </div>
             </div>
           </div>
