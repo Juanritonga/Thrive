@@ -4,8 +4,8 @@ import addDivision from "./Division/AddDivision";
 import updatedDivision from "./Division/UpdatedDivision";
 import Table from "@/pages/components/Table";
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,  // This will now use the environment variable
+const api = axios.create({ 
+  baseURL: import.meta.env.VITE_API_BASE_URL, 
   headers: {
     "Content-Type": "application/json",
   },

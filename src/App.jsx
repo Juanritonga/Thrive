@@ -69,6 +69,11 @@ const App = () => {
               <Route path="RoleAccess" element={<RoleAccess />} />
               <Route path="Departement" element={<Departement />} />
             </Route>
+            <Route path="UserData" element={<UserData />} />
+            <Route path="UserRole" element={<UserRole />} />
+            <Route path="Division" element={<Division />} />
+            <Route path="RoleAccess" element={<RoleAccess />} />
+            <Route path="Departement" element={<Departement />} />
             <Route path="project" element={<Project />} />
             <Route path="finance" element={<FinanceMasterData />}>
               <Route index element={<Navigate to="ClassFinance" replace />} />
@@ -103,11 +108,8 @@ const App = () => {
           </Route>
 
           <Route path="general-ledger" element={<GeneralLedgerDashboard />}>
-          <Route path="main-coa-mapping" element={<MainCOAMapping />}>
-              <Route
-                index
-                element={<Navigate to="coa-mapping" replace />}
-              />
+            <Route path="main-coa-mapping" element={<MainCOAMapping />}>
+              <Route index element={<Navigate to="coa-mapping" replace />} />
               <Route path="coa-mapping" element={<SubCOAMapping />} />
               <Route path="coa-division" element={<COADivision />} />
             </Route>

@@ -1,30 +1,79 @@
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
 const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   const location = useLocation();
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsSmallScreen(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+
+    // Sync sidebar visibility with screen size
+    if (window.innerWidth <= 768) {
+      setIsSidebarVisible(false);
+    }
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, [setIsSidebarVisible]);
 
   const isActive = (path) => location.pathname.startsWith(path);
 
   const menuItems = [
+    // {
+    //   role: "Super Admin",
+    //   label: "Master Data",
+    //   path: "/master-data",
+    //   icon: "fas fa-folder-open",
+    // },
+    // {
+    //   role: "Super Admin",
+    //   label: "User",
+    //   path: "/master-data/user",
+    //   icon: "fas fa-user",
+    //   indent: true,
+    // },
     {
       role: "Super Admin",
-      label: "MASTER DATA",
-      path: "/master-data",
-      icon: "fas fa-database",
+      label: "User Role",
+      path: "/master-data/UserRole",
+      icon: "fas fa-user-shield",
+      indent: true,
     },
     {
       role: "Super Admin",
-      label: "User",
-      path: "/master-data/user",
-      icon: "fas fa-university",
+      label: "User Data",
+      path: "/master-data/UserData",
+      icon: "fas fa-id-card",
+      indent: true,
+    },
+    {
+      role: "Super Admin",
+      label: "Role Access",
+      path: "/master-data/RoleAccess",
+      icon: "fas fa-key",
+      indent: true,
+    },
+    {
+      role: "Super Admin",
+      label: "Division",
+      path: "/master-data/Division",
+      icon: "fas fa-project-diagram",
+      indent: true,
+    },
+    {
+      role: "Super Admin",
+      label: "Departement",
+      path: "/master-data/Departement",
+      icon: "fas fa-building",
       indent: true,
     },
     {
       role: "Super Admin",
       label: "Project",
       path: "/master-data/project",
-      icon: "fas fa-wallet",
+      icon: "fas fa-tasks",
       indent: true,
     },
     {
@@ -34,12 +83,13 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       icon: "fas fa-hand-holding-usd",
       indent: true,
     },
+
     {
       role: "front end",
       label: "FINANCE",
       path: "/finance",
-      isParent: true,
       icon: "fas fa-file-invoice",
+      isParent: true,
     },
     {
       role: "front end",
@@ -82,6 +132,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       icon: "fas fa-file-alt",
       indent: true,
     },
+
     {
       role: "front end",
       label: "Fixed Assets",
@@ -109,6 +160,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       icon: "fas fa-file-alt",
       indent: true,
     },
+
     {
       role: "front end",
       label: "General Ledger",
@@ -140,7 +192,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Entry Management",
       path: "#",
-      icon: "fas fa fa-folder-open",
+      icon: "fas fa-folder-open",
       indent: true,
     },
   ];
@@ -149,30 +201,38 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
     <div className="relative">
       <div
         className={`fixed left-0 h-full border-gray-200 shadow-md transform duration-300 ${
-          isSidebarVisible ? "w-64" : "w-16"
-        } overflow-y-auto bg-white scrollbar-hide`}
+          isSmallScreen ? "w-20" : isSidebarVisible ? "w-64" : "w-20"
+        } overflow-y-auto hidden-scrollbar bg-white`}
       >
-        <ul className="p-4 space-y-2 mb-20">
+        <ul className="p-4 space-y-2">
           {menuItems
             .filter((item) => item.role === sessionStorage.getItem("role"))
             .map((item, index) => (
               <li
                 key={index}
-                className={`flex items-center ${item.indent ? "pl-4" : ""} ${
+                className={`flex items-center rounded-md ${
                   isActive(item.path)
-                    ? "font-bold text-custom-blue"
-                    : "text-dark"
-                }`}
+                    ? " bg-gray-100 text-black"
+                    : "text-gray-700"
+                } hover:bg-gray-200 transition-colors duration-200`}
               >
                 <Link
                   to={item.path}
-                  className={`flex items-center w-full p-2 hover:text-custom-blue ${
-                    isSidebarVisible ? "justify-start" : "justify-center"
-                  }`}
+                  className="flex items-center w-full py-3 px-4"
                 >
-                  <i className={`${item.icon} text-lg`}></i>
-                  {isSidebarVisible && (
-                    <span className="ml-3">{item.label}</span>
+                  <i
+                    className={`${item.icon} text-lg w-6 text-center text-custom-blue`}
+                  ></i>
+                  {!isSmallScreen && isSidebarVisible && (
+                    <span
+                      className={`ml-4 flex-1 text-black ${
+                        isActive(item.path)
+                          ? "font-bold text-custom-blue"
+                          : "font-medium"
+                      }`}
+                    >
+                      {item.label}
+                    </span>
                   )}
                 </Link>
               </li>
@@ -180,18 +240,20 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
         </ul>
       </div>
 
-      <button
-        onClick={() => setIsSidebarVisible(!isSidebarVisible)}
-        className={`fixed top-1/2 transform -translate-y-1/2 transition-all duration-300 ${
-          isSidebarVisible ? "left-64" : "left-16"
-        } p-2 text-custom-blue rounded-full  focus:outline-none z-50`}
-      >
-        {isSidebarVisible ? (
-          <i className="fas fa-chevron-left"></i>
-        ) : (
-          <i className="fas fa-chevron-right"></i>
-        )}
-      </button>
+      {!isSmallScreen && (
+        <button
+          onClick={() => setIsSidebarVisible(!isSidebarVisible)}
+          className={`fixed top-1/2 transform -translate-y-1/2 transition-all duration-300 ${
+            isSidebarVisible ? "left-64" : "left-20"
+          } p-2 text-custom-blue rounded-full focus:outline-none z-50`}
+        >
+          <i
+            className={`fas ${
+              isSidebarVisible ? "fa-chevron-left" : "fa-chevron-right"
+            }`}
+          ></i>
+        </button>
+      )}
     </div>
   );
 };

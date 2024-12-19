@@ -1,10 +1,23 @@
 import Sidebar from "./components/sidebar";
 import Header from "./components/header";
 import { Outlet } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Layout = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsSmallScreen(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+
+    // Atur ulang sidebar visibility saat layar kecil
+    if (window.innerWidth <= 768) {
+      setIsSidebarVisible(false);
+    }
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
@@ -12,8 +25,13 @@ const Layout = () => {
       <div className="flex flex-1 overflow-hidden">
         <div
           className={`transition-all duration-300 ${
-            isSidebarVisible ? "w-64" : "w-16"
-          } bg-white shadow-md overflow-y-auto`}>
+            isSmallScreen
+              ? "w-20" 
+              : isSidebarVisible
+              ? "w-64" 
+              : "w-20" 
+          } bg-white shadow-md overflow-y-auto`}
+        >
           <Sidebar
             isSidebarVisible={isSidebarVisible}
             setIsSidebarVisible={setIsSidebarVisible}

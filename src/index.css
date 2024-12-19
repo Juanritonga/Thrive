@@ -5,3 +5,12 @@
 body {
   font-family: 'DM Sans';
 }
+
+.hidden-scrollbar {
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none;
+}

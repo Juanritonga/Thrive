@@ -20,8 +20,8 @@ const Header = () => {
 
   const handleLogout = () => {
     sessionStorage.removeItem("token"); // Hapus token saat logout
-    sessionStorage.removeItem("name");  // Hapus nama pengguna
-    sessionStorage.removeItem("role");  // Hapus peran pengguna
+    sessionStorage.removeItem("name"); // Hapus nama pengguna
+    sessionStorage.removeItem("role"); // Hapus peran pengguna
     navigate("/login"); // Arahkan ke halaman login setelah logout
   };
 
@@ -33,9 +33,11 @@ const Header = () => {
           alt="Company Logo"
           className="h-full object-contain mr-4 ml-4"
         />
+        {role !== "Super Admin" && (
         <select className="bg-white text-gray-400 p-2 rounded w-full ml-40 sm:w-60">
           <option>Project</option>
         </select>
+      )}
       </div>
 
       <div className="flex items-center sm:mt-0">
