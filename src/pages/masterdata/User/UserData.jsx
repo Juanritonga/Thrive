@@ -245,9 +245,9 @@ const User = () => {
 
   const actions = [
     {
-      label: "Edit",
       icon: "fas fa-edit",
-      buttonClass: "bg-gray-200 text-gray-400",
+      buttonClass:
+        "bg-gray-200 text-gray-400 p-3 rounded-lg flex items-center justify-center w-10 h-10",
       handler: (user) => handleOpenEditModal(user),
     },
   ];

@@ -172,9 +172,9 @@ const Division = () => {
 
   const actions = [
     {
-      label: "Edit",
       icon: "fas fa-edit",
-      buttonClass: "bg-gray-200 text-gray-400 hover:bg-gray-300",
+      buttonClass:
+        "bg-gray-200 text-gray-400 p-3 rounded-lg flex items-center justify-center w-10 h-10",
       handler: (division) => handleOpenEditModal(division),
     },
   ];

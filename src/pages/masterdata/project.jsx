@@ -40,15 +40,13 @@ const Project = () => {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      const response = await api.get("/projects",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          params: { page: currentPage, limit: limit },
-        }
-      );
+      const response = await api.get("/projects", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        params: { page: currentPage, limit: limit },
+      });
 
       if (response.data.success) {
         setProjects(response.data.data.items || []);
@@ -70,15 +68,13 @@ const Project = () => {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      const response = await api.get("/entities",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          params: { page: currentPage, limit: limit },
-        }
-      );
+      const response = await api.get("/entities", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        params: { page: currentPage, limit: limit },
+      });
 
       console.log("Entities fetched:", response.data.data.items);
 
@@ -114,7 +110,8 @@ const Project = () => {
         return;
       }
 
-      const response = await api.post("/projects",
+      const response = await api.post(
+        "/projects",
         {
           name: newProject.name.trim(),
           entity_id: newProject.entity_id,
@@ -156,14 +153,12 @@ const Project = () => {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      const response = await api.get(`/projects/${projectId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await api.get(`/projects/${projectId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (response.data.success) {
         setProjectDetail(response.data.data); // Menyimpan detail proyek ke state
@@ -207,7 +202,8 @@ const Project = () => {
       );
 
       // Make the API request to update the project
-      const response = await api.put(`/projects/${projectId}`,
+      const response = await api.put(
+        `/projects/${projectId}`,
         {
           name: updatedData.name.trim(),
           entity_id: updatedData.entity_id,
@@ -260,14 +256,12 @@ const Project = () => {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      const response = await api.delete(`/projects/${projectId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await api.delete(`/projects/${projectId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (response.data.success) {
         setProjects((prevProjects) =>
@@ -339,10 +333,9 @@ const Project = () => {
       ),
     },
   ];
-  
+
   const actions = [
     {
-      label: "Update",
       icon: "fas fa-edit",
       buttonClass: "bg-blue-500 text-white hover:bg-blue-600",
       handler: (project) => {
@@ -351,7 +344,6 @@ const Project = () => {
       },
     },
     {
-      label: "Delete",
       icon: "fas fa-trash",
       buttonClass: "bg-red-500 text-white hover:bg-red-600",
       handler: (project) => {
@@ -359,7 +351,7 @@ const Project = () => {
         setDeleteModalOpen(true);
       },
     },
-  ]; 
+  ];
 
   if (loading) {
     return (
@@ -403,7 +395,12 @@ const Project = () => {
         {filteredData.length === 0 ? (
           <p>No projects found.</p>
         ) : (
-          <Table columns={columns} data={filteredData} actions={actions} onRowClick={(project) => handleProjectClick(project.id)} />
+          <Table
+            columns={columns}
+            data={paginatedData}
+            actions={actions}
+            onRowClick={(project) => handleProjectClick(project.id)}
+          />
         )}
       </div>
 
@@ -705,7 +702,7 @@ const Project = () => {
                     onChange={(e) =>
                       setUpdatedProject({
                         ...updatedProject,
-                        entity_id: e.target.value, 
+                        entity_id: e.target.value,
                       })
                     }
                   >
@@ -713,11 +710,11 @@ const Project = () => {
                     {entities && entities.length > 0 ? (
                       entities.map((entity) => (
                         <option key={entity.id} value={entity.id}>
-                          {entity.entity_name} 
+                          {entity.entity_name}
                         </option>
                       ))
                     ) : (
-                      <option disabled>No entities available</option> 
+                      <option disabled>No entities available</option>
                     )}
                   </select>
                 </div>
