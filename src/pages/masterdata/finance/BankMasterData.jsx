@@ -13,6 +13,13 @@
     const indexOfLastItem = currentPage * limit;
     const indexOfFirstItem = indexOfLastItem - limit;
 
+    const api = axios.create({
+      baseURL: import.meta.env.VITE_API_BASE_URL,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
     useEffect(() => {
       const fetchBanks = async () => {
         setLoading(true);
@@ -22,8 +29,7 @@
             throw new Error("Authorization token is missing.");
           }
 
-          const response = await axios.get(
-            "https://thrive-be.app-dev.altru.id/api/v1/banks",
+          const response = await api.get("/banks",
             {
               headers: {
                 "Content-Type": "application/json",

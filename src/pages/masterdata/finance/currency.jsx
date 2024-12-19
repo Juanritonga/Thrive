@@ -14,6 +14,13 @@ const Currency = () => {
   const indexOfLastItem = currentPage * limit;
   const indexOfFirstItem = indexOfLastItem - limit;
 
+  const api = axios.create({
+    baseURL: import.meta.env.VITE_API_BASE_URL,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
   useEffect(() => {
     const fetchCurrencys = async () => {
       setLoading(true);
@@ -23,8 +30,8 @@ const Currency = () => {
           throw new Error("Authorization token is missing.");
         }
 
-        const response = await axios.get(
-          "https://thrive-be.app-dev.altru.id/api/v1/currencies",
+        const response = await api.get(
+          "/currencies",
           {
             headers: {
               "Content-Type": "application/json",

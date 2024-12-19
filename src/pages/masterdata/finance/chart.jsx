@@ -4,6 +4,13 @@ import addChart from "./Chart/AddChart";
 import updatedChart from "./Chart/UpdatedChart";
 import Table from "@/pages/components/Table";
 
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 const Chart = () => {
   const [Chart, setChart] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -45,16 +52,13 @@ const Chart = () => {
         throw new Error("Authorization token is missing.");
       }
 
-      const response = await axios.get(
-        "https://thrive-be.app-dev.altru.id/api/v1/finance/acc",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          params: { page: 1, limit: 20 },
-        }
-      );
+      const response = await api.get("/finance/acc", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        params: { page: 1, limit: 20 },
+      });
 
       if (response.data.success) {
         setChart(response.data.data.items);
@@ -77,16 +81,13 @@ const Chart = () => {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      const response = await axios.get(
-        "https://thrive-be.app-dev.altru.id/api/v1/finance/classes",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          params: { limit: 10 },
-        }
-      );
+      const response = await api.get("/finance/classes", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        params: { limit: 10 },
+      });
 
       console.log("Divisions fetched:", response.data.data.items);
 
@@ -115,15 +116,12 @@ const Chart = () => {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      const response = await axios.delete(
-        `https://thrive-be.app-dev.altru.id/api/v1/finance/acc/${editChart.id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await api.delete(`/finance/acc/${editChart.id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (response.data.success) {
         // Refresh the user roles list
@@ -175,7 +173,9 @@ const Chart = () => {
       header: "Tanggal Update",
       accessor: (chart) =>
         chart.updated_at
-          ? new Date(chart.updated_at).toLocaleDateString("en-GB").replace(/\//g, "-")
+          ? new Date(chart.updated_at)
+              .toLocaleDateString("en-GB")
+              .replace(/\//g, "-")
           : "N/A",
     },
     {
@@ -193,7 +193,7 @@ const Chart = () => {
       ),
     },
   ];
-  
+
   const actions = [
     {
       label: "Edit",
