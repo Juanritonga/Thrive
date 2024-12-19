@@ -2,6 +2,13 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import Table from "../../components/Table";
 
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 const Project = () => {
   const [projects, setProjects] = useState([]);
   const [entities, setEntities] = useState([]);
@@ -33,8 +40,7 @@ const Project = () => {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      const response = await axios.get(
-        "https://thrive-be.app-dev.altru.id/api/v1/projects",
+      const response = await api.get("/projects",
         {
           headers: {
             "Content-Type": "application/json",
@@ -64,8 +70,7 @@ const Project = () => {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      const response = await axios.get(
-        "https://thrive-be.app-dev.altru.id/api/v1/entities",
+      const response = await api.get("/entities",
         {
           headers: {
             "Content-Type": "application/json",
@@ -109,8 +114,7 @@ const Project = () => {
         return;
       }
 
-      const response = await axios.post(
-        "https://thrive-be.app-dev.altru.id/api/v1/projects",
+      const response = await api.post("/projects",
         {
           name: newProject.name.trim(),
           entity_id: newProject.entity_id,
@@ -152,8 +156,7 @@ const Project = () => {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      const response = await axios.get(
-        `https://thrive-be.app-dev.altru.id/api/v1/projects/${projectId}`,
+      const response = await api.get(`/projects/${projectId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -204,8 +207,7 @@ const Project = () => {
       );
 
       // Make the API request to update the project
-      const response = await axios.put(
-        `https://thrive-be.app-dev.altru.id/api/v1/projects/${projectId}`,
+      const response = await api.put(`/projects/${projectId}`,
         {
           name: updatedData.name.trim(),
           entity_id: updatedData.entity_id,
@@ -258,8 +260,7 @@ const Project = () => {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      const response = await axios.delete(
-        `https://thrive-be.app-dev.altru.id/api/v1/projects/${projectId}`,
+      const response = await api.delete(`/projects/${projectId}`,
         {
           headers: {
             "Content-Type": "application/json",

@@ -5,6 +5,13 @@ import updatedClassFinance from "./UpdatedClassFinance";
 import Table from "@/components/Table";
 import ModalCRUD from "@/components/ModalCRUD";
 
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 const ClassFinance = () => {
   const [ClassFinances, setClassFinances] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -111,8 +118,7 @@ const ClassFinance = () => {
         throw new Error("Authorization token is missing.");
       }
 
-      const response = await axios.get(
-        "https://thrive-be.app-dev.altru.id/api/v1/finance/classes",
+      const response = await api.get("/finance/classes",
         {
           headers: {
             "Content-Type": "application/json",
@@ -145,8 +151,7 @@ const ClassFinance = () => {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      const response = await axios.delete(
-        `https://thrive-be.app-dev.altru.id/api/v1/finance/classes/${editClassFinance.id}`,
+      const response = await api.delete(`/finance/classes/${editClassFinance.id}`,
         {
           headers: {
             "Content-Type": "application/json",

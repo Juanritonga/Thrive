@@ -4,6 +4,13 @@ import addUserData from "./UserData/AddUserData";
 import updatedUserData from "./UserData/UpdatedUserData";
 import Table from "@/components/Table";
 
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 const User = () => {
   const [users, setUsers] = useState([]);
   const [entities, setEntities] = useState([]);
@@ -56,16 +63,13 @@ const User = () => {
         throw new Error("Authorization token is missing.");
       }
 
-      const response = await axios.get(
-        "https://thrive-be.app-dev.altru.id/api/v1/users",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          params: { page: 1, limit: 20 },
-        }
-      );
+      const response = await api.get("/users", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        params: { page: 1, limit: 20 },
+      });
 
       if (response.data.success) {
         setUsers(response.data.data.items);
@@ -89,16 +93,13 @@ const User = () => {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      const response = await axios.get(
-        "https://thrive-be.app-dev.altru.id/api/v1/roles",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          params: { limit: 10 },
-        }
-      );
+      const response = await api.get("/roles", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        params: { limit: 10 },
+      });
 
       console.log("Roles fetched:", response.data.data.items);
 
@@ -241,7 +242,7 @@ const User = () => {
       ),
     },
   ];
-  
+
   const actions = [
     {
       label: "Edit",
@@ -250,7 +251,6 @@ const User = () => {
       handler: (user) => handleOpenEditModal(user),
     },
   ];
-  
 
   if (loading) {
     return (
@@ -295,7 +295,7 @@ const User = () => {
         )}
       </div>
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg w-98">
             <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
               <div className="flex items-center space-x-2">
@@ -307,8 +307,7 @@ const User = () => {
             </div>
 
             <div className="p-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                {/* Entitas */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">    
                 <div>
                   <label
                     htmlFor="FullName"
@@ -332,7 +331,7 @@ const User = () => {
                 </div>
                 <div>
                   <label
-                    htmlFor="FullName"
+                    htmlFor="Posisi"
                     className="block text-gray-700 font-medium mb-2"
                   >
                     Posisi
@@ -342,19 +341,18 @@ const User = () => {
                     id="position"
                     placeholder="Posisi"
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
-                    value={newUserData.position} // Nilai default 'Position' ditampilkan jika belum ada perubahan
+                    value={newUserData.position}
                     onChange={(e) =>
                       setNewUserData({
                         ...newUserData,
-                        position: e.target.value, // Update nilai posisi sesuai input
+                        position: e.target.value, 
                       })
                     }
                   />
                 </div>
-
                 <div>
                   <label
-                    htmlFor="role"
+                    htmlFor="Role"
                     className="block text-gray-700 font-medium mb-2"
                   >
                     Role
@@ -375,7 +373,7 @@ const User = () => {
                     </option>
                     {roles.map(
                       (
-                        role // Changed `role` to `roles`
+                        role
                       ) => (
                         <option key={role.id} value={role.id}>
                           {role.role_name}
@@ -413,18 +411,16 @@ const User = () => {
                     ))}
                   </select>
                 </div>
-
-                {/* Nama Project */}
                 <div>
                   <label
-                    htmlFor="code"
+                    htmlFor="Email"
                     className="block text-gray-700 font-medium mb-2"
                   >
                     Email
                   </label>
                   <input
                     type="text"
-                    id="code"
+                    id="Email"
                     placeholder="Email"
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100"
                     value={newUserData.email}
@@ -433,9 +429,7 @@ const User = () => {
                     }
                   />
                 </div>
-              </div>
-
-              <div>
+                <div>
                 <label
                   htmlFor="phone"
                   className="block text-gray-700 font-medium mb-2"
@@ -471,9 +465,7 @@ const User = () => {
                   }
                 />
               </div>
-
-              {/* Description */}
-              <div className="mb-4">
+              <div>
                 <label
                   htmlFor="status"
                   className="block text-gray-700 font-medium mb-2"
@@ -495,7 +487,8 @@ const User = () => {
                   <option value="inactive">Inactive</option>
                 </select>
               </div>
-              <div>
+              </div>
+              <div className="mb-4">
                 <label
                   htmlFor="password"
                   className="block text-gray-700 font-medium mb-2"
