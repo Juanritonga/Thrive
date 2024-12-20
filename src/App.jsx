@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Login from "./pages/login";
-import Layout from "./pages/layout";
+import Login from "./pages/Login";
+import Layout from "./pages/Layout";
 import MasterData from "./pages/masterdata/MasterData";
 import Project from "./pages/masterdata/Project";
 import FinanceMasterData from "./pages/masterdata/FinanceMasterData";
@@ -50,14 +50,14 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route
-          path="/login"
+          path="/Login"
           element={<Login setIsAuthenticated={setIsAuthenticated} />}
         />
 
         <Route path="/" element={<Layout />}>
           <Route
             index
-            element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
+            element={isAuthenticated ? <Dashboard /> : <Navigate to="/Login" />}
           />
 
           <Route path="master-data" element={<MasterData />}>
