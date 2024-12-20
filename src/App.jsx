@@ -8,7 +8,7 @@ import FinanceMasterData from "./pages/masterdata/FinanceMasterData";
 import Finance from "./pages/finance/Finance";
 import BankFinance from "./pages/finance/BankFinance";
 import TranscodeFinance from "./pages/finance/TranscodeFinance";
-import Format from "./pages/cashbook/Format";
+import Format from "./pages/cashbook/format";
 import CashBook from "./pages/cashbook/CashBook";
 import BankC from "./pages/cashbook/BankCashBook";
 import PettyCash from "./pages/cashbook/PettyCash";
