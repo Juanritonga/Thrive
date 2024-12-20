@@ -19,7 +19,9 @@ const getBreadcrumbs = (pathname) => {
         {" > "}
         <Link
           to={to}
-          className={`text-black ${pathname === to ? "font-bold" : "text-gray-500"}`}
+          className={`text-black ${
+            pathname === to ? "font-bold" : "text-gray-500"
+          }`}
         >
           {path.charAt(0).toUpperCase() + path.slice(1)}
         </Link>
@@ -35,7 +37,7 @@ const Header = ({ setIsSidebarVisible, isSidebarVisible }) => {
   const [role, setRole] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   useEffect(() => {
     const storedName = sessionStorage.getItem("name");
     const storedRole = sessionStorage.getItem("role");
@@ -68,7 +70,9 @@ const Header = ({ setIsSidebarVisible, isSidebarVisible }) => {
         <div className="text-black">
           {/* Display the main title dynamically */}
           <h1 className="text-2xl font-bold ml-3 mt-4">
-            {location.pathname.includes("finance")
+            {location.pathname === "/" // Check if it's the home/dashboard page
+              ? "Home" // Display "Home" if the path is "/"
+              : location.pathname.includes("finance")
               ? "Finance"
               : location.pathname.includes("cashbook")
               ? "Cashbook"
@@ -78,7 +82,9 @@ const Header = ({ setIsSidebarVisible, isSidebarVisible }) => {
               ? "General Ledger"
               : "Master Data"}
           </h1>
-          <div className="text-sm mb-4">{getBreadcrumbs(location.pathname)}</div>
+          <div className="text-sm mb-4">
+            {getBreadcrumbs(location.pathname)}
+          </div>
         </div>
 
         {role !== "Super Admin" && (
