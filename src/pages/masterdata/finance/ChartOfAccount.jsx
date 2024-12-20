@@ -2,8 +2,9 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import addChart from "./Chart/AddChart";
 import updatedChart from "./Chart/UpdatedChart";
-import Table from "@/components/Table";
 import SearchBar from "@/components/SearchBar";
+import AddButton from "@/components/AddButton";
+import Table from "@/components/Table";
 import ModalCRUD from "@/components/ModalCRUD";
 
 const api = axios.create({
@@ -241,12 +242,7 @@ const Chart = () => {
           onChange={setSearchQuery}
           placeholder="Cari Acc."
         />
-        <button
-          className="bg-custom-blue text-white px-2 py-2 rounded-lg w-full sm:w-auto"
-          onClick={() => handleOpenModal("create")}
-        >
-          Tambah Baru
-        </button>
+        <AddButton onClick={() => handleOpenModal("create")} />
       </div>
       <div className="overflow-auto shadow-sm mb-6">
         {filteredData.length === 0 ? (
