@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import Table from "../../components/Table";
 import SearchBar from "@/components/SearchBar";
+import AddButton from "@/components/AddButton";
+import Table from "../../components/Table";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -372,12 +373,7 @@ const Project = () => {
           onChange={setSearchQuery}
           placeholder="Cari Project"
         />
-        <button
-          className="bg-custom-blue text-white px-2 py-2 rounded-lg w-full sm:w-auto"
-          onClick={handleOpenModal}
-        >
-          Tambah Baru
-        </button>
+        <AddButton onClick={() => handleOpenModal("create")} />
       </div>
       <div className="overflow-auto shadow-sm mb-6">
         {filteredData.length === 0 ? (

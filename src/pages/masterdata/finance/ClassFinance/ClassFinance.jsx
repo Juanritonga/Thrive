@@ -2,9 +2,10 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import addClassFinance from "./AddClassFinance";
 import updatedClassFinance from "./UpdatedClassFinance";
+import SearchBar from "@/components/SearchBar";
+import AddButton from "@/components/AddButton";
 import Table from "@/components/Table";
 import ModalCRUD from "@/components/ModalCRUD";
-import SearchBar from "@/components/SearchBar";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -235,12 +236,7 @@ const ClassFinance = () => {
           onChange={setSearchQuery}
           placeholder="Cari Kelas"
         />
-        <button
-          className="bg-custom-blue text-white px-2 py-2 rounded-lg w-full sm:w-auto"
-          onClick={() => handleOpenModal("create")}
-        >
-          Tambah Baru
-        </button>
+        <AddButton onClick={() => handleOpenModal("create")} />
       </div>
       <div className="overflow-auto shadow-sm mb-6">
         {filteredData.length === 0 ? (
