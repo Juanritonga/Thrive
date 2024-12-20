@@ -73,13 +73,6 @@ const ModalCRUD = ({
                 </button>
               )}
               <button
-                type="button"
-                className="bg-gray-300 text-gray-700 py-2 px-4 rounded-md"
-                onClick={onClose}
-              >
-                Cancel
-              </button>
-              <button
                 type="submit"
                 className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
               >

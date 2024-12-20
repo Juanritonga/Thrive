@@ -20,19 +20,6 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   const isActive = (path) => location.pathname.startsWith(path);
 
   const menuItems = [
-    // {
-    //   role: "Super Admin",
-    //   label: "Master Data",
-    //   path: "/master-data",
-    //   icon: "fas fa-folder-open",
-    // },
-    // {
-    //   role: "Super Admin",
-    //   label: "User",
-    //   path: "/master-data/user",
-    //   icon: "fas fa-user",
-    //   indent: true,
-    // },
     {
       role: "Super Admin",
       label: "User Role",
@@ -99,7 +86,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
     {
       role: "front end",
       label: "Bank",
-      path: "/cashbook/bankcashbook",
+      path: "/cashbook/bankchasbook",
       icon: "fas fa-university",
       indent: true,
     },
@@ -163,7 +150,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
     {
       role: "front end",
       label: "General Ledger",
-      path: "/generalledger",
+      path: "/general-ledger",
       icon: "fas fa-book",
     },
     {
@@ -176,14 +163,14 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
     {
       role: "front end",
       label: "COA Mapping",
-      path: "/generalledger/maincoamapping",
+      path: "/general-ledger/main-coa-mapping",
       icon: "fas fa-sitemap",
       indent: true,
     },
     {
       role: "front end",
       label: "Setup",
-      path: "/generalledger/setup",
+      path: "/general-ledger/setup",
       icon: "fas fa-gear",
       indent: true,
     },
@@ -199,6 +186,22 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   return (
     <div className="relative">
       <div
+        className={`flex items-center justify-center border-b border-gray-200 ${
+          isSidebarVisible ? "p-6" : "p-4"
+        }`}
+      >
+        <img
+          src="../thrive.png"
+          alt="Company Logo"
+          className={`object-contain ${isSidebarVisible ? "h-12" : "h-8"}`}
+          style={{
+            filter:
+              "invert(15%) sepia(70%) saturate(4000%) hue-rotate(220deg) brightness(80%) contrast(120%)",
+          }}
+        />
+      </div>
+
+      <div
         className={`fixed left-0 h-full border-gray-200 shadow-md transform duration-300 ${
           isSmallScreen ? "w-20" : isSidebarVisible ? "w-64" : "w-20"
         } overflow-y-auto hidden-scrollbar bg-white`}
@@ -210,24 +213,17 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
               <li
                 key={index}
                 className={`flex items-center rounded-md ${
-                  isActive(item.path)
-                    ? " bg-gray-100 text-black"
-                    : "text-gray-700"
+                  isActive(item.path) ? "bg-gray-100 text-black" : "text-gray-700"
                 } hover:bg-gray-200 transition-colors duration-200`}
               >
-                <Link
-                  to={item.path}
-                  className="flex items-center w-full py-3 px-4"
-                >
+                <Link to={item.path} className="flex items-center w-full py-3 px-4">
                   <i
                     className={`${item.icon} text-lg w-6 text-center text-custom-blue`}
                   ></i>
                   {!isSmallScreen && isSidebarVisible && (
                     <span
                       className={`ml-4 flex-1 text-black ${
-                        isActive(item.path)
-                          ? "font-bold text-custom-blue"
-                          : "font-medium"
+                        isActive(item.path) ? "font-bold text-custom-blue" : "font-medium"
                       }`}
                     >
                       {item.label}
@@ -238,21 +234,6 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
             ))}
         </ul>
       </div>
-
-      {!isSmallScreen && (
-        <button
-          onClick={() => setIsSidebarVisible(!isSidebarVisible)}
-          className={`fixed top-1/2 transform -translate-y-1/2 transition-all duration-300 ${
-            isSidebarVisible ? "left-64" : "left-20"
-          } p-2 text-custom-blue rounded-full focus:outline-none z-50`}
-        >
-          <i
-            className={`fas ${
-              isSidebarVisible ? "fa-chevron-left" : "fa-chevron-right"
-            }`}
-          />
-        </button>
-      )}
     </div>
   );
 };

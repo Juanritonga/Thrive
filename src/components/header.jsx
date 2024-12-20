@@ -1,7 +1,38 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
-const Header = () => {
+const getBreadcrumbs = () => {
+  const paths = location.pathname.split("/").filter(Boolean);
+  const breadcrumbPath = [
+    <Link
+      key="dashboard"
+      to="/"
+      className="ml-4 fa-solid fa-book text-gray-600"
+    />,
+  ];
+
+  paths.forEach((path, index) => {
+    const to = `/${paths.slice(0, index + 1).join("/")}`;
+    breadcrumbPath.push(
+      <span key={to}>
+        {" > "}
+        <Link
+          to={to}
+          className={`text-black ${
+            location.pathname === to ? "font-bold" : "text-gray-500"
+          }`}
+        >
+          {path.charAt(0).toUpperCase() + path.slice(1)}
+        </Link>
+      </span>
+    );
+  });
+
+  return breadcrumbPath;
+};
+
+const Header = ({ setIsSidebarVisible, isSidebarVisible }) => {
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const navigate = useNavigate();
@@ -26,15 +57,25 @@ const Header = () => {
   };
 
   return (
-    <div className="sticky top-0 left-0 right-0 bg-custom-blue flex w-full items-center justify-between py-4 h-20">
+    <div className="sticky top-0 left-0 right-0 flex w-full items-center justify-between py-4 h-22">
       <div className="flex items-center h-full">
-        <img
-          src="../thrive.png"
-          alt="Company Logo"
-          className="h-full object-contain mr-4 ml-4"
-        />
+        {/* Sidebar Toggle Button moved here */}
+        <button
+          onClick={() => setIsSidebarVisible(!isSidebarVisible)}
+          className="mr-4 p-2 text-custom-blue rounded-full focus:outline-none"
+        >
+          <i className={`fas ${isSidebarVisible ? "fa-bars" : "fa-bars"}`}></i>
+        </button>
+
+        <div className="text-black">
+          <h1 className="text-2xl font-bold ml-3 mt-4">
+            Master Data
+          </h1>
+          <div className="text-sm mb-4">{getBreadcrumbs()}</div>
+        </div>
+
         {role !== "Super Admin" && (
-          <select className="bg-white text-gray-400 p-2 rounded w-full ml-40 sm:w-60">
+          <select className="bg-gray-200 text-gray-400 p-2 rounded w-full ml-40 sm:w-60">
             <option>Project</option>
           </select>
         )}
@@ -42,22 +83,22 @@ const Header = () => {
 
       <div className="flex items-center sm:mt-0">
         <div className="flex items-center text-black p-2 rounded mr-4">
-          <div className="font-bold bg-white text-custom-blue mr-2 p-4 rounded-lg flex items-center justify-center w-12 h-12">
+          <div className="font-bold border border-gray-200 bg-white text-custom-blue mr-2 p-4 rounded-lg flex items-center justify-center w-12 h-12">
             {name.charAt(0)}
           </div>
           <div className="min-w-0 mr-5">
-            <div className="font-bold text-white text-sm truncate">{name}</div>
-            <div className="text-xs text-white truncate">{role}</div>
+            <div className="font-bold text-black text-sm truncate">{name}</div>
+            <div className="text-xs text-black truncate">{role}</div>
           </div>
         </div>
 
         <i
-          className="fa fa-sign-out bg-white text-custom-blue mr-2 p-4 rounded-lg cursor-pointer"
+          className="fa fa-sign-out border border-gray-200 bg-white text-custom-blue mr-2 p-4 rounded-lg cursor-pointer"
           onClick={handleLogout}
         ></i>
 
         <button
-          className="font-bold text-white p-2 rounded hidden sm:block mr-5"
+          className="font-bold text-black p-2 rounded hidden sm:block mr-5"
           onClick={handleLogout}
         >
           Log Out
@@ -65,6 +106,11 @@ const Header = () => {
       </div>
     </div>
   );
+};
+
+Header.propTypes = {
+  isSidebarVisible: PropTypes.bool.isRequired,
+  setIsSidebarVisible: PropTypes.func.isRequired,
 };
 
 export default Header;
