@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Login from "./pages/Login";
+import Login from "./pages/login";
 import Layout from "./pages/Layout";
 import MasterData from "./pages/masterdata/MasterData";
 import Project from "./pages/masterdata/Project";
