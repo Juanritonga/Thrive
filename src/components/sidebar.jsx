@@ -157,7 +157,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
     {
       role: "front end",
       label: "General Ledger",
-      path: "/general-ledger",
+      path: "/generalledger",
       icon: "fas fa-book",
     },
     {
@@ -170,14 +170,14 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
     {
       role: "front end",
       label: "COA Mapping",
-      path: "/general-ledger/main-coa-mapping",
+      path: "/generalledger/maincoamapping",
       icon: "fas fa-sitemap",
       indent: true,
     },
     {
       role: "front end",
       label: "Setup",
-      path: "/general-ledger/setup",
+      path: "/generalledger/setup",
       icon: "fas fa-gear",
       indent: true,
     },

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import SearchBar from "@/components/SearchBar";
+import AddButton from "@/components/AddButton";
 
 const TranscodeFinance = () => {
   const dummyTranscodes = [
@@ -86,7 +87,7 @@ const TranscodeFinance = () => {
     }
   };
 
-  const handleTambahBaru = () => {
+  const handleOpenModal = () => {
     setShowModal(true);
     setEditMode(false);
     setNewTranscode({
@@ -141,6 +142,7 @@ const TranscodeFinance = () => {
           onChange={setSearchQuery}
           placeholder="Cari Transcode"
         />
+        <AddButton onClick={() => handleOpenModal("create")} />
       </div>
       <div className="overflow-auto shadow-sm mb-6">
         {paginatedData.length === 0 ? (

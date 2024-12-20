@@ -1,5 +1,6 @@
 import { useState } from "react";
 import SearchBar from "@/components/SearchBar";
+import AddButton from "@/components/AddButton";
 
 const BankFinance = () => {
   const dummyBanks = [
@@ -86,7 +87,7 @@ const BankFinance = () => {
     }
   };
 
-  const handleTambahBaru = () => {
+  const handleOpenModal = () => {
     setShowModal(true);
     setEditMode(false);
     setNewBank({
@@ -147,6 +148,7 @@ const BankFinance = () => {
           onChange={setSearchQuery}
           placeholder="Cari Bank"
         />
+        <AddButton onClick={() => handleOpenModal("create")} />
       </div>
       <div className="overflow-auto shadow-sm mb-6">
         {paginatedData.length === 0 ? (
