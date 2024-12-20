@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Login from "./pages/login";
-import Layout from "./pages/Layout";
+import Layout from "./pages/layout";
 import MasterData from "./pages/masterdata/MasterData";
 import Project from "./pages/masterdata/Project";
 import FinanceMasterData from "./pages/masterdata/FinanceMasterData";
