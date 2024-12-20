@@ -5,7 +5,7 @@ const Setup = () => {
     <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
       <div className="flex justify-center gap-4">
         <NavLink
-          to="transactiontype"
+          to="transaction-type"
           className={({ isActive }) =>
             `font-bold flex-1 px-3 py-3 text-center border rounded transition-all duration-300 ${
               isActive
@@ -17,7 +17,7 @@ const Setup = () => {
           Trans. Type
         </NavLink>
         <NavLink
-          to="budgetgroup"
+          to="budget-group"
           className={({ isActive }) =>
             `font-bold flex-1 px-3 py-3 text-center border rounded transition-all duration-300 ${
               isActive
@@ -29,7 +29,7 @@ const Setup = () => {
           Budget Group
         </NavLink>
         <NavLink
-          to="accountperiod"
+          to="account-period"
           className={({ isActive }) =>
             `font-bold flex-1 px-3 py-3 text-center border rounded transition-all duration-300 ${
               isActive

@@ -61,24 +61,24 @@ const App = () => {
           />
 
           <Route path="master-data" element={<MasterData />}>
-            <Route path="User" element={<UserMasterData />}>
-              <Route index element={<Navigate to="UserData" replace />} />
-              <Route path="UserData" element={<UserData />} />
-              <Route path="UserRole" element={<UserRole />} />
-              <Route path="Division" element={<Division />} />
-              <Route path="RoleAccess" element={<RoleAccess />} />
-              <Route path="Departement" element={<Departement />} />
+            <Route path="user" element={<UserMasterData />}>
+              <Route index element={<Navigate to="user-data" replace />} />
+              <Route path="user-data" element={<UserData />} />
+              <Route path="user-role" element={<UserRole />} />
+              <Route path="division" element={<Division />} />
+              <Route path="role-Access" element={<RoleAccess />} />
+              <Route path="departement" element={<Departement />} />
             </Route>
-            <Route path="UserData" element={<UserData />} />
-            <Route path="UserRole" element={<UserRole />} />
-            <Route path="Division" element={<Division />} />
-            <Route path="RoleAccess" element={<RoleAccess />} />
-            <Route path="Departement" element={<Departement />} />
+            <Route path="user-data" element={<UserData />} />
+            <Route path="user-role" element={<UserRole />} />
+            <Route path="division" element={<Division />} />
+            <Route path="role-access" element={<RoleAccess />} />
+            <Route path="departement" element={<Departement />} />
             <Route path="project" element={<Project />} />
             <Route path="finance" element={<FinanceMasterData />}>
-              <Route index element={<Navigate to="ClassFinance" replace />} />
+              <Route index element={<Navigate to="class-finance" replace />} />
               <Route path="bank" element={<Bank />} />
-              <Route path="ClassFinance" element={<ClassF />} />
+              <Route path="class-finance" element={<ClassF />} />
               <Route path="chart" element={<Chart />} />
               <Route path="currency" element={<Currency />} />
               <Route path="tax" element={<Tax />} />
@@ -91,15 +91,15 @@ const App = () => {
             <Route path="transcode" element={<TranscodeFinance />} />
           </Route>
 
-          <Route path="cashbook" element={<CashBook />}>
+          <Route path="cash-book" element={<CashBook />}>
             <Route path="format" element={<Format />} />
-            <Route path="bankcashbook" element={<BankC />}>
+            <Route path="bank-cash-book" element={<BankC />}>
               <Route path=":id" element={<EntryCashAdvance />} />
             </Route>
-            <Route path="pettycash" element={<PettyCash />}>
+            <Route path="petty-cash" element={<PettyCash />}>
               <Route path=":id" element={<EntryCashAdvance />} />
             </Route>
-            <Route path="cashadvance" element={<CashAdvance />}>
+            <Route path="cash-advance" element={<CashAdvance />}>
               <Route path=":id" element={<EntryCashAdvance />} />
             </Route>
             <Route path="reimbursement" element={<Reimbursement />}>
@@ -107,20 +107,20 @@ const App = () => {
             </Route>
           </Route>
 
-          <Route path="generalledger" element={<GeneralLedgerDashboard />}>
-            <Route path="maincoamapping" element={<MainCOAMapping />}>
-              <Route index element={<Navigate to="coamapping" replace />} />
-              <Route path="coamapping" element={<SubCOAMapping />} />
-              <Route path="coadivision" element={<COADivision />} />
+          <Route path="general-ledger" element={<GeneralLedgerDashboard />}>
+            <Route path="main-coa-mapping" element={<MainCOAMapping />}>
+              <Route index element={<Navigate to="coa-mapping" replace />} />
+              <Route path="coa-mapping" element={<SubCOAMapping />} />
+              <Route path="coa-division" element={<COADivision />} />
             </Route>
             <Route path="setup" element={<Setup />}>
               <Route
                 index
-                element={<Navigate to="transactiontype" replace />}
+                element={<Navigate to="transaction-type" replace />}
               />
-              <Route path="transactiontype" element={<TransactionType />} />
-              <Route path="budgetgroup" element={<BudgetGroup />} />
-              <Route path="accountperiod" element={<AccountPeriod />} />
+              <Route path="transaction-type" element={<TransactionType />} />
+              <Route path="budget-group" element={<BudgetGroup />} />
+              <Route path="account-period" element={<AccountPeriod />} />
             </Route>
           </Route>
         </Route>

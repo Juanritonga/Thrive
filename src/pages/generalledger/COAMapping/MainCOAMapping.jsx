@@ -5,7 +5,7 @@ const MainCOAMapping = () => {
     <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
       <div className="flex justify-center gap-4">
         <NavLink
-          to="coamapping"
+          to="coa-mapping"
           className={({ isActive }) =>
             `font-bold flex-1 px-3 py-3 text-center border rounded transition-all duration-300 ${
               isActive
@@ -17,7 +17,7 @@ const MainCOAMapping = () => {
           COA Mapping
         </NavLink>
         <NavLink
-          to="coadivision"
+          to="coa-division"
           className={({ isActive }) =>
             `font-bold flex-1 px-3 py-3 text-center border rounded transition-all duration-300 ${
               isActive
