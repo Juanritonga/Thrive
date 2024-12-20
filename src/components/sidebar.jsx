@@ -86,7 +86,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
     {
       role: "front end",
       label: "Bank",
-      path: "/cashbook/bankchasbook",
+      path: "/cashbook/bankcashbook",
       icon: "fas fa-university",
       indent: true,
     },
