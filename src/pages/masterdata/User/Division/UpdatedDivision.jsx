@@ -1,13 +1,13 @@
 import axios from "axios";
 
-const updatedChart = async (
-  updatedChart,
-  setChart,
+const updatedDivision = async (
+  updatedDivision,
+  setDivision,
   setError,
   handleCloseUpdatedModal
 ) => {
   try {
-    if (!updatedChart || !updatedChart.id) {
+    if (!updatedDivision || !updatedDivision.id) {
       throw new Error("Invalid user role data.");
     }
 
@@ -15,8 +15,8 @@ const updatedChart = async (
     if (!token) throw new Error("Authorization token is missing.");
 
     const response = await axios.put(
-      `https://thrive-be.app-dev.altru.id/api/v1/finance/acc/${updatedChart.id}`,
-      updatedChart,
+      `https://thrive-be.app-dev.altru.id/api/v1/divisions/${updatedDivision.id}`,
+      updatedDivision,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -25,9 +25,9 @@ const updatedChart = async (
     );
 
     if (response.data.success) {
-      setChart((prevCharts) =>
-        prevCharts.map((Chart) =>
-          Chart.id === updatedChart.id ? response.data.data : Chart
+      setDivision((prevDivisions) =>
+        prevDivisions.map((Division) =>
+          Division.id === updatedDivision.id ? response.data.data : Division
         )
       );
       handleCloseUpdatedModal();
@@ -53,4 +53,4 @@ const updatedChart = async (
   }
 };
 
-export default updatedChart;
+export default updatedDivision;

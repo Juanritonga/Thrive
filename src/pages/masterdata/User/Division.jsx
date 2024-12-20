@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import Table from "@/components/Table";
+import addDivision from "./Division/AddDivision";
+import updatedDivision from "./Division/UpdatedDivision";
 import SearchBar from "@/components/SearchBar";
 import AddButton from "@/components/AddButton";
+import Table from "@/components/Table";
 import ModalCRUD from "@/components/ModalCRUD";
 
 const api = axios.create({
@@ -69,31 +71,21 @@ const Division = () => {
   };
 
   const handleSaveDivision = async () => {
-    try {
-      const token = sessionStorage.getItem("authToken");
-      if (!token) throw new Error("Authorization token is missing.");
-
-      if (editMode) {
-        await api.put(`/divisions/${currentDivision.division_id}`, currentDivision, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setDivisions((prev) =>
-          prev.map((division) =>
-            division.division_id === currentDivision.division_id
-              ? { ...division, ...currentDivision }
-              : division
-          )
-        );
-      } else {
-        const response = await api.post("/divisions", currentDivision, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setDivisions((prev) => [...prev, response.data.data]);
-      }
-      handleCloseModal();
-    } catch (err) {
-      console.error("Error saving division:", err.message);
-      setError(err.message);
+    if (editMode) {
+      await updatedDivision(
+        currentDivision,
+        setDivisions,
+        setError,
+        handleCloseModal
+      );
+    } else {
+      await addDivision(
+        currentDivision,
+        setDivisions,
+        setCurrentDivision,
+        setError,
+        handleCloseModal
+      );
     }
   };
 
