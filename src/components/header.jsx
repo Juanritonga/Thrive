@@ -1,9 +1,9 @@
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-const getBreadcrumbs = () => {
-  const paths = location.pathname.split("/").filter(Boolean);
+const getBreadcrumbs = (pathname) => {
+  const paths = pathname.split("/").filter(Boolean);
   const breadcrumbPath = [
     <Link
       key="dashboard"
@@ -19,9 +19,7 @@ const getBreadcrumbs = () => {
         {" > "}
         <Link
           to={to}
-          className={`text-black ${
-            location.pathname === to ? "font-bold" : "text-gray-500"
-          }`}
+          className={`text-black ${pathname === to ? "font-bold" : "text-gray-500"}`}
         >
           {path.charAt(0).toUpperCase() + path.slice(1)}
         </Link>
@@ -36,7 +34,8 @@ const Header = ({ setIsSidebarVisible, isSidebarVisible }) => {
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const navigate = useNavigate();
-
+  const location = useLocation();
+  
   useEffect(() => {
     const storedName = sessionStorage.getItem("name");
     const storedRole = sessionStorage.getItem("role");
@@ -59,7 +58,6 @@ const Header = ({ setIsSidebarVisible, isSidebarVisible }) => {
   return (
     <div className="sticky top-0 left-0 right-0 flex w-full items-center justify-between py-4 h-22">
       <div className="flex items-center h-full">
-        {/* Sidebar Toggle Button moved here */}
         <button
           onClick={() => setIsSidebarVisible(!isSidebarVisible)}
           className="mr-4 p-2 text-custom-blue rounded-full focus:outline-none"
@@ -68,10 +66,19 @@ const Header = ({ setIsSidebarVisible, isSidebarVisible }) => {
         </button>
 
         <div className="text-black">
+          {/* Display the main title dynamically */}
           <h1 className="text-2xl font-bold ml-3 mt-4">
-            Master Data
+            {location.pathname.includes("finance")
+              ? "Finance"
+              : location.pathname.includes("cashbook")
+              ? "Cashbook"
+              : location.pathname.includes("fixed-assets")
+              ? "Fixed Assets"
+              : location.pathname.includes("general-ledger")
+              ? "General Ledger"
+              : "Master Data"}
           </h1>
-          <div className="text-sm mb-4">{getBreadcrumbs()}</div>
+          <div className="text-sm mb-4">{getBreadcrumbs(location.pathname)}</div>
         </div>
 
         {role !== "Super Admin" && (

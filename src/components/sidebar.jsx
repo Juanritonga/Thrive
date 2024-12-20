@@ -22,6 +22,13 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   const menuItems = [
     {
       role: "Super Admin",
+      label: "Master Data",
+      path: "/master-data",
+      icon: "fas fa-user-shield",
+      indent: true,
+    },
+    {
+      role: "Super Admin",
       label: "User Role",
       path: "/master-data/UserRole",
       icon: "fas fa-user-shield",
