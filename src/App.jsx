@@ -8,19 +8,19 @@ import FinanceMasterData from "./pages/masterdata/FinanceMasterData";
 import Finance from "./pages/Finance/Finance";
 import BankFinance from "./pages/Finance/BankFinance";
 import TranscodeFinance from "./pages/Finance/TranscodeFinance";
-import Format from "./pages/cashbook/Format";
-import CashBook from "./pages/cashbook/CashBook";
-import BankC from "./pages/cashbook/BankCashBook";
-import PettyCash from "./pages/cashbook/PettyCash";
-import CashAdvance from "./pages/cashbook/CashAdvance";
-import Reimbursement from "./pages/cashbook/Reimbursement";
-import EntryCashAdvance from "./pages/cashbook/Entry/entryca";
+import Format from "./pages/Cashbook/Format";
+import CashBook from "./pages/Cashbook/CashBook";
+import BankC from "./pages/Cashbook/BankCashBook";
+import PettyCash from "./pages/Cashbook/PettyCash";
+import CashAdvance from "./pages/Cashbook/CashAdvance";
+import Reimbursement from "./pages/Cashbook/Reimbursement";
+import EntryCashAdvance from "./pages/Cashbook/Entry/entryca";
 import Dashboard from "./pages/Dashboard";
-import Bank from "./pages/masterdata/finance/BankMasterData";
-import ClassF from "./pages/masterdata/finance/ClassFinance/ClassFinance";
-import Chart from "./pages/masterdata/finance/ChartOfAccount";
-import Currency from "./pages/masterdata/finance/Currency";
-import Tax from "./pages/masterdata/finance/Tax";
+import Bank from "./pages/masterdata/FinanceMasterData/BankMasterData";
+import ClassF from "./pages/masterdata/FinanceMasterData/ClassFinance/ClassFinance";
+import Chart from "./pages/masterdata/FinanceMasterData/ChartOfAccount";
+import Currency from "./pages/masterdata/FinanceMasterData/Currency";
+import Tax from "./pages/masterdata/FinanceMasterData/Tax";
 import UserData from "./pages/masterdata/User/UserData";
 import UserRole from "./pages/masterdata/User/UserRole";
 import Division from "./pages/masterdata/User/Division";
@@ -50,14 +50,14 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route
-          path="/login"
+          path="/Login"
           element={<Login setIsAuthenticated={setIsAuthenticated} />}
         />
 
         <Route path="/" element={<Layout />}>
           <Route
             index
-            element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
+            element={isAuthenticated ? <Dashboard /> : <Navigate to="/Login" />}
           />
 
           <Route path="master-data" element={<MasterData />}>
