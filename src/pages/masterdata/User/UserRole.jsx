@@ -95,48 +95,62 @@ const UserRole = () => {
   };
 
   const handleSaveRole = async () => {
+    setLoading(true);  // Menambahkan loading sebelum operasi
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
-
+  
       if (editMode) {
+        // Untuk update role
         await api.put(`/roles/${currentRole.id}`, currentRole, {
           headers: { Authorization: `Bearer ${token}` },
         });
+  
+        // Update langsung state userRoles untuk memperbarui data
         setUserRoles((prev) =>
           prev.map((role) =>
             role.id === currentRole.id ? { ...role, ...currentRole } : role
           )
         );
       } else {
+        // Untuk tambah role
         const response = await api.post("/roles", currentRole, {
           headers: { Authorization: `Bearer ${token}` },
         });
+  
+        // Tambahkan data baru ke userRoles
         setUserRoles((prev) => [...prev, response.data.data]);
       }
       handleCloseModal();
     } catch (err) {
       console.error("Error saving role:", err.message);
       setError(err.message);
+    } finally {
+      setLoading(false);  // Menambahkan loading false setelah operasi selesai
     }
   };
-
+  
+  
   const handleDeleteRole = async () => {
+    setLoading(true);  // Menambahkan loading sebelum operasi
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
-
+  
       await api.delete(`/roles/${currentRole.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
+  
       setUserRoles((prev) => prev.filter((role) => role.id !== currentRole.id));
       handleCloseModal();
     } catch (err) {
       console.error("Error deleting role:", err.message);
       setError(err.message);
+    } finally {
+      setLoading(false);  // Menambahkan loading false setelah operasi selesai
     }
   };
+  
 
   useEffect(() => {
     fetchUserRoles();
