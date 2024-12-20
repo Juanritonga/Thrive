@@ -4,6 +4,26 @@ import PropTypes from "prop-types";
 
 const getBreadcrumbs = (pathname) => {
   const paths = pathname.split("/").filter(Boolean);
+
+  const pathNameMap = {
+    "master-data": "Master Data",
+    "user-role": "User Role",
+    "user-data": "User Data",
+    "role-access": "Role Access",
+    "class-finance": "Class Finance",
+    "cash-book": "Cash Book",
+    "bank-cash-book": "Bank Cash Book",
+    "petty-cash": "Petty Cash",
+    "cash-advance": "Cash Advance",
+    "general-ledger": "General Ledger",
+    "main-coa-mapping": "Main COA Mapping",
+    "coa-mapping": "COA Mapping",
+    "coa-division": "COA Division",
+    "transaction-type": "Transaction Type",
+    "budget-group": "Budget Group",
+    "account-period": "Account Period",
+  };
+
   const breadcrumbPath = [
     <Link
       key="dashboard"
@@ -14,6 +34,9 @@ const getBreadcrumbs = (pathname) => {
 
   paths.forEach((path, index) => {
     const to = `/${paths.slice(0, index + 1).join("/")}`;
+    const formattedPath =
+      pathNameMap[path.toLowerCase()] ||
+      path.charAt(0).toUpperCase() + path.slice(1);
     breadcrumbPath.push(
       <span key={to}>
         {" > "}
@@ -23,7 +46,7 @@ const getBreadcrumbs = (pathname) => {
             pathname === to ? "font-bold" : "text-gray-500"
           }`}
         >
-          {path.charAt(0).toUpperCase() + path.slice(1)}
+          {formattedPath}
         </Link>
       </span>
     );
@@ -68,10 +91,9 @@ const Header = ({ setIsSidebarVisible, isSidebarVisible }) => {
         </button>
 
         <div className="text-black">
-          {/* Display the main title dynamically */}
           <h1 className="text-2xl font-bold ml-3 mt-4">
-            {location.pathname === "/" // Check if it's the home/dashboard page
-              ? "Home" // Display "Home" if the path is "/"
+            {location.pathname === "/"
+              ? "Home"
               : location.pathname.includes("finance")
               ? "Finance"
               : location.pathname.includes("cashbook")
