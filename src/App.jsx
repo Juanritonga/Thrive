@@ -50,14 +50,14 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route
-          path="/login"
+          path="/Login"
           element={<Login setIsAuthenticated={setIsAuthenticated} />}
         />
 
         <Route path="/" element={<Layout />}>
           <Route
             index
-            element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
+            element={isAuthenticated ? <Dashboard /> : <Navigate to="/Login" />}
           />
 
           <Route path="master-data" element={<MasterData />}>
