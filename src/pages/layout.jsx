@@ -7,8 +7,8 @@ import "../index.css";
 const Layout = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
-  const [isScrolled, setIsScrolled] = useState(false); // Track if content is scrolled
-  const contentRef = useRef(null); // Reference to the Outlet content
+  const [isScrolled, setIsScrolled] = useState(false);
+  const contentRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => setIsSmallScreen(window.innerWidth <= 768);
@@ -24,9 +24,9 @@ const Layout = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (contentRef.current && contentRef.current.scrollTop > 0) {
-        setIsScrolled(true); // Content is scrolled
+        setIsScrolled(true);
       } else {
-        setIsScrolled(false); // Content is at the top
+        setIsScrolled(false);
       }
     };
 
@@ -35,7 +35,6 @@ const Layout = () => {
       contentElement.addEventListener("scroll", handleScroll);
     }
 
-    // Clean up scroll listener when component is unmounted
     return () => {
       if (contentElement) {
         contentElement.removeEventListener("scroll", handleScroll);
@@ -75,7 +74,7 @@ const Layout = () => {
         {/* Outlet for nested routes */}
         <div
           className="flex-1 overflow-y-auto bg-custom-base hidden-scrollbar"
-          ref={contentRef} // Attach ref to monitor scrolling
+          ref={contentRef}
         >
           <Outlet />
         </div>

@@ -79,7 +79,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
 
     {
       role: "front end",
-      label: "FINANCE",
+      label: "Finance",
       path: "/finance",
       icon: "fas fa-file-invoice",
       isParent: true,
