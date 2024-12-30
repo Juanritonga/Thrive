@@ -203,7 +203,20 @@ const UserRole = () => {
     { header: "Role ID", accessor: "role_id" },
     { header: "Role Name", accessor: "role_name" },
     { header: "Division Name", accessor: "division_name" },
-    { header: "Status", accessor: (role) => role.status },
+    {
+      header: "Status",
+      accessor: (role) => (
+        <span
+          className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+            role.status.toLowerCase() === "active"
+              ? "bg-green-200 text-green-600"
+              : "bg-red-200 text-red-600"
+          }`}
+        >
+          {role.status}
+        </span>
+      ),
+    },
     {
       header: "Created At",
       accessor: (role) =>

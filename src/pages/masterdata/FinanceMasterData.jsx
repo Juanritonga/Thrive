@@ -7,17 +7,17 @@ const FinanceMasterData = () => {
         <NavLink
           to="class-finance"
           className={({ isActive }) =>
-            `font-bold flex-1 px-2 py-2 sm:px-3 sm:py-3 bg-white text-custom-blue border rounded text-center ${
+            `font-bold flex-1 px-3 py-3 text-custom-blue text-center border rounded transition-all duration-300 ${
               isActive ? "bg-gray-300" : "hover:bg-gray-300"
             }`
           }
         >
-          Class Master
+          Class
         </NavLink>
         <NavLink
           to="chart"
           className={({ isActive }) =>
-            `font-bold flex-1 px-2 py-2 sm:px-3 sm:py-3 bg-white text-custom-blue border rounded text-center ${
+            `font-bold flex-1 px-3 py-3 text-custom-blue text-center border rounded transition-all duration-300 ${
               isActive ? "bg-gray-300" : "hover:bg-gray-300"
             }`
           }
@@ -27,7 +27,7 @@ const FinanceMasterData = () => {
         <NavLink
           to="currency"
           className={({ isActive }) =>
-            `font-bold flex-1 px-2 py-2 sm:px-3 sm:py-3 bg-white text-custom-blue border rounded text-center ${
+            `font-bold flex-1 px-3 py-3 text-custom-blue text-center border rounded transition-all duration-300 ${
               isActive ? "bg-gray-300" : "hover:bg-gray-300"
             }`
           }
@@ -37,7 +37,7 @@ const FinanceMasterData = () => {
         <NavLink
           to="bank"
           className={({ isActive }) =>
-            `font-bold flex-1 px-2 py-2 sm:px-3 sm:py-3 bg-white text-custom-blue border rounded text-center ${
+            `font-bold flex-1 px-3 py-3 text-custom-blue text-center border rounded transition-all duration-300 ${
               isActive ? "bg-gray-300" : "hover:bg-gray-300"
             }`
           }
@@ -47,7 +47,7 @@ const FinanceMasterData = () => {
         <NavLink
           to="tax"
           className={({ isActive }) =>
-            `font-bold flex-1 px-2 py-2 sm:px-3 sm:py-3 bg-white text-custom-blue border rounded text-center ${
+            `font-bold flex-1 px-3 py-3 text-custom-blue text-center border rounded transition-all duration-300 ${
               isActive ? "bg-gray-300" : "hover:bg-gray-300"
             }`
           }
