@@ -1,11 +1,12 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import addCurrency from "./Currency/AddCurrency";
 import updatedCurrency from "./Currency/UpdatedCurrency";
 import Table from "@/components/Table";
 import SearchBar from "@/components/SearchBar";
 import AddButton from "@/components/AddButton";
 import ModalCRUD from "@/components/ModalCRUD";
+import Pagination from "@/components/Pagination";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -14,7 +15,6 @@ const api = axios.create({
   },
 });
 
-// Pindahkan deklarasi export ke luar fungsi Currency
 export const fetchCurrencys = async () => {
   try {
     const token = sessionStorage.getItem("authToken");
@@ -22,7 +22,7 @@ export const fetchCurrencys = async () => {
 
     const response = await api.get("/currencies", {
       headers: { Authorization: `Bearer ${token}` },
-      params: { page: 1, limit: 20 },
+      params: { limit: 20 },
     });
 
     if (response.data.success) {
@@ -49,6 +49,40 @@ const Currency = () => {
     conv_rate: "",
     status: "Active",
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+
+  const fetchCurrencies = useCallback(async () => {
+    setLoading(true);
+    try {
+      const token = sessionStorage.getItem("authToken");
+      if (!token) throw new Error("Authorization token is missing.");
+
+      const offset = (currentPage - 1) * limit;
+
+      const response = await api.get("/currencies", {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { limit, offset },
+      });
+
+      if (response.data.success) {
+        setCurrencys(response.data.data.items);
+        setTotalItems(response.data.data.total || 0);
+      } else {
+        throw new Error(response.data.message || "Unexpected response format.");
+      }
+    } catch (err) {
+      console.error("Error fetching currencies:", err.message);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [currentPage, limit]);
+
+  useEffect(() => {
+    fetchCurrencies();
+  }, [fetchCurrencies]);
 
   const handleOpenModal = (mode = "create", currency = null) => {
     if (mode === "edit") {
@@ -87,6 +121,7 @@ const Currency = () => {
         handleCloseModal
       );
     }
+    fetchCurrencies();
   };
 
   const handleDeleteCurrency = async () => {
@@ -109,20 +144,6 @@ const Currency = () => {
       setError(err.message);
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchCurrencys();
-        setCurrencys(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
 
   const filteredData = currencys.filter((currency) =>
     Object.values(currency)
@@ -235,16 +256,25 @@ const Currency = () => {
       </div>
       <div className="overflow-auto shadow-sm mb-6">
         {filteredData.length === 0 ? (
-          <p>No users found.</p>
+          <p>No currencies found.</p>
         ) : (
           <Table columns={columns} data={filteredData} actions={actions} />
         )}
       </div>
-
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(totalItems / limit)}
+        totalItems={totalItems}
+        onPageChange={setCurrentPage}
+        limit={limit}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setCurrentPage(1);
+        }}
+      />
       <ModalCRUD
         isOpen={showModal}
-        title={editMode ? "Edit Currency" : "Tambah Baru"
-        }
+        title={editMode ? "Edit Currency" : "Tambah Baru"}
         onClose={handleCloseModal}
         onSave={handleSaveCurrency}
         onDelete={editMode ? handleDeleteCurrency : null}

@@ -1,14 +1,14 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import addBank from "./BankMasterData/AddBank";
 import updatedBank from "./BankMasterData/UpdatedBank";
 import SearchBar from "@/components/SearchBar";
 import AddButton from "@/components/AddButton";
 import Table from "@/components/Table";
 import ModalCRUD from "@/components/ModalCRUD";
+import Pagination from "@/components/Pagination";
 import { fetchCurrencys } from "./Currency";
-import { fetchDivisions } from '../User/Division';
-
+import { fetchDivisions } from "../User/Division";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -18,8 +18,8 @@ const api = axios.create({
 });
 
 const BankMasterData = () => {
-  const [currencies, setCurrencies] = useState([]); 
-  const [divisions, setDivisions] = useState([]); 
+  const [currencies, setCurrencies] = useState([]);
+  const [divisions, setDivisions] = useState([]);
   const [banks, setBanks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -34,30 +34,36 @@ const BankMasterData = () => {
     division_id: "",
     status: "Active",
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
 
-  const fetchBanks = async () => {
+  const fetchBanks = useCallback(async () => {
     setLoading(true);
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
+      const offset = (currentPage - 1) * limit;
+
       const response = await api.get("/banks", {
         headers: { Authorization: `Bearer ${token}` },
-        params: { page: 1, limit: 20 },
+        params: { limit, offset },
       });
 
       if (response.data.success) {
         setBanks(response.data.data.items);
+        setTotalItems(response.data.data.total || 0); // Total data dari API
       } else {
         throw new Error(response.data.message || "Unexpected response format.");
       }
     } catch (err) {
-      console.error("Error fetching divisions:", err.message);
+      console.error("Error fetching banks:", err.message);
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, limit]);
 
   const handleOpenModal = (mode = "create", bank = null) => {
     if (mode === "edit") {
@@ -66,11 +72,11 @@ const BankMasterData = () => {
     } else {
       setCurrentBank({
         bank: "",
-    account_number: "",
-    account_code: "",
-    currency_id: "",
-    division_id: "",
-    status: "Active",
+        account_number: "",
+        account_code: "",
+        currency_id: "",
+        division_id: "",
+        status: "Active",
       });
       setEditMode(false);
     }
@@ -83,21 +89,11 @@ const BankMasterData = () => {
 
   const handleSaveBank = async () => {
     if (editMode) {
-      await updatedBank(
-        currentBank,
-        setBanks,
-        setError,
-        handleCloseModal
-      );
+      await updatedBank(currentBank, setBanks, setError, handleCloseModal);
     } else {
-      await addBank(
-        currentBank,
-        setBanks,
-        setCurrentBank,
-        setError,
-        handleCloseModal
-      );
+      await addBank(currentBank, setBanks, setCurrentBank, setError, handleCloseModal);
     }
+    fetchBanks();
   };
 
   const handleDeleteBank = async () => {
@@ -109,12 +105,10 @@ const BankMasterData = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setBanks((prev) =>
-        prev.filter((bank) => bank.bank_id !== currentBank.bank_id)
-      );
+      setBanks((prev) => prev.filter((bank) => bank.bank_id !== currentBank.bank_id));
       handleCloseModal();
     } catch (err) {
-      console.error("Error deleting division:", err.message);
+      console.error("Error deleting bank:", err.message);
       setError(err.message);
     }
   };
@@ -129,20 +123,21 @@ const BankMasterData = () => {
         setError(err.message);
       }
     };
+
     const loadDivisions = async () => {
       try {
         const data = await fetchDivisions();
-        setDivisions(data); 
+        setDivisions(data);
       } catch (err) {
         console.error("Error loading divisions:", err.message);
         setError(err.message);
       }
-    };    
+    };
 
     loadCurrencies();
-    loadDivisions();  // Panggil fungsi untuk mengambil data currency
-    fetchBanks(); // Ambil data bank
-  }, []);
+    loadDivisions();
+    fetchBanks();
+  }, [fetchBanks]);
 
   const filteredData = banks.filter((bank) =>
     Object.values(bank)
@@ -157,8 +152,7 @@ const BankMasterData = () => {
       label: "Bank",
       type: "text",
       value: currentBank.bank,
-      onChange: (e) =>
-        setCurrentBank((prev) => ({ ...prev, bank: e.target.value })),
+      onChange: (e) => setCurrentBank((prev) => ({ ...prev, bank: e.target.value })),
     },
     {
       name: "account_number",
@@ -198,9 +192,8 @@ const BankMasterData = () => {
         label: division.division_name,
       })),
       onChange: (e) =>
-        setCurrentBank((prev) => ({ ...prev, division_id: e.target.value })), // Perbaiki dari currency_id ke division_id
+        setCurrentBank((prev) => ({ ...prev, division_id: e.target.value })),
     },
-    
     {
       name: "status",
       label: "Status",
@@ -249,8 +242,8 @@ const BankMasterData = () => {
       icon: "fas fa-edit",
       buttonClass:
         "bg-gray-200 text-gray-400 p-3 rounded-lg flex items-center justify-center w-10 h-10",
-        handler: (bank) => handleOpenModal("edit", bank),
-      },
+      handler: (bank) => handleOpenModal("edit", bank),
+    },
   ];
 
   if (loading) {
@@ -270,33 +263,42 @@ const BankMasterData = () => {
 
   return (
     <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
-    <div className="flex flex-wrap justify-between items-center mb-6 gap-2">
-      <SearchBar
-        value={searchQuery}
-        onChange={setSearchQuery}
-        placeholder="Cari Currency"
+      <div className="flex flex-wrap justify-between items-center mb-6 gap-2">
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Cari Currency"
+        />
+        <AddButton onClick={() => handleOpenModal("create")} />
+      </div>
+      <div className="overflow-auto shadow-sm mb-6">
+        {filteredData.length === 0 ? (
+          <p>No banks found.</p>
+        ) : (
+          <Table columns={columns} data={filteredData} actions={actions} />
+        )}
+      </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(totalItems / limit)}
+        totalItems={totalItems}
+        onPageChange={setCurrentPage}
+        limit={limit}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setCurrentPage(1);
+        }}
       />
-              <AddButton onClick={() => handleOpenModal("create")} />
-
+      <ModalCRUD
+        isOpen={showModal}
+        title={editMode ? "Edit Currency" : "Tambah Baru"}
+        onClose={handleCloseModal}
+        onSave={handleSaveBank}
+        onDelete={editMode ? handleDeleteBank : null}
+        formFields={formFields}
+        editMode={editMode}
+      />
     </div>
-    <div className="overflow-auto shadow-sm mb-6">
-      {filteredData.length === 0 ? (
-        <p>No users found.</p>
-      ) : (
-        <Table columns={columns} data={filteredData} actions={actions} />
-      )}
-    </div>
-
-    <ModalCRUD
-      isOpen={showModal}
-      title={editMode ? "Edit Currency" : "Tambah Baru"}
-      onClose={handleCloseModal}
-      onSave={handleSaveBank}
-      onDelete={editMode ? handleDeleteBank : null}
-      formFields={formFields}
-      editMode={editMode}
-    />
-  </div>
   );
 };
 

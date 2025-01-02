@@ -15,23 +15,26 @@ const api = axios.create({
   },
 });
 
-export const fetchDivisions = async () => {
+export const fetchDivisions = async (limit, offset) => {
   try {
     const token = sessionStorage.getItem("authToken");
     if (!token) throw new Error("Authorization token is missing.");
 
     const response = await api.get("/divisions", {
       headers: { Authorization: `Bearer ${token}` },
-      params: { page: 1, limit: 20 },
+      params: { limit, offset },
     });
 
     if (response.data.success) {
-      return response.data.data.items;
+      return {
+        items: response.data.data.items,
+        total: response.data.data.total || 0,
+      };
     } else {
       throw new Error(response.data.message || "Unexpected response format.");
     }
   } catch (err) {
-    console.error("Error fetching Currency:", err.message);
+    console.error("Error fetching divisions:", err.message);
     throw err;
   }
 };
@@ -52,32 +55,23 @@ const Division = () => {
   const [limit, setLimit] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
 
-  const fetchDivisions = useCallback(async () => {
+  const fetchDivisionsData = useCallback(async () => {
     setLoading(true);
     try {
-      const token = sessionStorage.getItem("authToken");
-      if (!token) throw new Error("Authorization token is missing.");
-
       const offset = (currentPage - 1) * limit;
-
-      const response = await api.get("/divisions", {
-        headers: { Authorization: `Bearer ${token}` },
-        params: { limit, offset },
-      });
-
-      if (response.data.success) {
-        setDivisions(response.data.data.items);
-        setTotalItems(response.data.data.total || 0);
-      } else {
-        throw new Error(response.data.message || "Unexpected response format.");
-      }
+      const data = await fetchDivisions(limit, offset);
+      setDivisions(data.items);
+      setTotalItems(data.total);
     } catch (err) {
-      console.error("Error fetching divisions:", err.message);
       setError(err.message);
     } finally {
       setLoading(false);
     }
   }, [currentPage, limit]);
+
+  useEffect(() => {
+    fetchDivisionsData();
+  }, [fetchDivisionsData]);
 
   const handleOpenModal = (mode = "create", division = null) => {
     if (mode === "edit") {
@@ -115,6 +109,7 @@ const Division = () => {
         handleCloseModal
       );
     }
+    fetchDivisionsData();
   };
 
   const handleDeleteDivision = async () => {
@@ -132,25 +127,12 @@ const Division = () => {
         )
       );
       handleCloseModal();
+      fetchDivisionsData();
     } catch (err) {
       console.error("Error deleting division:", err.message);
       setError(err.message);
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-          try {
-            const data = await fetchDivisions();
-            setDivisions(data);
-          } catch (err) {
-            setError(err.message);
-          } finally {
-            setLoading(false);
-          }
-        };
-        fetchData();
-  }, []);
 
   const filteredData = divisions.filter((division) =>
     Object.values(division)
@@ -192,13 +174,16 @@ const Division = () => {
         { value: "Inactive", label: "Inactive" },
       ],
       onChange: (e) =>
-        setCurrentDivision((prev) => ({ ...prev, status: e.target.value })),
+        setCurrentDivision((prev) => ({
+          ...prev,
+          status: e.target.value,
+        })),
     },
   ];
 
   const columns = [
     { header: "Division ID", accessor: "division_id" },
-    { header: "Role", accessor: "division_name" },
+    { header: "Division Name", accessor: "division_name" },
     { header: "Description", accessor: "description" },
     {
       header: "Status",
