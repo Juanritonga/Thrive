@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Table from "@/components/Table";
 import SearchBar from "@/components/SearchBar";
 import ModalCRUD from "@/components/ModalCRUD";
 import AddButton from "@/components/AddButton";
+import Pagination from "@/components/Pagination";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -32,22 +33,28 @@ const User = () => {
     status: "Active",
     password: "",
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
+      const offset = (currentPage - 1) * limit;
+
       const response = await api.get("/users", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: { page: 1, limit: 20 },
+        params: { limit, offset },
       });
 
       if (response.data.success) {
         setUsers(response.data.data.items);
+        setTotalItems(response.data.data.total || 0);
       } else {
         throw new Error(response.data.message || "Unexpected response format.");
       }
@@ -57,9 +64,9 @@ const User = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, limit]);
 
-  const fetchRoles = async () => {
+  const fetchRoles = useCallback(async () => {
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
@@ -80,9 +87,9 @@ const User = () => {
       console.error("Error fetching roles:", err.message);
       setError(err.message);
     }
-  };
+  }, []);
 
-  const fetchEntities = async () => {
+  const fetchEntities = useCallback(async () => {
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
@@ -103,7 +110,7 @@ const User = () => {
       console.error("Error fetching entities:", err.message);
       setError(err.message);
     }
-  };
+  }, []);
 
   const handleOpenModal = (mode = "create", data = null) => {
     if (mode === "edit") {
@@ -178,7 +185,7 @@ const User = () => {
     fetchUsers();
     fetchRoles();
     fetchEntities();
-  }, []);
+  }, [fetchUsers, fetchRoles, fetchEntities]);
 
   const filteredData = users.filter((user) =>
     Object.values(user)
@@ -196,89 +203,13 @@ const User = () => {
       onChange: (e) =>
         setCurrentUser((prev) => ({ ...prev, full_name: e.target.value })),
     },
-    {
-      name: "position",
-      label: "Position",
-      type: "text",
-      value: currentUser.position,
-      onChange: (e) =>
-        setCurrentUser((prev) => ({ ...prev, position: e.target.value })),
-    },
-    {
-      name: "role_id",
-      label: "Role",
-      type: "select",
-      value: currentUser.role_id,
-      options: roles.map((role) => ({
-        value: role.id,
-        label: role.role_name,
-      })),
-      onChange: (e) =>
-        setCurrentUser((prev) => ({ ...prev, role_id: e.target.value })),
-    },
-    {
-      name: "entity_id",
-      label: "Entity",
-      type: "select",
-      value: currentUser.entity_id,
-      options: entities.map((entity) => ({
-        value: entity.id,
-        label: entity.entity_name,
-      })),
-      onChange: (e) =>
-        setCurrentUser((prev) => ({ ...prev, entity_id: e.target.value })),
-    },
-    {
-      name: "email",
-      label: "Email",
-      type: "email",
-      value: currentUser.email,
-      onChange: (e) =>
-        setCurrentUser((prev) => ({ ...prev, email: e.target.value })),
-    },
-    {
-      name: "phone",
-      label: "Phone",
-      type: "tel",
-      value: currentUser.phone,
-      onChange: (e) =>
-        setCurrentUser((prev) => ({ ...prev, phone: e.target.value })),
-    },
-    {
-      name: "address",
-      label: "Address",
-      type: "text",
-      value: currentUser.address,
-      onChange: (e) =>
-        setCurrentUser((prev) => ({ ...prev, address: e.target.value })),
-    },
-    {
-      name: "status",
-      label: "Status",
-      type: "select",
-      value: currentUser.status,
-      options: [
-        { value: "Active", label: "Active" },
-        { value: "Inactive", label: "Inactive" },
-      ],
-      onChange: (e) =>
-        setCurrentUser((prev) => ({ ...prev, status: e.target.value })),
-    },
-    {
-      name: "password",
-      label: "Password",
-      type: "password",
-      value: currentUser.password,
-      onChange: (e) =>
-        setCurrentUser((prev) => ({ ...prev, password: e.target.value })),
-    },
   ];
 
   const columns = [
     { header: "User ID", accessor: "user_id" },
-    { header: "Full Name", accessor: "full_name" },
+    { header: "Nama User", accessor: "full_name" },
     { header: "Role", accessor: "role" },
-    { header: "Entity", accessor: "entity" },
+    { header: "Entitas", accessor: "entity" },
     {
       header: "Status",
       accessor: (user) => (
@@ -336,7 +267,17 @@ const User = () => {
           <Table columns={columns} data={filteredData} actions={actions} />
         )}
       </div>
-
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(totalItems / limit)}
+        totalItems={totalItems}
+        onPageChange={setCurrentPage}
+        limit={limit}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setCurrentPage(1);
+        }}
+      />
       <ModalCRUD
         isOpen={showModal}
         title={editMode ? "Edit User" : "Tambah Baru"}

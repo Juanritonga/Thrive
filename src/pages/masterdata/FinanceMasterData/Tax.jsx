@@ -4,6 +4,7 @@ import SearchBar from "@/components/SearchBar";
 import AddButton from "@/components/AddButton";
 import Table from "@/components/Table";
 import ModalCRUD from "@/components/ModalCRUD";
+import Pagination from "@/components/Pagination";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -19,6 +20,7 @@ const Tax = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [currentTax, setCurrentTax] = useState({
@@ -39,13 +41,15 @@ const Tax = () => {
         throw new Error("Authorization token is missing.");
       }
 
+      const offset = (currentPage - 1) * limit;
+
       const response = await api.get("/taxes", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         params: {
-          page: currentPage,
           limit,
+          offset,
         },
       });
 
@@ -54,7 +58,10 @@ const Tax = () => {
           (tax) => tax && typeof tax === "object" && tax.tax_id
         );
         setTaxes(validTaxes);
-        setTotalPages(response.data.data.total_pages || 1);
+
+        const totalItems = response.data.data.total || 0;
+        setTotalItems(totalItems);
+        setTotalPages(Math.ceil(totalItems / limit));
       } else {
         throw new Error(response.data.message || "Unexpected response format.");
       }
@@ -150,12 +157,6 @@ const Tax = () => {
     }
   };
 
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
-
   const filteredData = taxes.filter((tax) => {
     const values = Object.values(tax || {}).map((value) => value || "");
     return values.join(" ").toLowerCase().includes(searchQuery.toLowerCase());
@@ -196,9 +197,9 @@ const Tax = () => {
     { header: "Tax ID", accessor: "tax_id" },
     { header: "Name", accessor: "name" },
     { header: "Amount", accessor: (tax) => `${Math.min(tax.amount, 100)}%` },
-    { header: "Created By", accessor: "created_by" },
+    { header: "Dibuat Oleh", accessor: "created_by" },
     {
-      header: "Updated At",
+      header: "Tanggal Update",
       accessor: (tax) =>
         tax.updated_at
           ? new Date(tax.updated_at)
@@ -263,54 +264,17 @@ const Tax = () => {
           <Table columns={columns} data={filteredData} actions={actions} />
         )}
       </div>
-      <div className="flex flex-wrap justify-between items-center gap-4">
-        <span className="text-sm text-gray-500">
-          Showing {(currentPage - 1) * limit + 1} to{" "}
-          {Math.min(currentPage * limit, taxes.length)} of {taxes.length} entries
-        </span>
-        <div className="flex items-center gap-4 ml-auto">
-          <button
-            className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
-            disabled={currentPage === 1}
-            onClick={() => handlePageChange(currentPage - 1)}
-          >
-            &lt;
-          </button>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index}
-              className={`px-4 py-2 border rounded-md ${
-                currentPage === index + 1
-                  ? "bg-custom-blue text-white"
-                  : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-              }`}
-              onClick={() => handlePageChange(index + 1)}
-            >
-              {index + 1}
-            </button>
-          ))}
-          <button
-            className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            &gt;
-          </button>
-          <select
-            className="px-4 py-2 border rounded-md text-white bg-custom-blue"
-            value={limit}
-            onChange={(e) => {
-              setCurrentPage(1);
-              setLimit(Number(e.target.value));
-            }}
-          >
-            <option value={10}>10 Rows</option>
-            <option value={20}>20 Rows</option>
-            <option value={50}>50 Rows</option>
-          </select>
-        </div>
-      </div>
-
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalItems={totalItems}
+        onPageChange={setCurrentPage}
+        limit={limit}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setCurrentPage(1);
+        }}
+      />
       <ModalCRUD
         isOpen={showModal}
         title={editMode ? "Edit Tax" : "Tambah Baru"}
