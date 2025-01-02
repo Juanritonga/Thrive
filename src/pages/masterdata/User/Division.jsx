@@ -1,11 +1,12 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import addDivision from "./Division/AddDivision";
 import updatedDivision from "./Division/UpdatedDivision";
 import SearchBar from "@/components/SearchBar";
 import AddButton from "@/components/AddButton";
 import Table from "@/components/Table";
 import ModalCRUD from "@/components/ModalCRUD";
+import Pagination from "@/components/Pagination";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -26,20 +27,26 @@ const Division = () => {
     description: "",
     status: "Active",
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
 
-  const fetchDivisions = async () => {
+  const fetchDivisions = useCallback(async () => {
     setLoading(true);
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
+      const offset = (currentPage - 1) * limit;
+
       const response = await api.get("/divisions", {
         headers: { Authorization: `Bearer ${token}` },
-        params: { page: 1, limit: 20 },
+        params: { limit, offset },
       });
 
       if (response.data.success) {
         setDivisions(response.data.data.items);
+        setTotalItems(response.data.data.total || 0);
       } else {
         throw new Error(response.data.message || "Unexpected response format.");
       }
@@ -49,7 +56,7 @@ const Division = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, limit]);
 
   const handleOpenModal = (mode = "create", division = null) => {
     if (mode === "edit") {
@@ -99,7 +106,9 @@ const Division = () => {
       });
 
       setDivisions((prev) =>
-        prev.filter((division) => division.division_id !== currentDivision.division_id)
+        prev.filter(
+          (division) => division.division_id !== currentDivision.division_id
+        )
       );
       handleCloseModal();
     } catch (err) {
@@ -110,7 +119,7 @@ const Division = () => {
 
   useEffect(() => {
     fetchDivisions();
-  }, []);
+  }, [fetchDivisions]);
 
   const filteredData = divisions.filter((division) =>
     Object.values(division)
@@ -126,7 +135,10 @@ const Division = () => {
       type: "text",
       value: currentDivision.division_name,
       onChange: (e) =>
-        setCurrentDivision((prev) => ({ ...prev, division_name: e.target.value })),
+        setCurrentDivision((prev) => ({
+          ...prev,
+          division_name: e.target.value,
+        })),
     },
     {
       name: "description",
@@ -134,7 +146,10 @@ const Division = () => {
       type: "text",
       value: currentDivision.description,
       onChange: (e) =>
-        setCurrentDivision((prev) => ({ ...prev, description: e.target.value })),
+        setCurrentDivision((prev) => ({
+          ...prev,
+          description: e.target.value,
+        })),
     },
     {
       name: "status",
@@ -152,7 +167,7 @@ const Division = () => {
 
   const columns = [
     { header: "Division ID", accessor: "division_id" },
-    { header: "Division Name", accessor: "division_name" },
+    { header: "Role", accessor: "division_name" },
     { header: "Description", accessor: "description" },
     {
       header: "Status",
@@ -211,7 +226,17 @@ const Division = () => {
           <Table columns={columns} data={filteredData} actions={actions} />
         )}
       </div>
-
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(totalItems / limit)}
+        totalItems={totalItems}
+        onPageChange={setCurrentPage}
+        limit={limit}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setCurrentPage(1);
+        }}
+      />
       <ModalCRUD
         isOpen={showModal}
         title={editMode ? "Edit Division" : "Tambah Baru"}

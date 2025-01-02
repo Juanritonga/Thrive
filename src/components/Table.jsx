@@ -1,5 +1,3 @@
-import React from "react";
-
 const Table = ({ columns, data, actions, onRowClick }) => (
   <table className="min-w-full bg-white border rounded-lg">
     <thead>

@@ -1,11 +1,12 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import addClassFinance from "./AddClassFinance";
 import updatedClassFinance from "./UpdatedClassFinance";
 import SearchBar from "@/components/SearchBar";
 import AddButton from "@/components/AddButton";
 import Table from "@/components/Table";
 import ModalCRUD from "@/components/ModalCRUD";
+import Pagination from "@/components/Pagination";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -26,6 +27,44 @@ const ClassFinance = () => {
     code: "",
     status: "",
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+
+  const fetchClassFinances = useCallback(async () => {
+    setLoading(true);
+    try {
+      const token = sessionStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token is missing.");
+      }
+
+      const offset = (currentPage - 1) * limit;
+
+      const response = await api.get("/finance/classes", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: { limit, offset },
+      });
+
+      if (response.data.success) {
+        setClassFinances(response.data.data.items);
+        setTotalItems(response.data.data.total || 0);
+      } else {
+        throw new Error(response.data.message || "Unexpected response format.");
+      }
+    } catch (err) {
+      console.error("Error:", err.response || err.message);
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "An unexpected error occurred."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, [currentPage, limit]);
 
   const columns = [
     { header: "Class ID", accessor: "class_id" },
@@ -114,38 +153,6 @@ const ClassFinance = () => {
     setIsEditModalOpen(false);
   };
 
-  const fetchClassFinances = async () => {
-    setLoading(true);
-    try {
-      const token = sessionStorage.getItem("authToken");
-      if (!token) {
-        throw new Error("Authorization token is missing.");
-      }
-
-      const response = await api.get("/finance/classes", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: { page: 1, limit: 20 },
-      });
-
-      if (response.data.success) {
-        setClassFinances(response.data.data.items);
-      } else {
-        throw new Error(response.data.message || "Unexpected response format.");
-      }
-    } catch (err) {
-      console.error("Error:", err.response || err.message);
-      setError(
-        err.response?.data?.message ||
-          err.message ||
-          "An unexpected error occurred."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleSaveClassFinance = async () => {
     setLoading(true);
     try {
@@ -166,10 +173,11 @@ const ClassFinance = () => {
       }
       fetchClassFinances();
     } catch (err) {
-      setError("An error occurred while saving.");
-    } finally {
+      setError(err.message || "An error occurred while saving.");
+      console.error("Error occurred while saving:", err);
+  } finally {
       setLoading(false);
-    }
+  }
   };
 
   const handleDeleteClassFinance = async () => {
@@ -211,7 +219,7 @@ const ClassFinance = () => {
 
   useEffect(() => {
     fetchClassFinances();
-  }, []);
+  }, [fetchClassFinances]);
 
   if (loading) {
     return (
@@ -245,7 +253,17 @@ const ClassFinance = () => {
           <Table columns={columns} data={filteredData} actions={actions} />
         )}
       </div>
-
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(totalItems / limit)}
+        totalItems={totalItems}
+        onPageChange={setCurrentPage}
+        limit={limit}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setCurrentPage(1);
+        }}
+      />
       <ModalCRUD
         isOpen={isModalOpen || isEditModalOpen}
         title={isEditModalOpen ? "Edit Kelas Keuangan" : "Tambah Baru"}

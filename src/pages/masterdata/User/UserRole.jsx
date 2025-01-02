@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Table from "@/components/Table";
 import SearchBar from "@/components/SearchBar";
 import AddButton from "@/components/AddButton";
 import ModalCRUD from "@/components/ModalCRUD";
+import Pagination from "@/components/Pagination";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -25,8 +26,11 @@ const UserRole = () => {
     status: "Active",
   });
   const [editMode, setEditMode] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
 
-  const fetchUserRoles = async () => {
+  const fetchUserRoles = useCallback(async () => {
     setLoading(true);
     try {
       const token = sessionStorage.getItem("authToken");
@@ -34,15 +38,21 @@ const UserRole = () => {
         throw new Error("Authorization token is missing.");
       }
 
+      const offset = (currentPage - 1) * limit;
+
       const response = await api.get("/roles", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: { page: 1, limit: 20 },
+        params: {
+          limit,
+          offset,
+        },
       });
 
       if (response.data.success) {
         setUserRoles(response.data.data.items);
+        setTotalItems(response.data.data.total || 0);
       } else {
         throw new Error(response.data.message || "Unexpected response format.");
       }
@@ -52,9 +62,9 @@ const UserRole = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, limit]);
 
-  const fetchDivisions = async () => {
+  const fetchDivisions = useCallback(async () => {
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
@@ -73,7 +83,7 @@ const UserRole = () => {
       console.error("Error fetching divisions:", err.message);
       setError(err.message);
     }
-  };
+  }, []);
 
   const handleOpenModal = (mode = "create", data = null) => {
     if (mode === "edit") {
@@ -95,30 +105,26 @@ const UserRole = () => {
   };
 
   const handleSaveRole = async () => {
-    setLoading(true);  // Menambahkan loading sebelum operasi
+    setLoading(true);
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
-  
+
       if (editMode) {
-        // Untuk update role
         await api.put(`/roles/${currentRole.id}`, currentRole, {
           headers: { Authorization: `Bearer ${token}` },
         });
-  
-        // Update langsung state userRoles untuk memperbarui data
+
         setUserRoles((prev) =>
           prev.map((role) =>
             role.id === currentRole.id ? { ...role, ...currentRole } : role
           )
         );
       } else {
-        // Untuk tambah role
         const response = await api.post("/roles", currentRole, {
           headers: { Authorization: `Bearer ${token}` },
         });
-  
-        // Tambahkan data baru ke userRoles
+
         setUserRoles((prev) => [...prev, response.data.data]);
       }
       handleCloseModal();
@@ -126,36 +132,34 @@ const UserRole = () => {
       console.error("Error saving role:", err.message);
       setError(err.message);
     } finally {
-      setLoading(false);  // Menambahkan loading false setelah operasi selesai
+      setLoading(false);
     }
   };
-  
-  
+
   const handleDeleteRole = async () => {
-    setLoading(true);  // Menambahkan loading sebelum operasi
+    setLoading(true);
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
-  
+
       await api.delete(`/roles/${currentRole.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-  
+
       setUserRoles((prev) => prev.filter((role) => role.id !== currentRole.id));
       handleCloseModal();
     } catch (err) {
       console.error("Error deleting role:", err.message);
       setError(err.message);
     } finally {
-      setLoading(false);  // Menambahkan loading false setelah operasi selesai
+      setLoading(false);
     }
   };
-  
 
   useEffect(() => {
     fetchUserRoles();
     fetchDivisions();
-  }, []);
+  }, [fetchUserRoles, fetchDivisions]);
 
   const filteredData = userRoles.filter((userRole) =>
     Object.values(userRole)
@@ -201,9 +205,8 @@ const UserRole = () => {
 
   const columns = [
     { header: "Role ID", accessor: "role_id" },
-    { header: "Role Name", accessor: "role_name" },
-    { header: "Division Name", accessor: "division_name" },
-    { header: "Status", accessor: (role) => role.status },
+    { header: "Role", accessor: "role_name" },
+    { header: "Division", accessor: "division_name" },
     {
       header: "Created At",
       accessor: (role) =>
@@ -214,6 +217,7 @@ const UserRole = () => {
       accessor: (role) =>
         new Date(role.updated_at).toLocaleDateString("en-GB"),
     },
+    { header: "Status", accessor: (role) => role.status },
   ];
 
   const actions = [
@@ -257,7 +261,17 @@ const UserRole = () => {
           <Table columns={columns} data={filteredData} actions={actions} />
         )}
       </div>
-
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(totalItems / limit)}
+        totalItems={totalItems}
+        onPageChange={setCurrentPage}
+        limit={limit}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setCurrentPage(1);
+        }}
+      />
       <ModalCRUD
         isOpen={showModal}
         title={editMode ? "Edit Role" : "Tambah Baru"}

@@ -1,11 +1,12 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import addChart from "./Chart/AddChart";
 import updatedChart from "./Chart/UpdatedChart";
 import SearchBar from "@/components/SearchBar";
 import AddButton from "@/components/AddButton";
 import Table from "@/components/Table";
 import ModalCRUD from "@/components/ModalCRUD";
+import Pagination from "@/components/Pagination";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -28,8 +29,11 @@ const Chart = () => {
   });
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
 
-  const fetchCharts = async () => {
+  const fetchCharts = useCallback(async () => {
     setLoading(true);
     try {
       const token = sessionStorage.getItem("authToken");
@@ -37,13 +41,16 @@ const Chart = () => {
         throw new Error("Authorization token is missing.");
       }
 
+      const offset = (currentPage - 1) * limit;
+
       const response = await api.get("/finance/acc", {
         headers: { Authorization: `Bearer ${token}` },
-        params: { page: 1, limit: 20 },
+        params: { limit, offset },
       });
 
       if (response.data.success) {
         setCharts(response.data.data.items);
+        setTotalItems(response.data.data.total || 0);
       } else {
         throw new Error(response.data.message || "Unexpected response format.");
       }
@@ -53,9 +60,9 @@ const Chart = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, limit]);
 
-  const fetchClassFinances = async () => {
+  const fetchClassFinances = useCallback(async () => {
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
@@ -74,7 +81,7 @@ const Chart = () => {
       console.error("Error fetching class finances:", err.response || err.message);
       setError(err.response?.data?.message || err.message || "An error occurred.");
     }
-  };
+  }, []);
 
   const handleOpenModal = (mode = "create", data = null) => {
     if (mode === "edit") {
@@ -135,7 +142,7 @@ const Chart = () => {
   useEffect(() => {
     fetchCharts();
     fetchClassFinances();
-  }, []);
+  }, [fetchCharts, fetchClassFinances]);
 
   const filteredData = charts.filter((chart) =>
     Object.values(chart)
@@ -251,7 +258,17 @@ const Chart = () => {
           <Table columns={columns} data={filteredData} actions={actions} />
         )}
       </div>
-
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(totalItems / limit)}
+        totalItems={totalItems}
+        onPageChange={setCurrentPage}
+        limit={limit}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setCurrentPage(1);
+        }}
+      />
       <ModalCRUD
         isOpen={showModal}
         title={editMode ? "Edit Chart" : "Tambah Baru"}
