@@ -197,17 +197,18 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
           isSidebarVisible ? "p-6" : "p-4"
         }`}
       >
-        <img
-          src="../thrive.png"
-          alt="Company Logo"
-          className={`object-contain ${isSidebarVisible ? "h-12" : "h-8"}`}
-          style={{
-            filter:
-              "invert(15%) sepia(70%) saturate(4000%) hue-rotate(220deg) brightness(80%) contrast(120%)",
-          }}
-        />
+        <Link to="/dashboard">
+          <img
+            src="../thrive.png"
+            alt="Company Logo"
+            className={`object-contain ${isSidebarVisible ? "h-12" : "h-8"}`}
+            style={{
+              filter:
+                "invert(15%) sepia(70%) saturate(4000%) hue-rotate(220deg) brightness(80%) contrast(120%)",
+            }}
+          />
+        </Link>
       </div>
-
       <div
         className={`fixed left-0 h-full border-gray-200 shadow-md transform duration-300 ${
           isSmallScreen ? "w-20" : isSidebarVisible ? "w-64" : "w-20"
@@ -220,17 +221,24 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
               <li
                 key={index}
                 className={`flex items-center rounded-md ${
-                  isActive(item.path) ? "bg-gray-100 text-black" : "text-gray-700"
+                  isActive(item.path)
+                    ? "bg-gray-100 text-black"
+                    : "text-gray-700"
                 } hover:bg-gray-200 transition-colors duration-200`}
               >
-                <Link to={item.path} className="flex items-center w-full py-3 px-4">
+                <Link
+                  to={item.path}
+                  className="flex items-center w-full py-3 px-4"
+                >
                   <i
                     className={`${item.icon} text-lg w-6 text-center text-custom-blue`}
                   ></i>
                   {!isSmallScreen && isSidebarVisible && (
                     <span
                       className={`ml-4 flex-1 text-black ${
-                        isActive(item.path) ? "font-bold text-custom-blue" : "font-medium"
+                        isActive(item.path)
+                          ? "font-bold text-custom-blue"
+                          : "font-medium"
                       }`}
                     >
                       {item.label}

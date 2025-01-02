@@ -53,7 +53,7 @@ const BankMasterData = () => {
 
       if (response.data.success) {
         setBanks(response.data.data.items);
-        setTotalItems(response.data.data.total || 0); // Total data dari API
+        setTotalItems(response.data.data.total || 0);
       } else {
         throw new Error(response.data.message || "Unexpected response format.");
       }
