@@ -1,72 +1,128 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import addCurrency from "./Currency/AddCurrency";
+import updatedCurrency from "./Currency/UpdatedCurrency";
 import Table from "@/components/Table";
 import SearchBar from "@/components/SearchBar";
+import AddButton from "@/components/AddButton";
+import ModalCRUD from "@/components/ModalCRUD";
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+// Pindahkan deklarasi export ke luar fungsi Currency
+export const fetchCurrencys = async () => {
+  try {
+    const token = sessionStorage.getItem("authToken");
+    if (!token) throw new Error("Authorization token is missing.");
+
+    const response = await api.get("/currencies", {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { page: 1, limit: 20 },
+    });
+
+    if (response.data.success) {
+      return response.data.data.items;
+    } else {
+      throw new Error(response.data.message || "Unexpected response format.");
+    }
+  } catch (err) {
+    console.error("Error fetching Currency:", err.message);
+    throw err;
+  }
+};
 
 const Currency = () => {
   const [currencys, setCurrencys] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [limit, setLimit] = useState(10);
-
-  const indexOfLastItem = currentPage * limit;
-  const indexOfFirstItem = indexOfLastItem - limit;
-
-  const api = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL,
-    headers: {
-      "Content-Type": "application/json",
-    },
+  const [showModal, setShowModal] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [currentCurrency, setCurrentCurrency] = useState({
+    currency: "",
+    code: "",
+    conv_rate: "",
+    status: "Active",
   });
 
+  const handleOpenModal = (mode = "create", currency = null) => {
+    if (mode === "edit") {
+      setCurrentCurrency(currency);
+      setEditMode(true);
+    } else {
+      setCurrentCurrency({
+        currency: "",
+        code: "",
+        conv_rate: "",
+        status: "Active",
+      });
+      setEditMode(false);
+    }
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleSaveCurrency = async () => {
+    if (editMode) {
+      await updatedCurrency(
+        currentCurrency,
+        setCurrencys,
+        setError,
+        handleCloseModal
+      );
+    } else {
+      await addCurrency(
+        currentCurrency,
+        setCurrencys,
+        setCurrentCurrency,
+        setError,
+        handleCloseModal
+      );
+    }
+  };
+
+  const handleDeleteCurrency = async () => {
+    try {
+      const token = sessionStorage.getItem("authToken");
+      if (!token) throw new Error("Authorization token is missing.");
+
+      await api.delete(`/currencies/${currentCurrency.currency_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setCurrencys((prev) =>
+        prev.filter(
+          (currency) => currency.currency_id !== currentCurrency.currency_id
+        )
+      );
+      handleCloseModal();
+    } catch (err) {
+      console.error("Error deleting currency:", err.message);
+      setError(err.message);
+    }
+  };
+
   useEffect(() => {
-    const fetchCurrencys = async () => {
-      setLoading(true);
+    const fetchData = async () => {
       try {
-        const token = sessionStorage.getItem("authToken");
-        if (!token) {
-          throw new Error("Authorization token is missing.");
-        }
-
-        const response = await api.get(
-          "/currencies",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            params: {
-              page: currentPage,
-              limit: limit,
-            },
-          }
-        );
-
-        if (response.data.success) {
-          setCurrencys(response.data.data.items);
-          setTotalPages(response.data.data.total_pages || 1);
-        } else {
-          throw new Error(
-            response.data.message || "Unexpected response format."
-          );
-        }
+        const data = await fetchCurrencys();
+        setCurrencys(data);
       } catch (err) {
-        console.error("Error:", err.response || err.message);
-        setError(
-          err.response?.data?.message ||
-            err.message ||
-            "An unexpected error occurred."
-        );
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-
-    fetchCurrencys();
-  }, [currentPage, limit]);
+    fetchData();
+  }, []);
 
   const filteredData = currencys.filter((currency) =>
     Object.values(currency)
@@ -75,47 +131,82 @@ const Currency = () => {
       .includes(searchQuery.toLowerCase())
   );
 
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
+  const formFields = [
+    {
+      name: "currency",
+      label: "Currency",
+      type: "text",
+      value: currentCurrency.currency,
+      onChange: (e) =>
+        setCurrentCurrency((prev) => ({ ...prev, currency: e.target.value })),
+    },
+    {
+      name: "code",
+      label: "Kode",
+      type: "text",
+      value: currentCurrency.code,
+      onChange: (e) =>
+        setCurrentCurrency((prev) => ({ ...prev, code: e.target.value })),
+    },
+    {
+      name: "conv_rate",
+      label: "Conversi Rate",
+      type: "number",
+      value: currentCurrency.conv_rate,
+      onChange: (e) =>
+        setCurrentCurrency((prev) => ({ ...prev, conv_rate: e.target.value })),
+    },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      value: currentCurrency.status,
+      options: [
+        { value: "Active", label: "Active" },
+        { value: "Inactive", label: "Inactive" },
+      ],
+      onChange: (e) =>
+        setCurrentCurrency((prev) => ({ ...prev, status: e.target.value })),
+    },
+  ];
 
   const columns = [
-  { header: "Currency ID", accessor: "currency_id" },
-  { header: "Currency", accessor: "currency" },
-  { header: "Kode", accessor: "code" },
-  { header: "Konversi", accessor: "conv_rate" },
-  { header: "Dibuat Oleh", accessor: "created_by" },
-  {
-    header: "Tanggal Update",
-    accessor: (currency) =>
-      new Date(currency.updated_at).toLocaleDateString("en-GB").replace(/\//g, "-"),
-  },
-  {
-    header: "Status",
-    accessor: (currency) => (
-      <span
-        className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
-          currency.status.toLowerCase() === "active"
-            ? "bg-green-200 text-green-600"
-            : "bg-red-200 text-red-600"
-        }`}
-      >
-        {currency.status}
-      </span>
-    ),
-  },
-];
+    { header: "Currency ID", accessor: "currency_id" },
+    { header: "Currency", accessor: "currency" },
+    { header: "Kode", accessor: "code" },
+    { header: "Konversi", accessor: "conv_rate" },
+    { header: "Dibuat Oleh", accessor: "created_by" },
+    {
+      header: "Tanggal Update",
+      accessor: (currency) =>
+        new Date(currency.updated_at)
+          .toLocaleDateString("en-GB")
+          .replace(/\//g, "-"),
+    },
+    {
+      header: "Status",
+      accessor: (currency) => (
+        <span
+          className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+            currency.status.toLowerCase() === "active"
+              ? "bg-green-200 text-green-600"
+              : "bg-red-200 text-red-600"
+          }`}
+        >
+          {currency.status}
+        </span>
+      ),
+    },
+  ];
 
-const actions = [
-  {
-    icon: "fas fa-edit",
-    buttonClass:
+  const actions = [
+    {
+      icon: "fas fa-edit",
+      buttonClass:
         "bg-gray-200 text-gray-400 p-3 rounded-lg flex items-center justify-center w-10 h-10",
-    handler: (currency) => console.log("Edit action for:", currency),
-  },
-];
+      handler: (currency) => handleOpenModal("edit", currency),
+    },
+  ];
 
   if (loading) {
     return (
@@ -140,6 +231,7 @@ const actions = [
           onChange={setSearchQuery}
           placeholder="Cari Currency"
         />
+        <AddButton onClick={() => handleOpenModal("create")} />
       </div>
       <div className="overflow-auto shadow-sm mb-6">
         {filteredData.length === 0 ? (
@@ -149,58 +241,16 @@ const actions = [
         )}
       </div>
 
-      <div className="flex flex-wrap justify-between items-center gap-4">
-        <span className="text-sm text-gray-500">
-          Showing {indexOfFirstItem + 1} to{" "}
-          {Math.min(indexOfLastItem, currencys.length)} of {currencys.length}{" "}
-          entries
-        </span>
-        <div className="flex items-center gap-4 ml-auto">
-          {" "}
-          <div className="flex items-center space-x-3">
-            <button
-              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
-              disabled={currentPage === 1}
-              onClick={() => handlePageChange(currentPage - 1)}
-            >
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index}
-                className={`px-4 py-2 border rounded-md ${
-                  currentPage === index + 1
-                    ? "bg-custom-blue text-white"
-                    : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                }`}
-                onClick={() => handlePageChange(index + 1)}
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div>
-          <div className="flex items-center space-x-2">
-            <select
-              className="px-4 py-2 border rounded-md text-white bg-custom-blue"
-              value={limit}
-              onChange={(e) =>
-                setCurrentPage(1) || setLimit(Number(e.target.value))
-              }
-            >
-              <option value={10}>10 Baris</option>
-              <option value={20}>20 Baris</option>
-              <option value={50}>50 Baris</option>
-            </select>
-          </div>
-        </div>
-      </div>
+      <ModalCRUD
+        isOpen={showModal}
+        title={editMode ? "Edit Currency" : "Tambah Baru"
+        }
+        onClose={handleCloseModal}
+        onSave={handleSaveCurrency}
+        onDelete={editMode ? handleDeleteCurrency : null}
+        formFields={formFields}
+        editMode={editMode}
+      />
     </div>
   );
 };

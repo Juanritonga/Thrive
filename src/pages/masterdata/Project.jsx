@@ -333,7 +333,7 @@ const Project = () => {
   const actions = [
     {
       icon: "fas fa-edit",
-      buttonClass: "bg-blue-500 text-white hover:bg-blue-600",
+      buttonClass: "bg-blue-500 text-white hover:bg-blue-600 p-3 rounded-lg flex items-center justify-center w-10 h-10",
       handler: (project) => {
         setSelectedProject(project);
         setEditModalOpen(true);
@@ -341,7 +341,7 @@ const Project = () => {
     },
     {
       icon: "fas fa-trash",
-      buttonClass: "bg-red-500 text-white hover:bg-red-600",
+      buttonClass: "bg-red-500 text-white hover:bg-red-600 p-3 rounded-lg flex items-center justify-center w-10 h-10",
       handler: (project) => {
         setSelectedProject(project);
         setDeleteModalOpen(true);
