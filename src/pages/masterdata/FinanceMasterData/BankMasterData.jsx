@@ -1,219 +1,303 @@
-  import axios from "axios";
-  import { useState, useEffect } from "react";
-  import SearchBar from "@/components/SearchBar";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import addBank from "./BankMasterData/AddBank";
+import updatedBank from "./BankMasterData/UpdatedBank";
+import SearchBar from "@/components/SearchBar";
+import AddButton from "@/components/AddButton";
+import Table from "@/components/Table";
+import ModalCRUD from "@/components/ModalCRUD";
+import { fetchCurrencys } from "./Currency";
+import { fetchDivisions } from '../User/Division';
 
-  const BankMasterData = () => {
-    const [banks, setBanks] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    const [limit, setLimit] = useState(10);
 
-    const indexOfLastItem = currentPage * limit;
-    const indexOfFirstItem = indexOfLastItem - limit;
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-    const api = axios.create({
-      baseURL: import.meta.env.VITE_API_BASE_URL,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+const BankMasterData = () => {
+  const [currencies, setCurrencies] = useState([]); 
+  const [divisions, setDivisions] = useState([]); 
+  const [banks, setBanks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [currentBank, setCurrentBank] = useState({
+    bank: "",
+    account_number: "",
+    account_code: "",
+    currency_id: "",
+    division_id: "",
+    status: "Active",
+  });
 
-    useEffect(() => {
-      const fetchBanks = async () => {
-        setLoading(true);
-        try {
-          const token = sessionStorage.getItem("authToken");
-          if (!token) {
-            throw new Error("Authorization token is missing.");
-          }
+  const fetchBanks = async () => {
+    setLoading(true);
+    try {
+      const token = sessionStorage.getItem("authToken");
+      if (!token) throw new Error("Authorization token is missing.");
 
-          const response = await api.get("/banks",
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              params: {
-                page: currentPage,
-                limit: limit,
-              },
-            }
-          );
+      const response = await api.get("/banks", {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { page: 1, limit: 20 },
+      });
 
-          if (response.data.success) {
-            setBanks(response.data.data.items);
-            setTotalPages(response.data.data.total_pages || 1);
-          } else {
-            throw new Error(
-              response.data.message || "Unexpected response format."
-            );
-          }
-        } catch (err) {
-          console.error("Error:", err.response || err.message);
-          setError(
-            err.response?.data?.message ||
-              err.message ||
-              "An unexpected error occurred."
-          );
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchBanks();
-    }, [currentPage, limit]);
-
-    const filteredData = banks.filter((bank) =>
-      Object.values(bank)
-        .join(" ")
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase())
-    );
-
-    const handlePageChange = (page) => {
-      if (page >= 1 && page <= totalPages) {
-        setCurrentPage(page);
+      if (response.data.success) {
+        setBanks(response.data.data.items);
+      } else {
+        throw new Error(response.data.message || "Unexpected response format.");
       }
-    };
-
-    if (loading) {
-      return (
-        <div className="flex items-center justify-center h-screen bg-white-100">
-          <div className="flex flex-col items-center">
-            <div className="w-16 h-16 border-4 border-custom-blue border-dashed rounded-full animate-spin"></div>
-            <p className="mt-4 text-lg font-medium text-gray-700">Loading...</p>
-          </div>
-        </div>
-      );
+    } catch (err) {
+      console.error("Error fetching divisions:", err.message);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-
-    if (error) {
-      return <div style={{ color: "red" }}>{error}</div>;
-    }
-
-    return (
-      <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
-        <div className="flex flex-wrap justify-between items-center mb-6 gap-2">
-        <SearchBar
-          value={searchQuery}
-          onChange={setSearchQuery}
-          placeholder="Cari Bank"
-        />
-      </div>
-        <div className="overflow-auto shadow-sm mb-6">
-          {filteredData.length === 0 ? (
-            <p>No users found.</p>
-          ) : (
-            <table className="min-w-full bg-white border rounded-lg">
-              <thead>
-                <tr className="text-custom-blue bg-gray-200">
-                  <th className="py-3 px-4 border">Bank ID</th>
-                  <th className="py-3 px-4 border">Bank</th>
-                  <th className="py-3 px-4 border">Entitas</th>
-                  <th className="py-3 px-4 border">No. Rekening</th>
-                  <th className="py-3 px-4 border">Dibuat Oleh</th>
-                  <th className="py-3 px-4 border">Tanggal Update</th>
-                  <th className="py-3 px-4 border">Status</th>
-                  <th className="py-3 px-4 border">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredData.map((bank) => (
-                  <tr
-                    key={bank.bank_id}
-                    className="cursor-pointer border-t text-center text-custom-blue2"
-                  >
-                    <td className="py-3 px-4">{bank.bank_id}</td>
-                    <td className="py-3 px-4">{bank.bank}</td>
-                    <td className="py-3 px-4">{bank.entity}</td>
-                    <td className="py-3 px-4">{bank.account_number}</td>
-                    <td className="py-3 px-4">{bank.created_by}</td>
-                    <td className="py-3 px-4">
-                      {new Date(bank.updated_at)
-                        .toLocaleDateString("en-GB")
-                        .replace(/\//g, "-")}
-                    </td>{" "}
-                    <td className="py-3 px-4">
-                    <td className="py-3 px-4 text-center">
-                      <span
-                        className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
-                          bank.status.toLowerCase() === "active"
-                            ? "bg-green-200 text-green-600"
-                            : "bg-red-200 text-red-600"
-                        }`}
-                      >
-                        {bank.status}
-                      </span>
-                    </td>
-                    </td>
-                    <td className="py-3 px-4">
-                      <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12">
-                        <i className="fas fa-edit"></i>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-
-        <div className="flex flex-wrap justify-between items-center gap-4">
-          <span className="text-sm text-gray-500">
-            Showing {indexOfFirstItem + 1} to{" "}
-            {Math.min(indexOfLastItem, banks.length)} of {banks.length} entries
-          </span>
-          <div className="flex items-center gap-4 ml-auto">
-            {" "}
-            <div className="flex items-center space-x-3">
-              <button
-                className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
-                disabled={currentPage === 1}
-                onClick={() => handlePageChange(currentPage - 1)}
-              >
-                &lt;
-              </button>
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index}
-                  className={`px-4 py-2 border rounded-md ${
-                    currentPage === index + 1
-                      ? "bg-custom-blue text-white"
-                      : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                  }`}
-                  onClick={() => handlePageChange(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              ))}
-              <button
-                className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
-                &gt;
-              </button>
-            </div>
-            <div className="flex items-center space-x-2">
-              <select
-                className="px-4 py-2 border rounded-md text-white bg-custom-blue"
-                value={limit}
-                onChange={(e) =>
-                  setCurrentPage(1) || setLimit(Number(e.target.value))
-                }
-              >
-                <option value={10}>10 Baris</option>
-                <option value={20}>20 Baris</option>
-                <option value={50}>50 Baris</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
   };
 
-  export default BankMasterData;
+  const handleOpenModal = (mode = "create", bank = null) => {
+    if (mode === "edit") {
+      setCurrentBank(bank);
+      setEditMode(true);
+    } else {
+      setCurrentBank({
+        bank: "",
+    account_number: "",
+    account_code: "",
+    currency_id: "",
+    division_id: "",
+    status: "Active",
+      });
+      setEditMode(false);
+    }
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleSaveBank = async () => {
+    if (editMode) {
+      await updatedBank(
+        currentBank,
+        setBanks,
+        setError,
+        handleCloseModal
+      );
+    } else {
+      await addBank(
+        currentBank,
+        setBanks,
+        setCurrentBank,
+        setError,
+        handleCloseModal
+      );
+    }
+  };
+
+  const handleDeleteBank = async () => {
+    try {
+      const token = sessionStorage.getItem("authToken");
+      if (!token) throw new Error("Authorization token is missing.");
+
+      await api.delete(`/banks/${currentBank.bank_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setBanks((prev) =>
+        prev.filter((bank) => bank.bank_id !== currentBank.bank_id)
+      );
+      handleCloseModal();
+    } catch (err) {
+      console.error("Error deleting division:", err.message);
+      setError(err.message);
+    }
+  };
+
+  useEffect(() => {
+    const loadCurrencies = async () => {
+      try {
+        const data = await fetchCurrencys();
+        setCurrencies(data);
+      } catch (err) {
+        console.error("Error loading currencies:", err.message);
+        setError(err.message);
+      }
+    };
+    const loadDivisions = async () => {
+      try {
+        const data = await fetchDivisions();
+        setDivisions(data); 
+      } catch (err) {
+        console.error("Error loading divisions:", err.message);
+        setError(err.message);
+      }
+    };    
+
+    loadCurrencies();
+    loadDivisions();  // Panggil fungsi untuk mengambil data currency
+    fetchBanks(); // Ambil data bank
+  }, []);
+
+  const filteredData = banks.filter((bank) =>
+    Object.values(bank)
+      .join(" ")
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  );
+
+  const formFields = [
+    {
+      name: "bank",
+      label: "Bank",
+      type: "text",
+      value: currentBank.bank,
+      onChange: (e) =>
+        setCurrentBank((prev) => ({ ...prev, bank: e.target.value })),
+    },
+    {
+      name: "account_number",
+      label: "Account Number",
+      type: "number",
+      value: currentBank.account_number,
+      onChange: (e) =>
+        setCurrentBank((prev) => ({ ...prev, account_number: e.target.value })),
+    },
+    {
+      name: "account_code",
+      label: "Account Code",
+      type: "text",
+      value: currentBank.account_code,
+      onChange: (e) =>
+        setCurrentBank((prev) => ({ ...prev, account_code: e.target.value })),
+    },
+    {
+      name: "currency_id",
+      label: "Currency",
+      type: "select",
+      value: currentBank.currency_id,
+      options: currencies.map((currency) => ({
+        value: currency.currency_id,
+        label: currency.currency,
+      })),
+      onChange: (e) =>
+        setCurrentBank((prev) => ({ ...prev, currency_id: e.target.value })),
+    },
+    {
+      name: "division_id",
+      label: "Division",
+      type: "select",
+      value: currentBank.division_id,
+      options: divisions.map((division) => ({
+        value: division.division_id,
+        label: division.division_name,
+      })),
+      onChange: (e) =>
+        setCurrentBank((prev) => ({ ...prev, division_id: e.target.value })), // Perbaiki dari currency_id ke division_id
+    },
+    
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      value: currentBank.status,
+      options: [
+        { value: "Active", label: "Active" },
+        { value: "Inactive", label: "Inactive" },
+      ],
+      onChange: (e) =>
+        setCurrentBank((prev) => ({ ...prev, status: e.target.value })),
+    },
+  ];
+
+  const columns = [
+    { header: "Bank ID", accessor: "bank_id" },
+    { header: "Bank", accessor: "bank" },
+    { header: "Entitas", accessor: "entity" },
+    { header: "No. Rekening", accessor: "account_number" },
+    { header: "Dibuat Oleh", accessor: "created_by" },
+    {
+      header: "Tanggal Update",
+      accessor: (bank) =>
+        new Date(bank.updated_at)
+          .toLocaleDateString("en-GB")
+          .replace(/\//g, "-"),
+    },
+    {
+      header: "Status",
+      accessor: (bank) => (
+        <span
+          className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+            bank.status.toLowerCase() === "active"
+              ? "bg-green-200 text-green-600"
+              : "bg-red-200 text-red-600"
+          }`}
+        >
+          {bank.status}
+        </span>
+      ),
+    },
+  ];
+
+  const actions = [
+    {
+      icon: "fas fa-edit",
+      buttonClass:
+        "bg-gray-200 text-gray-400 p-3 rounded-lg flex items-center justify-center w-10 h-10",
+        handler: (bank) => handleOpenModal("edit", bank),
+      },
+  ];
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-white-100">
+        <div className="flex flex-col items-center">
+          <div className="w-16 h-16 border-4 border-custom-blue border-dashed rounded-full animate-spin"></div>
+          <p className="mt-4 text-lg font-medium text-gray-700">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div style={{ color: "red" }}>{error}</div>;
+  }
+
+  return (
+    <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
+    <div className="flex flex-wrap justify-between items-center mb-6 gap-2">
+      <SearchBar
+        value={searchQuery}
+        onChange={setSearchQuery}
+        placeholder="Cari Currency"
+      />
+              <AddButton onClick={() => handleOpenModal("create")} />
+
+    </div>
+    <div className="overflow-auto shadow-sm mb-6">
+      {filteredData.length === 0 ? (
+        <p>No users found.</p>
+      ) : (
+        <Table columns={columns} data={filteredData} actions={actions} />
+      )}
+    </div>
+
+    <ModalCRUD
+      isOpen={showModal}
+      title={editMode ? "Edit Currency" : "Tambah Baru"}
+      onClose={handleCloseModal}
+      onSave={handleSaveBank}
+      onDelete={editMode ? handleDeleteBank : null}
+      formFields={formFields}
+      editMode={editMode}
+    />
+  </div>
+  );
+};
+
+export default BankMasterData;

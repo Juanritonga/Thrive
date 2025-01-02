@@ -14,6 +14,28 @@ const api = axios.create({
   },
 });
 
+// Pindahkan deklarasi export ke luar fungsi Currency
+export const fetchCurrencys = async () => {
+  try {
+    const token = sessionStorage.getItem("authToken");
+    if (!token) throw new Error("Authorization token is missing.");
+
+    const response = await api.get("/currencies", {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { page: 1, limit: 20 },
+    });
+
+    if (response.data.success) {
+      return response.data.data.items;
+    } else {
+      throw new Error(response.data.message || "Unexpected response format.");
+    }
+  } catch (err) {
+    console.error("Error fetching Currency:", err.message);
+    throw err;
+  }
+};
+
 const Currency = () => {
   const [currencys, setCurrencys] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,30 +49,6 @@ const Currency = () => {
     conv_rate: "",
     status: "Active",
   });
-
-  const fetchCurrencys = async () => {
-    setLoading(true);
-    try {
-      const token = sessionStorage.getItem("authToken");
-      if (!token) throw new Error("Authorization token is missing.");
-
-      const response = await api.get("/currencies", {
-        headers: { Authorization: `Bearer ${token}` },
-        params: { page: 1, limit: 20 },
-      });
-
-      if (response.data.success) {
-        setCurrencys(response.data.data.items);
-      } else {
-        throw new Error(response.data.message || "Unexpected response format.");
-      }
-    } catch (err) {
-      console.error("Error fetching Currency:", err.message);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleOpenModal = (mode = "create", currency = null) => {
     if (mode === "edit") {
@@ -91,30 +89,42 @@ const Currency = () => {
     }
   };
 
- const handleDeleteCurrency = async () => {
-     try {
-       const token = sessionStorage.getItem("authToken");
-       if (!token) throw new Error("Authorization token is missing.");
- 
-       await api.delete(`/currencies/${currentCurrency.currency_id}`, {
-         headers: { Authorization: `Bearer ${token}` },
-       });
- 
-       setCurrencys((prev) =>
-         prev.filter((currency) => currency.currency_id !== currentCurrency.currency_id)
-       );
-       handleCloseModal();
-     } catch (err) {
-       console.error("Error deleting currency:", err.message);
-       setError(err.message);
-     }
-   };
- 
-   useEffect(() => {
-     fetchCurrencys();
-   }, []);
+  const handleDeleteCurrency = async () => {
+    try {
+      const token = sessionStorage.getItem("authToken");
+      if (!token) throw new Error("Authorization token is missing.");
 
-   const filteredData = currencys.filter((currency) =>
+      await api.delete(`/currencies/${currentCurrency.currency_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setCurrencys((prev) =>
+        prev.filter(
+          (currency) => currency.currency_id !== currentCurrency.currency_id
+        )
+      );
+      handleCloseModal();
+    } catch (err) {
+      console.error("Error deleting currency:", err.message);
+      setError(err.message);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchCurrencys();
+        setCurrencys(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const filteredData = currencys.filter((currency) =>
     Object.values(currency)
       .join(" ")
       .toLowerCase()
@@ -194,7 +204,7 @@ const Currency = () => {
       icon: "fas fa-edit",
       buttonClass:
         "bg-gray-200 text-gray-400 p-3 rounded-lg flex items-center justify-center w-10 h-10",
-      handler: (currency) => console.log("Edit action for:", currency),
+      handler: (currency) => handleOpenModal("edit", currency),
     },
   ];
 
@@ -221,8 +231,7 @@ const Currency = () => {
           onChange={setSearchQuery}
           placeholder="Cari Currency"
         />
-                <AddButton onClick={() => handleOpenModal("create")} />
-
+        <AddButton onClick={() => handleOpenModal("create")} />
       </div>
       <div className="overflow-auto shadow-sm mb-6">
         {filteredData.length === 0 ? (
@@ -234,7 +243,8 @@ const Currency = () => {
 
       <ModalCRUD
         isOpen={showModal}
-        title={editMode ? "Edit Currency" : "Tambah Baru"}
+        title={editMode ? "Edit Currency" : "Tambah Baru"
+        }
         onClose={handleCloseModal}
         onSave={handleSaveCurrency}
         onDelete={editMode ? handleDeleteCurrency : null}

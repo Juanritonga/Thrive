@@ -14,6 +14,27 @@ const api = axios.create({
   },
 });
 
+export const fetchDivisions = async () => {
+  try {
+    const token = sessionStorage.getItem("authToken");
+    if (!token) throw new Error("Authorization token is missing.");
+
+    const response = await api.get("/divisions", {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { page: 1, limit: 20 },
+    });
+
+    if (response.data.success) {
+      return response.data.data.items;
+    } else {
+      throw new Error(response.data.message || "Unexpected response format.");
+    }
+  } catch (err) {
+    console.error("Error fetching Currency:", err.message);
+    throw err;
+  }
+};
+
 const Division = () => {
   const [divisions, setDivisions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,30 +47,6 @@ const Division = () => {
     description: "",
     status: "Active",
   });
-
-  const fetchDivisions = async () => {
-    setLoading(true);
-    try {
-      const token = sessionStorage.getItem("authToken");
-      if (!token) throw new Error("Authorization token is missing.");
-
-      const response = await api.get("/divisions", {
-        headers: { Authorization: `Bearer ${token}` },
-        params: { page: 1, limit: 20 },
-      });
-
-      if (response.data.success) {
-        setDivisions(response.data.data.items);
-      } else {
-        throw new Error(response.data.message || "Unexpected response format.");
-      }
-    } catch (err) {
-      console.error("Error fetching divisions:", err.message);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleOpenModal = (mode = "create", division = null) => {
     if (mode === "edit") {
@@ -109,7 +106,17 @@ const Division = () => {
   };
 
   useEffect(() => {
-    fetchDivisions();
+    const fetchData = async () => {
+          try {
+            const data = await fetchDivisions();
+            setDivisions(data);
+          } catch (err) {
+            setError(err.message);
+          } finally {
+            setLoading(false);
+          }
+        };
+        fetchData();
   }, []);
 
   const filteredData = divisions.filter((division) =>
