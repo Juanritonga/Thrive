@@ -94,35 +94,30 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Bank",
       path: "/cash-book/bank-cash-book",
-      icon: "fas fa-university",
       indent: true,
     },
     {
       role: "front end",
       label: "Petty Cash",
       path: "/cash-book/petty-cash",
-      icon: "fas fa-wallet",
       indent: true,
     },
     {
       role: "front end",
       label: "Cash Advance",
       path: "/cash-book/cash-advance",
-      icon: "fas fa-hand-holding-usd",
       indent: true,
     },
     {
       role: "front end",
       label: "Reimbursement",
       path: "/cash-book/reimbursement",
-      icon: "fas fa-receipt",
       indent: true,
     },
     {
       role: "front end",
       label: "Format",
       path: "/cash-book/format",
-      icon: "fas fa-file-alt",
       indent: true,
     },
 
@@ -136,21 +131,18 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Cash Advance",
       path: "#",
-      icon: "fas fa-hand-holding-usd",
       indent: true,
     },
     {
       role: "front end",
       label: "Reimbursement",
       path: "#",
-      icon: "fas fa-receipt",
       indent: true,
     },
     {
       role: "front end",
       label: "Format",
       path: "#",
-      icon: "fas fa-file-alt",
       indent: true,
     },
 
@@ -164,28 +156,24 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Report",
       path: "#",
-      icon: "fas fa-file-alt",
       indent: true,
     },
     {
       role: "front end",
       label: "COA Mapping",
       path: "/general-ledger/main-coa-mapping",
-      icon: "fas fa-sitemap",
       indent: true,
     },
     {
       role: "front end",
       label: "Setup",
       path: "/general-ledger/setup",
-      icon: "fas fa-gear",
       indent: true,
     },
     {
       role: "front end",
       label: "Entry Management",
       path: "#",
-      icon: "fas fa-folder-open",
       indent: true,
     },
   ];
@@ -214,7 +202,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
           isSmallScreen ? "w-20" : isSidebarVisible ? "w-64" : "w-20"
         } overflow-y-auto hidden-scrollbar bg-white`}
       >
-        <ul className="p-4 space-y-2">
+        <ul className="p-4 space-y-2 mb-20">
           {menuItems
             .filter((item) => item.role === sessionStorage.getItem("role"))
             .map((item, index) => (

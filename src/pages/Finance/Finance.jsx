@@ -12,9 +12,9 @@ const Finance = () => {
             <NavLink
               to="bank"
               className={({ isActive }) =>
-                `font-bold flex-1 px-3 py-3 text-center border rounded transition-all duration-300 ${
+                `font-bold flex-1 px-3 py-3 text-center border rounded ${
                   isActive
-                    ? "bg-custom-blue text-white shadow-lg scale-105"
+                    ? "bg-gray-200"
                     : "bg-white text-custom-blue hover:bg-gray-300 hover:text-black"
                 }`
               }
@@ -26,9 +26,9 @@ const Finance = () => {
             <NavLink
               to="transcode"
               className={({ isActive }) =>
-                `font-bold flex-1 px-3 py-3 text-center border rounded transition-all duration-300 ${
+                `font-bold flex-1 px-3 py-3 text-center border rounded ${
                   isActive
-                    ? "bg-custom-blue text-white shadow-lg scale-105"
+                    ? "bg-gray-200"
                     : "bg-white text-custom-blue hover:bg-gray-300 hover:text-black"
                 }`
               }
