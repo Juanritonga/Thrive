@@ -155,6 +155,9 @@ const CashAdvance = () => {
   const [items, setItems] = useState(DataAdvance);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [isEditing, setIsEditing] = useState(false); // Track if we are editing an item
+  const [currentItem, setCurrentItem] = useState(null); // Track the item being edited
+
   const navigate = useNavigate();
 
   const [newItem, setNewItem] = useState({
@@ -178,7 +181,6 @@ const CashAdvance = () => {
   );
   const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleRowClick = (id) => {
@@ -189,10 +191,30 @@ const CashAdvance = () => {
     const { name, value } = e.target;
     setNewItem({ ...newItem, [name]: value });
   };
+  const handleOpenModal = (item = null) => {
+    if (item) {
+      setCurrentItem(item); // Set item to edit
+      setIsEditing(true); // Set to editing mode
+      setNewItem({ ...item }); // Populate the modal with data to edit
+    } else {
+      setIsEditing(false); // Set to add mode
+      setNewItem({
+        id: "",
+        advanceTransaction: "",
+        referenceNo: "",
+        staffID: "",
+        receiptNo: "",
+        madeBy: "",
+        updateDate: new Date().toLocaleDateString("en-GB"),
+      });
+    }
+    setIsModalOpen(true);
+  };
 
   const handleAddItem = () => {
-    if (newItem.id && newItem.description && newItem.prefix && newItem.format) {
-      setItems([...items, newItem]);
+    if (newItem.id && newItem.advanceTransaction && newItem.referenceNo) {
+      // Add item without disturbing other functionality
+      setItems((prevItems) => [...prevItems, newItem]);
       setNewItem({
         id: "",
         advanceTransaction: "",
@@ -209,6 +231,32 @@ const CashAdvance = () => {
   };
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleSubmit = () => {
+    if (newItem.id && newItem.advanceTransaction && newItem.referenceNo) {
+      if (isEditing) {
+        // Edit item logic
+        setItems((prevItems) =>
+          prevItems.map((item) => (item.id === currentItem.id ? newItem : item))
+        );
+      } else {
+        // Add item logic
+        setItems((prevItems) => [...prevItems, newItem]);
+      }
+      setNewItem({
+        id: "",
+        advanceTransaction: "",
+        referenceNo: "",
+        staffID: "",
+        receiptNo: "",
+        madeBy: "",
+        updateDate: new Date().toLocaleDateString("en-GB"),
+      });
+      handleCloseModal();
+    } else {
+      alert("Isi semua field terlebih dahulu.");
+    }
+  };
 
   return (
     <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
@@ -242,7 +290,7 @@ const CashAdvance = () => {
               <th className="py-3 px-4 border">Advance ID</th>
               <th className="py-3 px-4 border">Advance Transaction</th>
               <th className="py-3 px-4 border">Refrence No.</th>
-              <th className="py-3 px-4 border">Satff ID</th>
+              <th className="py-3 px-4 border">Staff ID</th>
               <th className="py-3 px-4 border">Receipt No.</th>
               <th className="py-3 px-4 border">Made By</th>
               <th className="py-3 px-4 border">Update Date</th>
@@ -254,7 +302,7 @@ const CashAdvance = () => {
               <tr
                 key={item.id}
                 className="cursor-pointer border-t text-center text-custom-blue2"
-                onClick={() => navigate(`${item.id}`)} 
+                onClick={() => navigate(`${item.id}`)}
               >
                 <td className="py-3 px-4">{item.id}</td>
                 <td className="py-3 px-4">{item.advanceTransaction}</td>
@@ -263,8 +311,11 @@ const CashAdvance = () => {
                 <td className="py-3 px-4">{item.receiptNo}</td>
                 <td className="py-3 px-4">{item.madeBy}</td>
                 <td className="py-3 px-4">{item.updateDate}</td>
-                <td className="py-3 px-4 border">
-                  <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12">
+                <td className="py-3 px-4">
+                  <button
+                    className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg w-12 h-12"
+                    onClick={() => handleOpenModal(item)} // Open modal for editing
+                  >
                     <i className="fas fa-edit"></i>
                   </button>
                 </td>
@@ -274,6 +325,7 @@ const CashAdvance = () => {
         </table>
       </div>
 
+      {/* Pagination */}
       <div className="flex flex-wrap justify-between items-center gap-4">
         <span className="text-sm text-gray-500">
           Showing {indexOfFirstItem + 1} to{" "}
@@ -320,7 +372,7 @@ const CashAdvance = () => {
             <select
               className="px-4 py-2 border rounded-md text-white bg-custom-blue "
               value={itemsPerPage}
-              onChange={(e) => setItemsPerPage(Number(e.target.value))} // Mengubah state itemsPerPage
+              onChange={(e) => setItemsPerPage(Number(e.target.value))}
             >
               <option value={10}>10 Baris</option>
               <option value={20}>20 Baris</option>
@@ -333,8 +385,8 @@ const CashAdvance = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white rounded-lg w-98">
-            <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
+          <div className="bg-white rounded-lg w-[35%] mx-auto ">
+            <div className="flex justify-between items-center bg-custom-blue text-white p-4 rounded-t-lg">
               <div className="flex items-center space-x-2">
                 <h2 className="text-lg">Tambah Baru</h2>
               </div>
@@ -343,27 +395,30 @@ const CashAdvance = () => {
               </button>
             </div>
 
-            <form className="p-4 space-y-4">
+            <form className="p-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-bold text-custom-blue2">
                     Cash Advance ID
                   </label>
                   <input
                     type="text"
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                    name="id"
+                    value={newItem.id}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border rounded-md"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-bold text-custom-blue2">
                     Advance Transaction
                   </label>
-                  <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                  <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-400">
                     <option>Advance Transaction</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-bold text-custom-blue2">
                     Receipt No.
                   </label>
                   <input
@@ -372,7 +427,7 @@ const CashAdvance = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-bold text-custom-blue2">
                     Receipt to
                   </label>
                   <input
@@ -381,7 +436,7 @@ const CashAdvance = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-bold text-custom-blue2">
                     Reference No.
                   </label>
                   <input
@@ -390,23 +445,23 @@ const CashAdvance = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-bold text-custom-blue2">
                     Bank Code
                   </label>
-                  <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                  <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-400">
                     <option>Bank Code</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-bold text-custom-blue2">
                     Currency
                   </label>
-                  <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                  <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-400">
                     <option>Currency</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-bold text-custom-blue2">
                     Rate
                   </label>
                   <input
@@ -415,7 +470,7 @@ const CashAdvance = () => {
                   />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-bold text-custom-blue2">
                     Description
                   </label>
                   <textarea
@@ -423,8 +478,8 @@ const CashAdvance = () => {
                     rows="3"
                   ></textarea>
                 </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700">
+                <div>
+                  <label className="block text-sm font-bold text-custom-blue2">
                     Date
                   </label>
                   <div className="relative mt-1">
