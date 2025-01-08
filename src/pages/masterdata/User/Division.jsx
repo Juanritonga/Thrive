@@ -1,12 +1,11 @@
 import axios from "axios";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import addDivision from "./Division/AddDivision";
 import updatedDivision from "./Division/UpdatedDivision";
 import SearchBar from "@/components/SearchBar";
 import AddButton from "@/components/AddButton";
 import Table from "@/components/Table";
 import ModalCRUD from "@/components/ModalCRUD";
-import Pagination from "@/components/Pagination";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -15,26 +14,23 @@ const api = axios.create({
   },
 });
 
-export const fetchDivisions = async (limit, offset) => {
+export const fetchDivisions = async () => {
   try {
     const token = sessionStorage.getItem("authToken");
     if (!token) throw new Error("Authorization token is missing.");
 
     const response = await api.get("/divisions", {
       headers: { Authorization: `Bearer ${token}` },
-      params: { limit, offset },
+      params: { page: 1, limit: 20 },
     });
 
     if (response.data.success) {
-      return {
-        items: response.data.data.items,
-        total: response.data.data.total || 0,
-      };
+      return response.data.data.items;
     } else {
       throw new Error(response.data.message || "Unexpected response format.");
     }
   } catch (err) {
-    console.error("Error fetching divisions:", err.message);
+    console.error("Error fetching Currency:", err.message);
     throw err;
   }
 };
@@ -51,27 +47,6 @@ const Division = () => {
     description: "",
     status: "Active",
   });
-  const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(10);
-  const [totalItems, setTotalItems] = useState(0);
-
-  const fetchDivisionsData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const offset = (currentPage - 1) * limit;
-      const data = await fetchDivisions(limit, offset);
-      setDivisions(data.items);
-      setTotalItems(data.total);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [currentPage, limit]);
-
-  useEffect(() => {
-    fetchDivisionsData();
-  }, [fetchDivisionsData]);
 
   const handleOpenModal = (mode = "create", division = null) => {
     if (mode === "edit") {
@@ -109,7 +84,6 @@ const Division = () => {
         handleCloseModal
       );
     }
-    fetchDivisionsData();
   };
 
   const handleDeleteDivision = async () => {
@@ -122,17 +96,28 @@ const Division = () => {
       });
 
       setDivisions((prev) =>
-        prev.filter(
-          (division) => division.division_id !== currentDivision.division_id
-        )
+        prev.filter((division) => division.division_id !== currentDivision.division_id)
       );
       handleCloseModal();
-      fetchDivisionsData();
     } catch (err) {
       console.error("Error deleting division:", err.message);
       setError(err.message);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+          try {
+            const data = await fetchDivisions();
+            setDivisions(data);
+          } catch (err) {
+            setError(err.message);
+          } finally {
+            setLoading(false);
+          }
+        };
+        fetchData();
+  }, []);
 
   const filteredData = divisions.filter((division) =>
     Object.values(division)
@@ -148,10 +133,7 @@ const Division = () => {
       type: "text",
       value: currentDivision.division_name,
       onChange: (e) =>
-        setCurrentDivision((prev) => ({
-          ...prev,
-          division_name: e.target.value,
-        })),
+        setCurrentDivision((prev) => ({ ...prev, division_name: e.target.value })),
     },
     {
       name: "description",
@@ -159,10 +141,7 @@ const Division = () => {
       type: "text",
       value: currentDivision.description,
       onChange: (e) =>
-        setCurrentDivision((prev) => ({
-          ...prev,
-          description: e.target.value,
-        })),
+        setCurrentDivision((prev) => ({ ...prev, description: e.target.value })),
     },
     {
       name: "status",
@@ -174,10 +153,7 @@ const Division = () => {
         { value: "Inactive", label: "Inactive" },
       ],
       onChange: (e) =>
-        setCurrentDivision((prev) => ({
-          ...prev,
-          status: e.target.value,
-        })),
+        setCurrentDivision((prev) => ({ ...prev, status: e.target.value })),
     },
   ];
 
@@ -242,17 +218,7 @@ const Division = () => {
           <Table columns={columns} data={filteredData} actions={actions} />
         )}
       </div>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={Math.ceil(totalItems / limit)}
-        totalItems={totalItems}
-        onPageChange={setCurrentPage}
-        limit={limit}
-        onLimitChange={(newLimit) => {
-          setLimit(newLimit);
-          setCurrentPage(1);
-        }}
-      />
+
       <ModalCRUD
         isOpen={showModal}
         title={editMode ? "Edit Division" : "Tambah Baru"}

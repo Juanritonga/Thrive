@@ -5,6 +5,8 @@ import SearchBar from "@/components/SearchBar";
 import ModalCRUD from "@/components/ModalCRUD";
 import AddButton from "@/components/AddButton";
 import Pagination from "@/components/Pagination";
+import addUserData from "./UserData/AddUserData";
+import updatedUserData from "./UserData/UpdatedUserData";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -138,29 +140,21 @@ const User = () => {
   };
 
   const handleSaveUser = async () => {
-    try {
-      const token = sessionStorage.getItem("authToken");
-      if (!token) throw new Error("Authorization token is missing.");
-
-      if (editMode) {
-        await api.put(`/users/${currentUser.id}`, currentUser, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUsers((prev) =>
-          prev.map((user) =>
-            user.id === currentUser.id ? { ...user, ...currentUser } : user
-          )
-        );
-      } else {
-        const response = await api.post("/users", currentUser, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUsers((prev) => [...prev, response.data.data]);
-      }
-      handleCloseModal();
-    } catch (err) {
-      console.error("Error saving user:", err.message);
-      setError(err.message);
+    if (editMode) {
+      updatedUserData(
+        currentUser,
+        setUsers,
+        setError,
+        handleCloseModal
+      );
+    } else {
+      addUserData(
+        currentUser,
+        setUsers,
+        setCurrentUser,
+        setError,
+        handleCloseModal
+      );
     }
   };
 
@@ -202,6 +196,82 @@ const User = () => {
       value: currentUser.full_name,
       onChange: (e) =>
         setCurrentUser((prev) => ({ ...prev, full_name: e.target.value })),
+    },
+    {
+      name: "position",
+      label: "Position",
+      type: "text",
+      value: currentUser.position,
+      onChange: (e) =>
+        setCurrentUser((prev) => ({ ...prev, position: e.target.value })),
+    },
+    {
+      name: "role_id",
+      label: "Role",
+      type: "select",
+      value: currentUser.role_id,
+      options: roles.map((role) => ({
+        value: role.id,
+        label: role.role_name,
+      })),
+      onChange: (e) =>
+        setCurrentUser((prev) => ({ ...prev, role_id: e.target.value })),
+    },
+    {
+      name: "entity_id",
+      label: "Entity",
+      type: "select",
+      value: currentUser.entity_id,
+      options: entities.map((entity) => ({
+        value: entity.id,
+        label: entity.entity_name,
+      })),
+      onChange: (e) =>
+        setCurrentUser((prev) => ({ ...prev, entity_id: e.target.value })),
+    },
+    {
+      name: "email",
+      label: "Email",
+      type: "email",
+      value: currentUser.email,
+      onChange: (e) =>
+        setCurrentUser((prev) => ({ ...prev, email: e.target.value })),
+    },
+    {
+      name: "phone",
+      label: "Phone",
+      type: "tel",
+      value: currentUser.phone,
+      onChange: (e) =>
+        setCurrentUser((prev) => ({ ...prev, phone: e.target.value })),
+    },
+    {
+      name: "address",
+      label: "Address",
+      type: "text",
+      value: currentUser.address,
+      onChange: (e) =>
+        setCurrentUser((prev) => ({ ...prev, address: e.target.value })),
+    },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      value: currentUser.status,
+      options: [
+        { value: "Active", label: "Active" },
+        { value: "Inactive", label: "Inactive" },
+      ],
+      onChange: (e) =>
+        setCurrentUser((prev) => ({ ...prev, status: e.target.value })),
+    },
+    {
+      name: "password",
+      label: "Password",
+      type: "password",
+      value: currentUser.password,
+      onChange: (e) =>
+        setCurrentUser((prev) => ({ ...prev, password: e.target.value })),
     },
   ];
 
