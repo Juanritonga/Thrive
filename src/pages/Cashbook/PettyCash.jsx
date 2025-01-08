@@ -149,7 +149,7 @@ export const DataAdvance = [
   },
 ];
 
-const PettyCash = () => {
+const CashAdvance = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState(DataAdvance);
@@ -167,6 +167,7 @@ const PettyCash = () => {
     updateDate: new Date().toLocaleDateString("en-GB"),
   });
 
+  // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const filteredData = items.filter((item) =>
@@ -253,7 +254,7 @@ const PettyCash = () => {
               <tr
                 key={item.id}
                 className="cursor-pointer border-t text-center text-custom-blue2"
-                onClick={() => navigate(`${item.id}`)} // Navigasi ke rute dengan ID
+                onClick={() => navigate(`${item.id}`)} 
               >
                 <td className="py-3 px-4">{item.id}</td>
                 <td className="py-3 px-4">{item.advanceTransaction}</td>
@@ -273,7 +274,6 @@ const PettyCash = () => {
         </table>
       </div>
 
-      {/* Pagination */}
       <div className="flex flex-wrap justify-between items-center gap-4">
         <span className="text-sm text-gray-500">
           Showing {indexOfFirstItem + 1} to{" "}
@@ -282,9 +282,6 @@ const PettyCash = () => {
         </span>
 
         <div className="flex items-center space-x-3">
-          {/* Tombol untuk memilih jumlah item per halaman */}
-
-          {/* Pagination buttons */}
           <div className="flex items-center space-x-3">
             <button
               className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
@@ -323,7 +320,7 @@ const PettyCash = () => {
             <select
               className="px-4 py-2 border rounded-md text-white bg-custom-blue "
               value={itemsPerPage}
-              onChange={(e) => setItemsPerPage(Number(e.target.value))}
+              onChange={(e) => setItemsPerPage(Number(e.target.value))} // Mengubah state itemsPerPage
             >
               <option value={10}>10 Baris</option>
               <option value={20}>20 Baris</option>
@@ -334,7 +331,6 @@ const PettyCash = () => {
         </div>
       </div>
 
-      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg w-98">
@@ -443,16 +439,17 @@ const PettyCash = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex justify-between mt-6">
+              <div className="flex justify-between gap-4">
                 <button
-                  type="button"
-                  className="bg-red-500 text-white py-2 px-4 rounded-md"
+                  className="w-1/2 py-2 bg-red-500 text-white rounded hover:bg-red-500"
+                  onClick={handleCloseModal}
                 >
                   Delete
                 </button>
+
                 <button
-                  type="submit"
-                  className="bg-blue-600 text-white py-2 px-4 rounded-md"
+                  className="w-1/2 py-2 bg-blue-700 text-white rounded hover:bg-blue-500"
+                  onClick={handleAddItem}
                 >
                   Simpan
                 </button>
@@ -465,4 +462,4 @@ const PettyCash = () => {
   );
 };
 
-export default PettyCash;
+export default CashAdvance;
