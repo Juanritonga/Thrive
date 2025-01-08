@@ -35,6 +35,8 @@ import COADivision from "./pages/generalledger/COAMapping/COADivision";
 import TransactionType from "./pages/generalledger/Setup/TransactionType";
 import BudgetGroup from "./pages/generalledger/Setup/BudgetGroup";
 import AccountPeriod from "./pages/generalledger/Setup/AccountPeriod";
+import EntryBank from "./pages/Cashbook/Entry/EntryBank";
+import EntryReimbursement from "./pages/Cashbook/Entry/EntryReimbursement";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -94,7 +96,7 @@ const App = () => {
           <Route path="cash-book" element={<CashBook />}>
             <Route path="format" element={<Format />} />
             <Route path="bank-cash-book" element={<BankC />}>
-              <Route path=":id" element={<EntryCashAdvance />} />
+              <Route path=":id" element={<EntryBank />} />
             </Route>
             <Route path="petty-cash" element={<PettyCash />}>
               <Route path=":id" element={<EntryCashAdvance />} />
@@ -103,7 +105,7 @@ const App = () => {
               <Route path=":id" element={<EntryCashAdvance />} />
             </Route>
             <Route path="reimbursement" element={<Reimbursement />}>
-              <Route path=":id" element={<EntryCashAdvance />} />
+              <Route path=":id" element={<EntryReimbursement />} />
             </Route>
           </Route>
 

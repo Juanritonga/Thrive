@@ -4,146 +4,146 @@ import { useNavigate } from "react-router-dom";
 
 export const DataAdvance = [
   {
-    id: "FRM001",
-    advanceTransaction: "Journal Memorial",
-    referenceNo: "JM",
-    staffID: "FRM001",
-    receiptNo: "Lab/II/AA/0624",
+    id: "CAS001",
+    description: "Penjualan Rumah",
+    bank: "BCA",
+    currency: "IDR",
+    receiptNo: "001013213",
     madeBy: "Jon Pantau",
     updateDate: "19-01-2024",
   },
   {
-    id: "FRM002",
-    advanceTransaction: "Expense Report",
-    referenceNo: "ER",
-    staffID: "FRM002",
-    receiptNo: "Lab/II/BB/0624",
+    id: "CAS002",
+    description: "Penjualan Rumah",
+    bank: "BCA",
+    currency: "IDR",
+    receiptNo: "001013213",
     madeBy: "Sara Lestari",
     updateDate: "20-01-2024",
   },
   {
-    id: "FRM003",
-    advanceTransaction: "Purchase Order",
-    referenceNo: "PO",
-    staffID: "FRM003",
-    receiptNo: "Lab/III/CC/0724",
+    id: "CAS003",
+    description: "Penjualan Rumah",
+    bank: "BCA",
+    currency: "IDR",
+    receiptNo: "001013213",
     madeBy: "Ali Setiawan",
     updateDate: "21-01-2024",
   },
   {
-    id: "FRM004",
-    advanceTransaction: "Invoice",
-    referenceNo: "INV",
-    staffID: "FRM004",
-    receiptNo: "Lab/IV/DD/0824",
+    id: "CAS004",
+    description: "Penjualan Rumah",
+    bank: "BCA",
+    currency: "IDR",
+    receiptNo: "001013213",
     madeBy: "Eka Pratama",
     updateDate: "22-01-2024",
   },
   {
-    id: "FRM005",
-    advanceTransaction: "Payment Voucher",
-    referenceNo: "PV",
-    staffID: "FRM005",
-    receiptNo: "Lab/V/EE/0924",
+    id: "CAS005",
+    description: "Penjualan Rumah",
+    bank: "BCA",
+    currency: "IDR",
+    receiptNo: "001013213",
     madeBy: "Budi Santoso",
     updateDate: "23-01-2024",
   },
   {
-    id: "FRM006",
-    advanceTransaction: "Budget Plan",
-    referenceNo: "BP",
-    staffID: "FRM006",
-    receiptNo: "Lab/VI/FF/1024",
+    id: "CAS006",
+    description: "Penjualan Rumah",
+    bank: "BCA",
+    currency: "IDR",
+    receiptNo: "001013213",
     madeBy: "Cici Dewi",
     updateDate: "24-01-2024",
   },
   {
-    id: "FRM007",
-    advanceTransaction: "Cash Receipt",
-    referenceNo: "CR",
-    staffID: "FRM007",
-    receiptNo: "Lab/VII/GG/1124",
+    id: "CAS007",
+    description: "Penjualan Rumah",
+    bank: "BCA",
+    currency: "IDR",
+    receiptNo: "001013213",
     madeBy: "Dani Yudha",
     updateDate: "25-01-2024",
   },
   {
-    id: "FRM008",
-    advanceTransaction: "Credit Memo",
-    referenceNo: "CM",
-    staffID: "FRM008",
-    receiptNo: "Lab/VIII/HH/1224",
+    id: "CAS008",
+    description: "Penjualan Rumah",
+    bank: "BCA",
+    currency: "IDR",
+    receiptNo: "001013213",
     madeBy: "Gita Puspita",
     updateDate: "26-01-2024",
   },
   {
-    id: "FRM009",
-    advanceTransaction: "Payment Receipt",
-    referenceNo: "PR",
-    staffID: "FRM009",
-    receiptNo: "Lab/IX/II/1324",
+    id: "CAS009",
+    description: "Penjualan Rumah",
+    bank: "BCA",
+    currency: "IDR",
+    receiptNo: "001013213",
     madeBy: "Rama Prabowo",
     updateDate: "27-01-2024",
   },
   {
-    id: "FRM010",
-    advanceTransaction: "Refund Request",
-    referenceNo: "RR",
-    staffID: "FRM010",
-    receiptNo: "Lab/X/JJ/1424",
+    id: "CAS010",
+    description: "Penjualan Rumah",
+    bank: "BCA",
+    currency: "IDR",
+    receiptNo: "001013213",
     madeBy: "Lina Sari",
     updateDate: "28-01-2024",
   },
   {
-    id: "FRM011",
-    advanceTransaction: "Journal Memorial",
-    referenceNo: "JM",
-    staffID: "FRM011",
-    receiptNo: "Lab/II/AA/0624",
+    id: "CAS011",
+    description: "Penjualan Rumah",
+    bank: "BCA",
+    currency: "IDR",
+    receiptNo: "001013213",
     madeBy: "Jon Pantau",
     updateDate: "19-01-2024",
   },
   {
-    id: "FRM012",
-    advanceTransaction: "Budget Plan",
-    referenceNo: "BP",
-    staffID: "FRM012",
-    receiptNo: "Lab/VI/FF/1024",
+    id: "CAS012",
+    description: "Penjualan Rumah",
+    bank: "BCA",
+    currency: "IDR",
+    receiptNo: "001013213",
     madeBy: "Cici Dewi",
     updateDate: "24-01-2024",
   },
   {
-    id: "FRM013",
-    advanceTransaction: "Cash Receipt",
-    referenceNo: "CR",
-    staffID: "FRM013",
-    receiptNo: "Lab/VII/GG/1124",
+    id: "CAS013",
+    description: "Penjualan Rumah",
+    bank: "BCA",
+    currency: "IDR",
+    receiptNo: "001013213",
     madeBy: "Dani Yudha",
     updateDate: "25-01-2024",
   },
   {
-    id: "FRM014",
-    advanceTransaction: "Credit Memo",
-    referenceNo: "CM",
-    staffID: "FRM014",
-    receiptNo: "Lab/VIII/HH/1224",
+    id: "CAS014",
+    description: "Penjualan Rumah",
+    bank: "BCA",
+    currency: "IDR",
+    receiptNo: "001013213",
     madeBy: "Gita Puspita",
     updateDate: "26-01-2024",
   },
   {
-    id: "FRM015",
-    advanceTransaction: "Payment Receipt",
-    referenceNo: "PR",
-    staffID: "FRM015",
-    receiptNo: "Lab/IX/II/1324",
+    id: "CAS015",
+    description: "Penjualan Rumah",
+    bank: "BCA",
+    currency: "IDR",
+    receiptNo: "001013213",
     madeBy: "Rama Prabowo",
     updateDate: "27-01-2024",
   },
   {
-    id: "FRM016",
-    advanceTransaction: "Refund Request",
-    referenceNo: "RR",
-    staffID: "FRM016",
-    receiptNo: "Lab/X/JJ/1424",
+    id: "CAS016",
+    description: "Penjualan Rumah",
+    bank: "BCA",
+    currency: "IDR",
+    receiptNo: "001013213",
     madeBy: "Lina Sari",
     updateDate: "28-01-2024",
   },
@@ -159,9 +159,9 @@ const CashAdvance = () => {
 
   const [newItem, setNewItem] = useState({
     id: "",
-    advanceTransaction: "",
-    referenceNo: "",
-    staffID: "",
+    description: "",
+    bank: "",
+    currency: "",
     receiptNo: "",
     madeBy: "",
     updateDate: new Date().toLocaleDateString("en-GB"),
@@ -195,9 +195,9 @@ const CashAdvance = () => {
       setItems([...items, newItem]);
       setNewItem({
         id: "",
-        advanceTransaction: "",
-        referenceNo: "",
-        staffID: "",
+        description: "",
+        bank: "",
+        currency: "",
         receiptNo: "",
         madeBy: "",
         updateDate: new Date().toLocaleDateString("en-GB"),
@@ -239,10 +239,10 @@ const CashAdvance = () => {
         <table className="min-w-full bg-white border rounded-lg">
           <thead>
             <tr className="text-custom-blue bg-gray-200">
-              <th className="py-3 px-4 border">Advance ID</th>
-              <th className="py-3 px-4 border">Advance Transaction</th>
-              <th className="py-3 px-4 border">Refrence No.</th>
-              <th className="py-3 px-4 border">Satff ID</th>
+              <th className="py-3 px-4 border">Cash Bank ID</th>
+              <th className="py-3 px-4 border">Description</th>
+              <th className="py-3 px-4 border">Bank</th>
+              <th className="py-3 px-4 border">Currency</th>
               <th className="py-3 px-4 border">Receipt No.</th>
               <th className="py-3 px-4 border">Made By</th>
               <th className="py-3 px-4 border">Update Date</th>
@@ -257,9 +257,9 @@ const CashAdvance = () => {
                 onClick={() => navigate(`${item.id}`)}
               >
                 <td className="py-3 px-4">{item.id}</td>
-                <td className="py-3 px-4">{item.advanceTransaction}</td>
-                <td className="py-3 px-4">{item.referenceNo}</td>
-                <td className="py-3 px-4">{item.staffID}</td>
+                <td className="py-3 px-4">{item.description}</td>
+                <td className="py-3 px-4">{item.bank}</td>
+                <td className="py-3 px-4">{item.currency}</td>
                 <td className="py-3 px-4">{item.receiptNo}</td>
                 <td className="py-3 px-4">{item.madeBy}</td>
                 <td className="py-3 px-4">{item.updateDate}</td>
@@ -347,7 +347,15 @@ const CashAdvance = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-bold text-custom-blue2">
-                    Cash Advance ID
+                    Cash In / Out
+                  </label>
+                  <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-400">
+                    <option>Cash In / Out</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-custom-blue2">
+                    Cash Bank ID
                   </label>
                   <input
                     type="text"
@@ -356,10 +364,10 @@ const CashAdvance = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-custom-blue2">
-                    Advance Transaction
+                    Transaction Receipt
                   </label>
                   <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-400">
-                    <option>Advance Transaction</option>
+                    <option>Transaction Receipt</option>
                   </select>
                 </div>
                 <div>
@@ -374,15 +382,6 @@ const CashAdvance = () => {
                 <div>
                   <label className="block text-sm font-bold text-custom-blue2">
                     Receipt to
-                  </label>
-                  <input
-                    type="text"
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-custom-blue2">
-                    Reference No.
                   </label>
                   <input
                     type="text"
@@ -414,14 +413,14 @@ const CashAdvance = () => {
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                   />
                 </div>
-                <div className="md:col-span-2">
+                <div>
                   <label className="block text-sm font-bold text-custom-blue2">
-                    Description
+                    Reference
                   </label>
-                  <textarea
+                  <input
+                    type="text"
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                    rows="3"
-                  ></textarea>
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-custom-blue2">
@@ -437,6 +436,15 @@ const CashAdvance = () => {
                       <i className="fas fa-calendar-alt text-gray-400"></i>
                     </div>
                   </div>
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-bold text-custom-blue2">
+                    Description
+                  </label>
+                  <textarea
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                    rows="3"
+                  ></textarea>
                 </div>
               </div>
               <div className="flex justify-between gap-4">

@@ -4,146 +4,146 @@ import { useNavigate } from "react-router-dom";
 
 export const DataAdvance = [
   {
-    id: "FRM001",
-    advanceTransaction: "Journal Memorial",
-    referenceNo: "JM",
-    staffID: "FRM001",
-    receiptNo: "Lab/II/AA/0624",
+    id: "RCM001",
+    reimburse_transaction: "Balikin Duit",
+    petty_cash_account: "102300",
+    bank_transaction: "02310230",
+    bank_code: "BCA",
     madeBy: "Jon Pantau",
     updateDate: "19-01-2024",
   },
   {
-    id: "FRM002",
-    advanceTransaction: "Expense Report",
-    referenceNo: "ER",
-    staffID: "FRM002",
-    receiptNo: "Lab/II/BB/0624",
+    id: "RCM002",
+    reimburse_transaction: "Balikin Duit",
+    petty_cash_account: "102300",
+    bank_transaction: "02310230",
+    bank_code: "BCA",
     madeBy: "Sara Lestari",
     updateDate: "20-01-2024",
   },
   {
-    id: "FRM003",
-    advanceTransaction: "Purchase Order",
-    referenceNo: "PO",
-    staffID: "FRM003",
-    receiptNo: "Lab/III/CC/0724",
+    id: "RCM003",
+    reimburse_transaction: "Balikin Duit",
+    petty_cash_account: "102300",
+    bank_transaction: "02310230",
+    bank_code: "BCA",
     madeBy: "Ali Setiawan",
     updateDate: "21-01-2024",
   },
   {
-    id: "FRM004",
-    advanceTransaction: "Invoice",
-    referenceNo: "INV",
-    staffID: "FRM004",
-    receiptNo: "Lab/IV/DD/0824",
+    id: "RCM004",
+    reimburse_transaction: "Balikin Duit",
+    petty_cash_account: "102300",
+    bank_transaction: "02310230",
+    bank_code: "BCA",
     madeBy: "Eka Pratama",
     updateDate: "22-01-2024",
   },
   {
-    id: "FRM005",
-    advanceTransaction: "Payment Voucher",
-    referenceNo: "PV",
-    staffID: "FRM005",
-    receiptNo: "Lab/V/EE/0924",
+    id: "RCM005",
+    reimburse_transaction: "Balikin Duit",
+    petty_cash_account: "102300",
+    bank_transaction: "02310230",
+    bank_code: "BCA",
     madeBy: "Budi Santoso",
     updateDate: "23-01-2024",
   },
   {
-    id: "FRM006",
-    advanceTransaction: "Budget Plan",
-    referenceNo: "BP",
-    staffID: "FRM006",
-    receiptNo: "Lab/VI/FF/1024",
+    id: "RCM006",
+    reimburse_transaction: "Balikin Duit",
+    petty_cash_account: "102300",
+    bank_transaction: "02310230",
+    bank_code: "BCA",
     madeBy: "Cici Dewi",
     updateDate: "24-01-2024",
   },
   {
-    id: "FRM007",
-    advanceTransaction: "Cash Receipt",
-    referenceNo: "CR",
-    staffID: "FRM007",
-    receiptNo: "Lab/VII/GG/1124",
+    id: "RCM007",
+    reimburse_transaction: "Balikin Duit",
+    petty_cash_account: "102300",
+    bank_transaction: "02310230",
+    bank_code: "BCA",
     madeBy: "Dani Yudha",
     updateDate: "25-01-2024",
   },
   {
-    id: "FRM008",
-    advanceTransaction: "Credit Memo",
-    referenceNo: "CM",
-    staffID: "FRM008",
-    receiptNo: "Lab/VIII/HH/1224",
+    id: "RCM008",
+    reimburse_transaction: "Balikin Duit",
+    petty_cash_account: "102300",
+    bank_transaction: "02310230",
+    bank_code: "BCA",
     madeBy: "Gita Puspita",
     updateDate: "26-01-2024",
   },
   {
-    id: "FRM009",
-    advanceTransaction: "Payment Receipt",
-    referenceNo: "PR",
-    staffID: "FRM009",
-    receiptNo: "Lab/IX/II/1324",
+    id: "RCM009",
+    reimburse_transaction: "Balikin Duit",
+    petty_cash_account: "102300",
+    bank_transaction: "02310230",
+    bank_code: "BCA",
     madeBy: "Rama Prabowo",
     updateDate: "27-01-2024",
   },
   {
-    id: "FRM010",
-    advanceTransaction: "Refund Request",
-    referenceNo: "RR",
-    staffID: "FRM010",
-    receiptNo: "Lab/X/JJ/1424",
+    id: "RCM010",
+    reimburse_transaction: "Balikin Duit",
+    petty_cash_account: "102300",
+    bank_transaction: "02310230",
+    bank_code: "BCA",
     madeBy: "Lina Sari",
     updateDate: "28-01-2024",
   },
   {
-    id: "FRM011",
-    advanceTransaction: "Journal Memorial",
-    referenceNo: "JM",
-    staffID: "FRM011",
-    receiptNo: "Lab/II/AA/0624",
+    id: "RCM011",
+    reimburse_transaction: "Balikin Duit",
+    petty_cash_account: "102300",
+    bank_transaction: "02310230",
+    bank_code: "BCA",
     madeBy: "Jon Pantau",
     updateDate: "19-01-2024",
   },
   {
-    id: "FRM012",
-    advanceTransaction: "Budget Plan",
-    referenceNo: "BP",
-    staffID: "FRM012",
-    receiptNo: "Lab/VI/FF/1024",
+    id: "RCM012",
+    reimburse_transaction: "Balikin Duit",
+    petty_cash_account: "102300",
+    bank_transaction: "02310230",
+    bank_code: "BCA",
     madeBy: "Cici Dewi",
     updateDate: "24-01-2024",
   },
   {
-    id: "FRM013",
-    advanceTransaction: "Cash Receipt",
-    referenceNo: "CR",
-    staffID: "FRM013",
-    receiptNo: "Lab/VII/GG/1124",
+    id: "RCM013",
+    reimburse_transaction: "Balikin Duit",
+    petty_cash_account: "102300",
+    bank_transaction: "02310230",
+    bank_code: "BCA",
     madeBy: "Dani Yudha",
     updateDate: "25-01-2024",
   },
   {
-    id: "FRM014",
-    advanceTransaction: "Credit Memo",
-    referenceNo: "CM",
-    staffID: "FRM014",
-    receiptNo: "Lab/VIII/HH/1224",
+    id: "RCM014",
+    reimburse_transaction: "Balikin Duit",
+    petty_cash_account: "102300",
+    bank_transaction: "02310230",
+    bank_code: "BCA",
     madeBy: "Gita Puspita",
     updateDate: "26-01-2024",
   },
   {
-    id: "FRM015",
-    advanceTransaction: "Payment Receipt",
-    referenceNo: "PR",
-    staffID: "FRM015",
-    receiptNo: "Lab/IX/II/1324",
+    id: "RCM015",
+    reimburse_transaction: "Balikin Duit",
+    petty_cash_account: "102300",
+    bank_transaction: "02310230",
+    bank_code: "BCA",
     madeBy: "Rama Prabowo",
     updateDate: "27-01-2024",
   },
   {
-    id: "FRM016",
-    advanceTransaction: "Refund Request",
-    referenceNo: "RR",
-    staffID: "FRM016",
-    receiptNo: "Lab/X/JJ/1424",
+    id: "RCM016",
+    reimburse_transaction: "Balikin Duit",
+    petty_cash_account: "102300",
+    bank_transaction: "02310230",
+    bank_code: "BCA",
     madeBy: "Lina Sari",
     updateDate: "28-01-2024",
   },
@@ -159,10 +159,10 @@ const Reimbursement = () => {
 
   const [newItem, setNewItem] = useState({
     id: "",
-    advanceTransaction: "",
-    referenceNo: "",
-    staffID: "",
-    receiptNo: "",
+    reimburse_transaction: "",
+    petty_cash_account: "",
+    bank_transaction: "",
+    bank_code: "",
     madeBy: "",
     updateDate: new Date().toLocaleDateString("en-GB"),
   });
@@ -191,14 +191,14 @@ const Reimbursement = () => {
   };
 
   const handleAddItem = () => {
-    if (newItem.id && newItem.description && newItem.prefix && newItem.format) {
+    if (newItem.id && newItem.reimburse_transaction && newItem.prefix && newItem.format) {
       setItems([...items, newItem]);
       setNewItem({
         id: "",
-        advanceTransaction: "",
-        referenceNo: "",
-        staffID: "",
-        receiptNo: "",
+        reimburse_transaction: "",
+        petty_cash_account: "",
+        bank_transaction: "",
+        bank_code: "",
         madeBy: "",
         updateDate: new Date().toLocaleDateString("en-GB"),
       });
@@ -234,15 +234,16 @@ const Reimbursement = () => {
         </button>
       </div>
 
+      {/* Table */}
       <div className="overflow-auto shadow-sm mb-6">
         <table className="min-w-full bg-white border rounded-lg">
           <thead>
             <tr className="text-custom-blue bg-gray-200">
-              <th className="py-3 px-4 border">Advance ID</th>
-              <th className="py-3 px-4 border">Advance Transaction</th>
-              <th className="py-3 px-4 border">Refrence No.</th>
-              <th className="py-3 px-4 border">Satff ID</th>
-              <th className="py-3 px-4 border">Receipt No.</th>
+              <th className="py-3 px-4 border">Reimburse ID</th>
+              <th className="py-3 px-4 border">Reimburse Transaction</th>
+              <th className="py-3 px-4 border">Petty Cash Acc.</th>
+              <th className="py-3 px-4 border">Bank Transaction</th>
+              <th className="py-3 px-4 border">Bank Code</th>
               <th className="py-3 px-4 border">Made By</th>
               <th className="py-3 px-4 border">Update Date</th>
               <th className="py-3 px-4 border">Aksi</th>
@@ -256,10 +257,10 @@ const Reimbursement = () => {
                 onClick={() => navigate(`${item.id}`)}
               >
                 <td className="py-3 px-4">{item.id}</td>
-                <td className="py-3 px-4">{item.advanceTransaction}</td>
-                <td className="py-3 px-4">{item.referenceNo}</td>
-                <td className="py-3 px-4">{item.staffID}</td>
-                <td className="py-3 px-4">{item.receiptNo}</td>
+                <td className="py-3 px-4">{item.reimburse_transaction}</td>
+                <td className="py-3 px-4">{item.petty_cash_account}</td>
+                <td className="py-3 px-4">{item.bank_transaction}</td>
+                <td className="py-3 px-4">{item.bank_code}</td>
                 <td className="py-3 px-4">{item.madeBy}</td>
                 <td className="py-3 px-4">{item.updateDate}</td>
                 <td className="py-3 px-4 border">
@@ -319,7 +320,7 @@ const Reimbursement = () => {
             <select
               className="px-4 py-2 border rounded-md text-white bg-custom-blue "
               value={itemsPerPage}
-              onChange={(e) => setItemsPerPage(Number(e.target.value))}
+              onChange={(e) => setItemsPerPage(Number(e.target.value))} // Mengubah state itemsPerPage
             >
               <option value={10}>10 Baris</option>
               <option value={20}>20 Baris</option>
@@ -330,10 +331,9 @@ const Reimbursement = () => {
         </div>
       </div>
 
-      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white rounded-lg w-98">
+          <div className="bg-white rounded-lg w-[35%] mx-auto ">
             <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
               <div className="flex items-center space-x-2">
                 <h2 className="text-lg">Tambah Baru</h2>
@@ -343,11 +343,19 @@ const Reimbursement = () => {
               </button>
             </div>
 
-            <form className="p-4 space-y-4">
+            <form className="p-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Cash Advance ID
+                  <label className="block text-sm font-bold text-custom-blue2">
+                    Cash In / Out
+                  </label>
+                  <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-400">
+                    <option>Cash In / Out</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-custom-blue2">
+                    Cash Bank ID
                   </label>
                   <input
                     type="text"
@@ -355,15 +363,15 @@ const Reimbursement = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Advance Transaction
+                  <label className="block text-sm font-bold text-custom-blue2">
+                    Transaction Receipt
                   </label>
-                  <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                    <option>Advance Transaction</option>
+                  <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-400">
+                    <option>Transaction Receipt</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-bold text-custom-blue2">
                     Receipt No.
                   </label>
                   <input
@@ -372,7 +380,7 @@ const Reimbursement = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-bold text-custom-blue2">
                     Receipt to
                   </label>
                   <input
@@ -381,32 +389,23 @@ const Reimbursement = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Reference No.
-                  </label>
-                  <input
-                    type="text"
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-bold text-custom-blue2">
                     Bank Code
                   </label>
-                  <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                  <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-400">
                     <option>Bank Code</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Currency
+                  <label className="block text-sm font-bold text-custom-blue2">
+                    bank_transaction
                   </label>
-                  <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                    <option>Currency</option>
+                  <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-400">
+                    <option>bank_transaction</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-bold text-custom-blue2">
                     Rate
                   </label>
                   <input
@@ -414,17 +413,17 @@ const Reimbursement = () => {
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                   />
                 </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Description
+                <div>
+                  <label className="block text-sm font-bold text-custom-blue2">
+                    Reference
                   </label>
-                  <textarea
+                  <input
+                    type="text"
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                    rows="3"
-                  ></textarea>
+                  />
                 </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700">
+                <div>
+                  <label className="block text-sm font-bold text-custom-blue2">
                     Date
                   </label>
                   <div className="relative mt-1">
@@ -438,17 +437,27 @@ const Reimbursement = () => {
                     </div>
                   </div>
                 </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-bold text-custom-blue2">
+                    reimburse_transaction
+                  </label>
+                  <textarea
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                    rows="3"
+                  ></textarea>
+                </div>
               </div>
-              <div className="flex justify-between mt-6">
+              <div className="flex justify-between gap-4">
                 <button
-                  type="button"
-                  className="bg-red-500 text-white py-2 px-4 rounded-md"
+                  className="w-1/2 py-2 bg-red-500 text-white rounded hover:bg-red-500"
+                  onClick={handleCloseModal}
                 >
                   Delete
                 </button>
+
                 <button
-                  type="submit"
-                  className="bg-blue-600 text-white py-2 px-4 rounded-md"
+                  className="w-1/2 py-2 bg-blue-700 text-white rounded hover:bg-blue-500"
+                  onClick={handleAddItem}
                 >
                   Simpan
                 </button>
