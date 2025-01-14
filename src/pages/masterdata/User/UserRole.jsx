@@ -217,7 +217,20 @@ const UserRole = () => {
       accessor: (role) =>
         new Date(role.updated_at).toLocaleDateString("en-GB"),
     },
-    { header: "Status", accessor: (role) => role.status },
+    {
+      header: "Status",
+      accessor: (RoleAcces) => (
+        <span
+          className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
+            RoleAcces.status.toLowerCase() === "active"
+              ? "bg-green-200 text-green-600"
+              : "bg-red-200 text-red-600"
+          }`}
+        >
+          {RoleAcces.status}
+        </span>
+      ),
+    },
   ];
 
   const actions = [

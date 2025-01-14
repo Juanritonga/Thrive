@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const addRoleAccess = async (
-  newRoleAccess,
-  setRoleAccess,
-  setNewRoleAccess,
+const addEntitas = async (
+  newEntitas,
+  setEntitas,
+  setNewEntitas,
   setError,
   handleCloseModal
 ) => {
@@ -12,8 +12,8 @@ const addRoleAccess = async (
         if (!token) throw new Error("Authorization token is missing.");
       
         const response = await axios.post(
-          "https://thrive-be.app-dev.altru.id/api/v1/role-access",
-          newRoleAccess,
+          "https://thrive-be.app-dev.altru.id/api/v1/entities",
+          newEntitas,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -22,10 +22,20 @@ const addRoleAccess = async (
         );
       
         if (response.data.success) {
-          setRoleAccess((prevRoleAccess) => [response.data.data, ...prevRoleAccess]);
-          setNewRoleAccess({
-            role_id: "",
-            modules: "",
+          setEntitas((prevEntitas) => [response.data.data, ...prevEntitas]);
+          setNewEntitas({
+            entity_name: "",
+            address: "",
+            city: "",
+            province: "",
+            postal_code:"",
+            division:"",
+            access:"",
+            email:"",
+            phone:"",
+            fax:"",
+            fiscal_year:"",
+            audit_period:"",
             status: "",
           });
           handleCloseModal();
@@ -48,4 +58,4 @@ const addRoleAccess = async (
       
 };
 
-export default addRoleAccess;
+export default addEntitas;

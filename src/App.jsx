@@ -25,7 +25,7 @@ import UserData from "./pages/masterdata/User/UserData";
 import UserRole from "./pages/masterdata/User/UserRole";
 import Division from "./pages/masterdata/User/Division";
 import RoleAccess from "./pages/masterdata/User/RoleAccess";
-import Departement from "./pages/masterdata/User/Department";
+import Entitas from "./pages/masterdata/User/Entitas";
 import UserMasterData from "./pages/masterdata/UserMasterData";
 import GeneralLedgerDashboard from "./pages/generalledger/GeneralLedgerDashboard";
 import Setup from "./pages/generalledger/Setup";
@@ -69,13 +69,13 @@ const App = () => {
               <Route path="user-role" element={<UserRole />} />
               <Route path="division" element={<Division />} />
               <Route path="role-Access" element={<RoleAccess />} />
-              <Route path="departement" element={<Departement />} />
+              <Route path="entitas" element={<Entitas />} />
             </Route>
             <Route path="user-data" element={<UserData />} />
             <Route path="user-role" element={<UserRole />} />
             <Route path="division" element={<Division />} />
             <Route path="role-access" element={<RoleAccess />} />
-            <Route path="departement" element={<Departement />} />
+            <Route path="entitas" element={<Entitas />} />
             <Route path="project" element={<Project />} />
             <Route path="finance" element={<FinanceMasterData />}>
               <Route index element={<Navigate to="class-finance" replace />} />
