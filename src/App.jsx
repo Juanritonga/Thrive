@@ -63,14 +63,7 @@ const App = () => {
           />
 
           <Route path="master-data" element={<MasterData />}>
-            <Route path="user" element={<UserMasterData />}>
-              <Route index element={<Navigate to="user-data" replace />} />
-              <Route path="user-data" element={<UserData />} />
-              <Route path="user-role" element={<UserRole />} />
-              <Route path="division" element={<Division />} />
-              <Route path="role-Access" element={<RoleAccess />} />
-              <Route path="entitas" element={<Entitas />} />
-            </Route>
+            <Route index element={<Navigate to="user-role" replace />} />
             <Route path="user-data" element={<UserData />} />
             <Route path="user-role" element={<UserRole />} />
             <Route path="division" element={<Division />} />
@@ -78,6 +71,7 @@ const App = () => {
             <Route path="entitas" element={<Entitas />} />
             <Route path="project" element={<Project />} />
             <Route path="finance" element={<FinanceMasterData />}>
+            <Route index element={<Navigate to="class-finance" replace />} />
               <Route path="bank" element={<Bank />} />
               <Route path="class-finance" element={<ClassF />} />
               <Route path="chart" element={<Chart />} />

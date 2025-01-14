@@ -2,7 +2,7 @@ import { NavLink, Outlet } from "react-router-dom";
 
 const FinanceMasterData = () => {
   return (
-    <div className="container bg-white p-4 mx-auto my-4 rounded-lg w-15/16">
+    <div className="flex flex-col h-screen">
       {/* <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-4">
         <NavLink
           to="class-finance"
@@ -56,7 +56,7 @@ const FinanceMasterData = () => {
         </NavLink>
       </div> */}
       {/* Content Area */}
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1">
         <Outlet />
       </div>
     </div>

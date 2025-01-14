@@ -5,10 +5,13 @@ import PropTypes from "prop-types";
 const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   const location = useLocation();
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
-  const [isFinanceOpen, setIsFinanceOpen] = useState(false); // State to track finance menu visibility
-  const [isCashbookOpen, setIsCashbookOpen] = useState(false); // State to track finance menu visibility
-  const [isFixedAssetsOpen, setIsFixedAssetsOpen] = useState(false); // State to track finance menu visibility
-  const [isGeneralLedgerOpen, setIsGeneralLedgerOpen] = useState(false); // State to track finance menu visibility
+  const [isMasterDataOpen, setIsMasterDataOpen] = useState(false); 
+  const [isFinanceMasterDataOpen, setIsFinanceMasterDataOpen] = useState(false); 
+  const [isMasterDataFinanceOpen, setIsMasterDataFinanceOpen] = useState(false); 
+  const [isFinanceOpen, setIsFinanceOpen] = useState(false); 
+  const [isCashbookOpen, setIsCashbookOpen] = useState(false);
+  const [isFixedAssetsOpen, setIsFixedAssetsOpen] = useState(false);
+  const [isGeneralLedgerOpen, setIsGeneralLedgerOpen] = useState(false); 
 
   useEffect(() => {
     const handleResize = () => setIsSmallScreen(window.innerWidth <= 768);
@@ -30,6 +33,8 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       path: "/master-data",
       icon: "fas fa-user-shield",
       indent: true,
+      onClick: () => setIsMasterDataOpen(!isMasterDataOpen),
+      hasDropdown: true,
     },
     {
       role: "Super Admin",
@@ -37,6 +42,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       path: "/master-data/user-role",
       icon: "fas fa-user-shield",
       indent: true,
+      visible: isMasterDataOpen
     },
     {
       role: "Super Admin",
@@ -44,6 +50,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       path: "/master-data/user-data",
       icon: "fas fa-id-card",
       indent: true,
+      visible: isMasterDataOpen
     },
     {
       role: "Super Admin",
@@ -51,6 +58,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       path: "/master-data/role-access",
       icon: "fas fa-key",
       indent: true,
+      visible: isMasterDataOpen
     },
     {
       role: "Super Admin",
@@ -58,6 +66,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       path: "/master-data/division",
       icon: "fas fa-project-diagram",
       indent: true,
+      visible: isMasterDataOpen
     },
     {
       role: "Super Admin",
@@ -65,6 +74,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       path: "/master-data/entitas",
       icon: "fas fa-building",
       indent: true,
+      visible: isMasterDataOpen
     },
     {
       role: "Super Admin",
@@ -72,6 +82,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       path: "/master-data/project",
       icon: "fas fa-tasks",
       indent: true,
+      visible: isMasterDataOpen
     },
     {
       role: "Super Admin",
@@ -79,87 +90,101 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       path: "/master-data/finance",
       icon: "fas fa-hand-holding-usd",
       isParent: true,
+      onClick: () => setIsFinanceMasterDataOpen(!isFinanceMasterDataOpen),
+      hasDropdown: true,
     },
     {
       role: "Super Admin",
       label: "Class",
       path: "/master-data/finance/class-finance",
       indent: true,
+      visible: isFinanceMasterDataOpen,
     },
     {
       role: "Super Admin",
       label: "Chart of Account",
       path: "/master-data/finance/chart",
       indent: true,
+      visible: isFinanceMasterDataOpen,
     },
     {
       role: "Super Admin",
       label: "Currency",
-      path: "/master-data/currency",
+      path: "/master-data/finance/currency",
       indent: true,
+      visible: isFinanceMasterDataOpen,
     },
     {
       role: "Super Admin",
       label: "Bank",
       path: "/master-data/finance/bank",
       indent: true,
+      visible: isFinanceMasterDataOpen,
     },
     {
       role: "Super Admin",
       label: "Tax",
       path: "/master-data/finance/tax",
       indent: true,
-    },
-
-    
+      visible: isFinanceMasterDataOpen,
+    }, 
     {
       role: "front end",
       label: "Master Data",
       path: "/master-data",
       icon: "fas fa-file-invoice",
       isParent: true,
+      onClick: () => setIsMasterDataFinanceOpen(!isMasterDataFinanceOpen),
+      hasDropdown: true,
     },
     {
       role: "front end",
       label: "User",
       path: "/master-data/user",
       indent: true,
+      visible: isMasterDataFinanceOpen,
     },
     {
       role: "front end",
       label: "Division",
       path: "/master-data/division",
       indent: true,
+      visible: isMasterDataFinanceOpen,
     },
     {
       role: "front end",
       label: "Class",
       path: "/master-data/finance/class-finance",
       indent: true,
+      visible: isMasterDataFinanceOpen,
     },
     {
       role: "front end",
       label: "Chart",
       path: "/master-data/finance/chart",
       indent: true,
+      visible: isMasterDataFinanceOpen,
     },
     {
       role: "front end",
       label: "Currency",
       path: "/master-data/finance/currency",
       indent: true,
+      visible: isMasterDataFinanceOpen,
     },
     {
       role: "front end",
       label: "Bank",
       path: "/master-data/finance/bank",
       indent: true,
+      visible: isMasterDataFinanceOpen,
     },
     {
       role: "front end",
       label: "Tax",
       path: "/master-data/finance/tax",
       indent: true,
+      visible: isMasterDataFinanceOpen,
     },
     {
       role: "front end",
@@ -342,7 +367,12 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
                       {item.hasDropdown && (
                         <i
                           className={`fas fa-caret-${(() => {
-                            // Return the correct caret direction based on the menu item label and its open state
+                            if (item.label === "Master Data")
+                              return isMasterDataOpen ? "down" : "right";
+                            if (item.label === "Finance")
+                              return isFinanceMasterDataOpen ? "down" : "right";
+                            if (item.label === "Master Data")
+                              return isMasterDataFinanceOpen ? "down" : "right";
                             if (item.label === "Finance")
                               return isFinanceOpen ? "down" : "right";
                             if (item.label === "Cash Book")
@@ -351,7 +381,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
                               return isFixedAssetsOpen ? "down" : "right";
                             if (item.label === "General Ledger")
                               return isGeneralLedgerOpen ? "down" : "right";
-                            return "right"; // Default to right if none of the labels match
+                            return "right";
                           })()} ml-2 text-custom-blue`}
                         ></i>
                       )}
