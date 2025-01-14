@@ -2,8 +2,8 @@ import { NavLink, Outlet } from "react-router-dom";
 
 const FinanceMasterData = () => {
   return (
-    <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
-      <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-4">
+    <div className="container bg-white p-4 mx-auto my-4 rounded-lg w-15/16">
+      {/* <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-4">
         <NavLink
           to="class-finance"
           className={({ isActive }) =>
@@ -54,7 +54,7 @@ const FinanceMasterData = () => {
         >
           Tax
         </NavLink>
-      </div>
+      </div> */}
       {/* Content Area */}
       <div className="flex-1 overflow-auto">
         <Outlet />

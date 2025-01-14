@@ -78,7 +78,6 @@ const App = () => {
             <Route path="entitas" element={<Entitas />} />
             <Route path="project" element={<Project />} />
             <Route path="finance" element={<FinanceMasterData />}>
-              <Route index element={<Navigate to="class-finance" replace />} />
               <Route path="bank" element={<Bank />} />
               <Route path="class-finance" element={<ClassF />} />
               <Route path="chart" element={<Chart />} />

@@ -24,13 +24,13 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   const isActive = (path) => location.pathname.startsWith(path);
 
   const menuItems = [
-    // {
-    //   role: "Super Admin",
-    //   label: "Master Data",
-    //   path: "/master-data",
-    //   icon: "fas fa-user-shield",
-    //   indent: true,
-    // },
+    {
+      role: "Super Admin",
+      label: "Master Data",
+      path: "/master-data",
+      icon: "fas fa-user-shield",
+      indent: true,
+    },
     {
       role: "Super Admin",
       label: "User Role",
@@ -78,9 +78,89 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       label: "Finance",
       path: "/master-data/finance",
       icon: "fas fa-hand-holding-usd",
+      isParent: true,
+    },
+    {
+      role: "Super Admin",
+      label: "Class",
+      path: "/master-data/finance/class-finance",
+      indent: true,
+    },
+    {
+      role: "Super Admin",
+      label: "Chart of Account",
+      path: "/master-data/finance/chart",
+      indent: true,
+    },
+    {
+      role: "Super Admin",
+      label: "Currency",
+      path: "/master-data/currency",
+      indent: true,
+    },
+    {
+      role: "Super Admin",
+      label: "Bank",
+      path: "/master-data/finance/bank",
+      indent: true,
+    },
+    {
+      role: "Super Admin",
+      label: "Tax",
+      path: "/master-data/finance/tax",
       indent: true,
     },
 
+    
+    {
+      role: "front end",
+      label: "Master Data",
+      path: "/master-data",
+      icon: "fas fa-file-invoice",
+      isParent: true,
+    },
+    {
+      role: "front end",
+      label: "User",
+      path: "/master-data/user",
+      indent: true,
+    },
+    {
+      role: "front end",
+      label: "Division",
+      path: "/master-data/division",
+      indent: true,
+    },
+    {
+      role: "front end",
+      label: "Class",
+      path: "/master-data/finance/class-finance",
+      indent: true,
+    },
+    {
+      role: "front end",
+      label: "Chart",
+      path: "/master-data/finance/chart",
+      indent: true,
+    },
+    {
+      role: "front end",
+      label: "Currency",
+      path: "/master-data/finance/currency",
+      indent: true,
+    },
+    {
+      role: "front end",
+      label: "Bank",
+      path: "/master-data/finance/bank",
+      indent: true,
+    },
+    {
+      role: "front end",
+      label: "Tax",
+      path: "/master-data/finance/tax",
+      indent: true,
+    },
     {
       role: "front end",
       label: "Finance",
