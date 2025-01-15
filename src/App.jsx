@@ -2,39 +2,39 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Login from "./pages/Login";
 import Layout from "./pages/Layout";
-import MasterData from "./pages/masterdata/MasterData";
-import Project from "./pages/masterdata/Project";
-import FinanceMasterData from "./pages/masterdata/FinanceMasterData";
-import Finance from "./pages/Finance/Finance";
-import BankFinance from "./pages/Finance/BankFinance";
-import TranscodeFinance from "./pages/Finance/TranscodeFinance";
+import MasterDataInternal from "./pages/MasterDataInternal/MasterDataInternal";
+import Project from "./pages/MasterDataInternal/Project";
+import FinanceInternal from "./pages/MasterDataInternal/FinanceInternal";
+import FinanceExternal from "./pages/FinanceExternal/FinanceExternal";
+import BankFinanceExternal from "./pages/FinanceExternal/BankFinanceExternal";
+import TranscodeFinanceExternal from "./pages/FinanceExternal/TranscodeFinanceExternal";
 import Format from "./pages/Cashbook/Format";
 import CashBook from "./pages/Cashbook/Cashbook";
 import BankC from "./pages/Cashbook/BankCashBook";
 import PettyCash from "./pages/Cashbook/PettyCash";
 import CashAdvance from "./pages/Cashbook/CashAdvance";
 import Reimbursement from "./pages/Cashbook/Reimbursement";
-import EntryCashAdvance from "./pages/Cashbook/Entry/entryca";
+import EntryCashAdvance from "./pages/Cashbook/Entry/EntryCashAdvance";
 import Dashboard from "./pages/Dashboard";
-import Bank from "./pages/masterdata/FinanceMasterData/BankMasterData";
-import ClassF from "./pages/masterdata/FinanceMasterData/ClassFinance/ClassFinance";
-import Chart from "./pages/masterdata/FinanceMasterData/ChartOfAccount";
-import Currency from "./pages/masterdata/FinanceMasterData/Currency";
-import Tax from "./pages/masterdata/FinanceMasterData/Tax";
-import UserData from "./pages/masterdata/User/UserData";
-import UserRole from "./pages/masterdata/User/UserRole";
-import Division from "./pages/masterdata/User/Division";
-import RoleAccess from "./pages/masterdata/User/RoleAccess";
-import Entitas from "./pages/masterdata/User/Entitas";
-import UserMasterData from "./pages/masterdata/UserMasterData";
-import GeneralLedgerDashboard from "./pages/generalledger/GeneralLedgerDashboard";
-import Setup from "./pages/generalledger/Setup";
-import MainCOAMapping from "./pages/generalledger/COAMapping/MainCOAMapping";
-import SubCOAMapping from "./pages/generalledger/COAMapping/SubCOAMapping";
-import COADivision from "./pages/generalledger/COAMapping/COADivision";
-import TransactionType from "./pages/generalledger/Setup/TransactionType";
-import BudgetGroup from "./pages/generalledger/Setup/BudgetGroup";
-import AccountPeriod from "./pages/generalledger/Setup/AccountPeriod";
+import BankFinanceInternal from "./pages/FinanceInternal/BankFinanceInternal";
+import ClassFinance from "./pages/FinanceInternal/ClassFinance";
+import Chart from "./pages/FinanceInternal/ChartOfAccount";
+import Currency from "./pages/FinanceInternal/Currency";
+import TaxFinanceInternal from "./pages/FinanceInternal/TaxFinanceInternal";
+import UserData from "./pages/MasterDataInternal/User/UserData";
+import UserRole from "./pages/MasterDataInternal/User/UserRole";
+import Division from "./pages/MasterDataInternal/User/Division";
+import RoleAccess from "./pages/MasterDataInternal/User/RoleAccess";
+import Entitas from "./pages/MasterDataInternal/User/Entity";
+import UserMasterData from "./pages/MasterDataInternal/UserMasterData";
+import GeneralLedgerDashboard from "./pages/GeneralLedger/GeneralLedgerDashboard";
+import Setup from "./pages/GeneralLedger/Setup";
+import MainCOAMapping from "./pages/GeneralLedger/COAMapping/MainCOAMapping";
+import SubCOAMapping from "./pages/GeneralLedger/COAMapping/SubCOAMapping";
+import COADivision from "./pages/GeneralLedger/COAMapping/COADivision";
+import TransactionType from "./pages/GeneralLedger/Setup/TransactionType";
+import BudgetGroup from "./pages/GeneralLedger/Setup/BudgetGroup";
+import AccountPeriod from "./pages/GeneralLedger/Setup/AccountPeriod";
 import EntryBank from "./pages/Cashbook/Entry/EntryBank";
 import EntryReimbursement from "./pages/Cashbook/Entry/EntryReimbursement";
 
@@ -62,7 +62,7 @@ const App = () => {
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/Login" />}
           />
 
-          <Route path="master-data" element={<MasterData />}>
+          <Route path="master-data" element={<MasterDataInternal />}>
             <Route index element={<Navigate to="user-role" replace />} />
             <Route path="user-data" element={<UserData />} />
             <Route path="user-role" element={<UserRole />} />
@@ -70,20 +70,20 @@ const App = () => {
             <Route path="role-access" element={<RoleAccess />} />
             <Route path="entitas" element={<Entitas />} />
             <Route path="project" element={<Project />} />
-            <Route path="finance" element={<FinanceMasterData />}>
-            <Route index element={<Navigate to="class-finance" replace />} />
-              <Route path="bank" element={<Bank />} />
-              <Route path="class-finance" element={<ClassF />} />
-              <Route path="chart" element={<Chart />} />
-              <Route path="currency" element={<Currency />} />
-              <Route path="tax" element={<Tax />} />
-            </Route>
           </Route>
 
-          <Route path="finance" element={<Finance />}>
+          <Route path="finance" element={<FinanceInternal />}>
+          <Route path="bank" element={<BankFinanceInternal />} />
+              <Route path="class-finance" element={<ClassFinance />} />
+              <Route path="chart" element={<Chart />} />
+              <Route path="currency" element={<Currency />} />
+              <Route path="tax" element={<TaxFinanceInternal />} />
+          </Route>
+
+          <Route path="finance" element={<FinanceExternal />}>
             <Route index element={<Navigate to="bank" replace />} />
-            <Route path="bank" element={<BankFinance />} />
-            <Route path="transcode" element={<TranscodeFinance />} />
+            <Route path="bank" element={<BankFinanceExternal />} />
+            <Route path="transcode" element={<TranscodeFinanceExternal />} />
           </Route>
 
           <Route path="cash-book" element={<CashBook />}>
