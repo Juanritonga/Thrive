@@ -34,24 +34,27 @@ const UserRole = () => {
     setLoading(true);
     try {
       const token = sessionStorage.getItem("authToken");
-      if (!token) {
-        throw new Error("Authorization token is missing.");
-      }
-
+      if (!token) throw new Error("Authorization token is missing.");
+  
       const offset = (currentPage - 1) * limit;
-
+  
       const response = await api.get("/roles", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: {
-          limit,
-          offset,
-        },
+        headers: { Authorization: `Bearer ${token}` },
+        params: { limit, offset },
       });
-
+  
+      console.log("API Response:", response.data); // Tambahkan ini untuk debugging
+  
       if (response.data.success) {
-        setUserRoles(response.data.data.items);
+        const formattedRoles = response.data.data.items.map((role) => ({
+          ...role,
+          created_at: role.created_at ? new Date(role.created_at) : new Date(), // Pastikan ada nilai
+          updated_at: role.updated_at ? new Date(role.updated_at) : new Date(),
+        }));
+  
+        console.log("Formatted Roles:", formattedRoles); // Debugging sebelum disimpan ke state
+  
+        setUserRoles(formattedRoles);
         setTotalItems(response.data.data.total || 0);
       } else {
         throw new Error(response.data.message || "Unexpected response format.");
@@ -63,6 +66,7 @@ const UserRole = () => {
       setLoading(false);
     }
   }, [currentPage, limit]);
+  
 
   const fetchDivisions = useCallback(async () => {
     try {
@@ -109,23 +113,46 @@ const UserRole = () => {
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
-
+  
+      const timestamp = new Date().toISOString();
+  
       if (editMode) {
-        await api.put(`/roles/${currentRole.id}`, currentRole, {
+        await api.put(`/roles/${currentRole.id}`, {
+          ...currentRole,
+          updated_at: timestamp,
+        }, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
+  
         setUserRoles((prev) =>
           prev.map((role) =>
-            role.id === currentRole.id ? { ...role, ...currentRole } : role
+            role.id === currentRole.id
+              ? { ...role, ...currentRole, updated_at: timestamp }
+              : role
           )
         );
       } else {
-        const response = await api.post("/roles", currentRole, {
+        const response = await api.post("/roles", {
+          ...currentRole,
+          created_at: timestamp,
+          updated_at: timestamp,
+        }, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        setUserRoles((prev) => [...prev, response.data.data]);
+  
+        // Cari division_name berdasarkan division_id yang dipilih
+        const division = divisions.find((d) => d.id === currentRole.division_id);
+        const division_name = division ? division.division_name : "Unknown";
+  
+        setUserRoles((prev) => [
+          ...prev,
+          {
+            ...response.data.data,
+            division_name, // Tambahkan division_name agar langsung muncul di tabel
+            created_at: timestamp,
+            updated_at: timestamp,
+          },
+        ]);
       }
       handleCloseModal();
     } catch (err) {
@@ -135,6 +162,8 @@ const UserRole = () => {
       setLoading(false);
     }
   };
+  
+  
 
   const handleDeleteRole = async () => {
     setLoading(true);
@@ -206,32 +235,22 @@ const UserRole = () => {
   const columns = [
     { header: "Role ID", accessor: "role_id" },
     { header: "Role", accessor: "role_name" },
-    { header: "Division", accessor: "division_name" },
+    { header: "Division", accessor: "division_name" }, // Pastikan pakai division_name
     {
       header: "Created At",
       accessor: (role) =>
-        new Date(role.created_at).toLocaleDateString("en-GB"),
+        role.created_at && !isNaN(new Date(role.created_at))
+          ? new Date(role.created_at).toLocaleDateString("en-GB")
+          : "-",
     },
     {
       header: "Updated At",
       accessor: (role) =>
-        new Date(role.updated_at).toLocaleDateString("en-GB"),
+        role.updated_at && !isNaN(new Date(role.updated_at))
+          ? new Date(role.updated_at).toLocaleDateString("en-GB")
+          : "-",
     },
-    {
-      header: "Status",
-      accessor: (RoleAcces) => (
-        <span
-          className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
-            RoleAcces.status.toLowerCase() === "active"
-              ? "bg-green-200 text-green-600"
-              : "bg-red-200 text-red-600"
-          }`}
-        >
-          {RoleAcces.status}
-        </span>
-      ),
-    },
-  ];
+  ];  
 
   const actions = [
     {
