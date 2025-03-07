@@ -97,6 +97,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "Super Admin",
       label: "Class",
       path: "/finance/class-finance",
+      icon: "fas fa-chalkboard-teacher",
       indent: true,
       visible: isFinanceMasterDataOpen,
     },
@@ -104,6 +105,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "Super Admin",
       label: "Chart of Account",
       path: "/finance/chart",
+      icon: "fas fa-chart-line",
       indent: true,
       visible: isFinanceMasterDataOpen,
     },
@@ -111,6 +113,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "Super Admin",
       label: "Currency",
       path: "/finance/currency",
+      icon: "fas fa-dollar-sign",
       indent: true,
       visible: isFinanceMasterDataOpen,
     },
@@ -118,6 +121,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "Super Admin",
       label: "Bank",
       path: "/finance/bank",
+      icon: "fas fa-university",
       indent: true,
       visible: isFinanceMasterDataOpen,
     },
@@ -125,6 +129,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "Super Admin",
       label: "Tax",
       path: "/finance/tax",
+      icon: "fas fa-percent",
       indent: true,
       visible: isFinanceMasterDataOpen,
     }, 
@@ -141,6 +146,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "User",
       path: "/master-data/user-role",
+      icon: "fas fa-user",
       indent: true,
       visible: isMasterDataFinanceOpen,
     },
@@ -148,6 +154,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Division",
       path: "/master-data/division",
+      icon: "fas fa-project-diagram",
       indent: true,
       visible: isMasterDataFinanceOpen,
     },
@@ -155,6 +162,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Class",
       path: "/finance/class-finance",
+      icon: "fas fa-chalkboard-teacher",
       indent: true,
       visible: isMasterDataFinanceOpen,
     },
@@ -162,6 +170,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Chart",
       path: "/finance/chart",
+      icon: "fas fa-chart-line",
       indent: true,
       visible: isMasterDataFinanceOpen,
     },
@@ -169,6 +178,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Currency",
       path: "/finance/currency",
+      icon: "fas fa-dollar-sign",
       indent: true,
       visible: isMasterDataFinanceOpen,
     },
@@ -176,6 +186,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Bank",
       path: "/finance/bank",
+      icon: "fas fa-university",
       indent: true,
       visible: isMasterDataFinanceOpen,
     },
@@ -183,6 +194,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Tax",
       path: "/finance/tax",
+      icon: "fas fa-percent",
       indent: true,
       visible: isMasterDataFinanceOpen,
     },
@@ -208,6 +220,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Bank",
       path: "/cash-book/bank-cash-book",
+      icon: "fas fa-university",
       indent: true,
       visible: isFinanceOpen && isCashbookOpen, 
     },
@@ -215,6 +228,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Petty Cash",
       path: "/cash-book/petty-cash",
+      icon: "fas fa-wallet",
       indent: true,
       visible: isFinanceOpen && isCashbookOpen, 
     },
@@ -222,6 +236,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Cash Advance",
       path: "/cash-book/cash-advance",
+      icon: "fas fa-hand-holding-usd",
       indent: true,
       visible: isFinanceOpen && isCashbookOpen, 
     },
@@ -229,6 +244,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Reimbursement",
       path: "/cash-book/reimbursement",
+      icon: "fas fa-receipt",
       indent: true,
       visible: isFinanceOpen && isCashbookOpen, 
     },
@@ -236,10 +252,10 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Format",
       path: "/cash-book/format",
+      icon: "fas fa-file-alt",
       indent: true,
       visible: isFinanceOpen && isCashbookOpen, 
     },
-
     {
       role: "front end",
       label: "Fixed Assets",
@@ -253,6 +269,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Cash Advance",
       path: "#",
+      icon: "fas fa-hand-holding-usd",
       indent: true,
       visible: isFinanceOpen && isFixedAssetsOpen,
     },
@@ -260,6 +277,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Reimbursement",
       path: "#",
+      icon: "fas fa-receipt",
       indent: true,
       visible: isFinanceOpen && isFixedAssetsOpen,
     },
@@ -267,10 +285,10 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Format",
       path: "#",
+      icon: "fas fa-file-alt",
       indent: true,
       visible: isFinanceOpen && isFixedAssetsOpen,
     },
-
     {
       role: "front end",
       label: "General Ledger",
@@ -279,12 +297,12 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       visible: isFinanceOpen,
       onClick: () => setIsGeneralLedgerOpen(!isGeneralLedgerOpen),
       hasDropdown: true,
-
     },
     {
       role: "front end",
       label: "Report",
       path: "#",
+      icon: "fas fa-file-alt",
       indent: true,
       visible: isFinanceOpen && isGeneralLedgerOpen,
     },
@@ -292,6 +310,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "COA Mapping",
       path: "/general-ledger/main-coa-mapping",
+      icon: "fas fa-map",
       indent: true,
       visible: isFinanceOpen && isGeneralLedgerOpen,
     },
@@ -299,6 +318,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Setup",
       path: "/general-ledger/setup",
+      icon: "fas fa-cogs",
       indent: true,
       visible: isFinanceOpen && isGeneralLedgerOpen,
     },
@@ -306,6 +326,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       role: "front end",
       label: "Entry Management",
       path: "#",
+      icon: "fas fa-tasks",
       indent: true,
       visible: isFinanceOpen && isGeneralLedgerOpen,
     },
@@ -336,7 +357,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
             .filter((item) => item.role === sessionStorage.getItem("role"))
             .map(
               (item, index) =>
-                item.visible !== false && ( // Only render if item is visible
+                item.visible !== false && (
                   <li
                     key={index}
                     className={`flex items-center rounded-md ${
@@ -347,7 +368,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
                   >
                     <Link
                       to={item.path}
-                      onClick={item.onClick} // Add onClick for parent items
+                      onClick={item.onClick}
                       className="flex items-center w-full py-3 px-4"
                     >
                       <i

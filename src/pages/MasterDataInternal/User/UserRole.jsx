@@ -43,16 +43,12 @@ const UserRole = () => {
         params: { limit, offset },
       });
   
-      console.log("API Response:", response.data); // Tambahkan ini untuk debugging
-  
       if (response.data.success) {
         const formattedRoles = response.data.data.items.map((role) => ({
           ...role,
-          created_at: role.created_at ? new Date(role.created_at) : new Date(), // Pastikan ada nilai
+          created_at: role.created_at ? new Date(role.created_at) : new Date(),
           updated_at: role.updated_at ? new Date(role.updated_at) : new Date(),
         }));
-  
-        console.log("Formatted Roles:", formattedRoles); // Debugging sebelum disimpan ke state
   
         setUserRoles(formattedRoles);
         setTotalItems(response.data.data.total || 0);
@@ -140,7 +136,6 @@ const UserRole = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
   
-        // Cari division_name berdasarkan division_id yang dipilih
         const division = divisions.find((d) => d.id === currentRole.division_id);
         const division_name = division ? division.division_name : "Unknown";
   
@@ -148,7 +143,7 @@ const UserRole = () => {
           ...prev,
           {
             ...response.data.data,
-            division_name, // Tambahkan division_name agar langsung muncul di tabel
+            division_name,
             created_at: timestamp,
             updated_at: timestamp,
           },
@@ -235,7 +230,7 @@ const UserRole = () => {
   const columns = [
     { header: "Role ID", accessor: "role_id" },
     { header: "Role", accessor: "role_name" },
-    { header: "Division", accessor: "division_name" }, // Pastikan pakai division_name
+    { header: "Division", accessor: "division_name" },
     {
       header: "Created At",
       accessor: (role) =>
