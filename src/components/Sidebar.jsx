@@ -339,7 +339,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
           isSidebarVisible ? "p-6" : "p-4"
         }`}
       >
-        <Link to="/dashboard">
+        <Link to="/">
           <img
             src="../thrive.png"
             alt="Company Logo"
