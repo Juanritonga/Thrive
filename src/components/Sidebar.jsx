@@ -5,13 +5,13 @@ import PropTypes from "prop-types";
 const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   const location = useLocation();
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
-  const [isMasterDataOpen, setIsMasterDataOpen] = useState(false); 
-  const [isFinanceMasterDataOpen, setIsFinanceMasterDataOpen] = useState(false); 
-  const [isMasterDataFinanceOpen, setIsMasterDataFinanceOpen] = useState(false); 
-  const [isFinanceOpen, setIsFinanceOpen] = useState(false); 
+  const [isMasterDataOpen, setIsMasterDataOpen] = useState(false);
+  const [isFinanceMasterDataOpen, setIsFinanceMasterDataOpen] = useState(false);
+  //const [isMasterDataFinanceOpen, setIsMasterDataFinanceOpen] = useState(false);
+  const [isFinanceOpen, setIsFinanceOpen] = useState(false);
   const [isCashbookOpen, setIsCashbookOpen] = useState(false);
   const [isFixedAssetsOpen, setIsFixedAssetsOpen] = useState(false);
-  const [isGeneralLedgerOpen, setIsGeneralLedgerOpen] = useState(false); 
+  const [isGeneralLedgerOpen, setIsGeneralLedgerOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setIsSmallScreen(window.innerWidth <= 768);
@@ -128,64 +128,64 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       indent: true,
       visible: isFinanceMasterDataOpen,
     }, 
-    {
-      role: "front end",
-      label: "Master Data",
-      path: "/master-data",
-      icon: "fas fa-file-invoice",
-      isParent: true,
-      onClick: () => setIsMasterDataFinanceOpen(!isMasterDataFinanceOpen),
-      hasDropdown: true,
-    },
-    {
-      role: "front end",
-      label: "User",
-      path: "/master-data/user-role",
-      indent: true,
-      visible: isMasterDataFinanceOpen,
-    },
-    {
-      role: "front end",
-      label: "Division",
-      path: "/master-data/division",
-      indent: true,
-      visible: isMasterDataFinanceOpen,
-    },
-    {
-      role: "front end",
-      label: "Class",
-      path: "/finance/class-finance",
-      indent: true,
-      visible: isMasterDataFinanceOpen,
-    },
-    {
-      role: "front end",
-      label: "Chart",
-      path: "/finance/chart",
-      indent: true,
-      visible: isMasterDataFinanceOpen,
-    },
-    {
-      role: "front end",
-      label: "Currency",
-      path: "/finance/currency",
-      indent: true,
-      visible: isMasterDataFinanceOpen,
-    },
-    {
-      role: "front end",
-      label: "Bank",
-      path: "/finance/bank",
-      indent: true,
-      visible: isMasterDataFinanceOpen,
-    },
-    {
-      role: "front end",
-      label: "Tax",
-      path: "/finance/tax",
-      indent: true,
-      visible: isMasterDataFinanceOpen,
-    },
+    // {
+    //   role: "front end",
+    //   label: "Master Data",
+    //   path: "/master-data",
+    //   icon: "fas fa-file-invoice",
+    //   isParent: true,
+    //   onClick: () => setIsMasterDataFinanceOpen(!isMasterDataFinanceOpen),
+    //   hasDropdown: true,
+    // },
+    // {
+    //   role: "front end",
+    //   label: "User",
+    //   path: "/master-data/user-role",
+    //   indent: true,
+    //   visible: isMasterDataFinanceOpen,
+    // },
+    // {
+    //   role: "front end",
+    //   label: "Division",
+    //   path: "/master-data/division",
+    //   indent: true,
+    //   visible: isMasterDataFinanceOpen,
+    // },
+    // {
+    //   role: "front end",
+    //   label: "Class",
+    //   path: "/finance/class-finance",
+    //   indent: true,
+    //   visible: isMasterDataFinanceOpen,
+    // },
+    // {
+    //   role: "front end",
+    //   label: "Chart",
+    //   path: "/finance/chart",
+    //   indent: true,
+    //   visible: isMasterDataFinanceOpen,
+    // },
+    // {
+    //   role: "front end",
+    //   label: "Currency",
+    //   path: "/finance/currency",
+    //   indent: true,
+    //   visible: isMasterDataFinanceOpen,
+    // },
+    // {
+    //   role: "front end",
+    //   label: "Bank",
+    //   path: "/finance/bank",
+    //   indent: true,
+    //   visible: isMasterDataFinanceOpen,
+    // },
+    // {
+    //   role: "front end",
+    //   label: "Tax",
+    //   path: "/finance/tax",
+    //   indent: true,
+    //   visible: isMasterDataFinanceOpen,
+    // },
     {
       role: "front end",
       label: "Finance",
@@ -309,6 +309,12 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       indent: true,
       visible: isFinanceOpen && isGeneralLedgerOpen,
     },
+    {
+      role: "front end",
+      label: "Project",
+      path: "/project",
+      icon: "fas fa-file-invoice",
+    },
   ];
 
   return (
@@ -318,7 +324,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
           isSidebarVisible ? "p-6" : "p-4"
         }`}
       >
-        <Link to="/dashboard">
+        <Link to="/">
           <img
             src="../thrive.png"
             alt="Company Logo"
@@ -336,7 +342,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
             .filter((item) => item.role === sessionStorage.getItem("role"))
             .map(
               (item, index) =>
-                item.visible !== false && ( // Only render if item is visible
+                item.visible !== false && (
                   <li
                     key={index}
                     className={`flex items-center rounded-md ${
@@ -347,7 +353,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
                   >
                     <Link
                       to={item.path}
-                      onClick={item.onClick} // Add onClick for parent items
+                      onClick={item.onClick}
                       className="flex items-center w-full py-3 px-4"
                     >
                       <i

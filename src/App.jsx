@@ -37,6 +37,7 @@ import BudgetGroup from "./pages/GeneralLedger/Setup/BudgetGroup";
 import AccountPeriod from "./pages/GeneralLedger/Setup/AccountPeriod";
 import EntryBank from "./pages/Cashbook/Entry/EntryBank";
 import EntryReimbursement from "./pages/Cashbook/Entry/EntryReimbursement";
+import ProjectExternal from "./pages/ProjectExternal";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -118,6 +119,9 @@ const App = () => {
               <Route path="account-period" element={<AccountPeriod />} />
             </Route>
           </Route>
+
+          <Route path="project" element={<ProjectExternal />}></Route>
+
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect, useCallback } from "react";
-import addEntitas from "./Entity/AddEntity";
-import updatedEntitas from "./Entity/UpdatedEntitas";
+import addEntity from "./Entity/AddEntity";
+import updatedEntity from "./Entity/UpdatedEntity";
 import SearchBar from "@/components/SearchBar";
 import AddButton from "@/components/AddButton";
 import Table from "@/components/Table";
@@ -14,7 +14,7 @@ const api = axios.create({
   },
 });
 
-export const fetchEntitass = async () => {
+export const fetchEntitys = async () => {
   try {
     const token = sessionStorage.getItem("authToken");
     if (!token) throw new Error("Authorization token is missing.");
@@ -30,13 +30,13 @@ export const fetchEntitass = async () => {
       throw new Error(response.data.message || "Unexpected response format.");
     }
   } catch (err) {
-    console.error("Error fetching Currency:", err.message);
+    console.error("Error fetching Entity:", err.message);
     throw err;
   }
 };
 
 const Entity = () => {
-  const [Entitass, setEntitass] = useState([]);
+  const [Entitys, setEntitys] = useState([]);
   const [divisions, setDivisions] = useState([]);
   const [access, setAccess] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,7 +44,7 @@ const Entity = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [currentEntitas, setCurrentEntitas] = useState({
+  const [currentEntity, setCurrentEntity] = useState({
     entity_name: "",
     address: "",
     city: "",
@@ -105,12 +105,12 @@ const Entity = () => {
     }
   }, []);
 
-  const handleOpenModal = (mode = "create", Entitas = null) => {
+  const handleOpenModal = (mode = "create", Entity = null) => {
     if (mode === "edit") {
-      setCurrentEntitas(Entitas);
+      setCurrentEntity(Entity);
       setEditMode(true);
     } else {
-      setCurrentEntitas({
+      setCurrentEntity({
         entity_name: "",
         address: "",
         city: "",
@@ -134,42 +134,42 @@ const Entity = () => {
     setShowModal(false);
   };
 
-  const handleSaveEntitas = async () => {
+  const handleSaveEntity = async () => {
     if (editMode) {
-      await updatedEntitas(
-        currentEntitas,
-        setEntitass,
+      await updatedEntity(
+        currentEntity,
+        setEntitys,
         setError,
         handleCloseModal
       );
     } else {
-      await addEntitas(
-        currentEntitas,
-        setEntitass,
-        setCurrentEntitas,
+      await addEntity(
+        currentEntity,
+        setEntitys,
+        setCurrentEntity,
         setError,
         handleCloseModal
       );
     }
   };
 
-  const handleDeleteEntitas = async () => {
+  const handleDeleteEntity = async () => {
     try {
       const token = sessionStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token is missing.");
 
-      await api.delete(`/entities/${currentEntitas.Entitas_id}`, {
+      await api.delete(`/entities/${currentEntity.Entity_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setEntitass((prev) =>
+      setEntitys((prev) =>
         prev.filter(
-          (Entitas) => Entitas.Entitas_id !== currentEntitas.Entitas_id
+          (Entity) => Entity.Entity_id !== currentEntity.Entity_id
         )
       );
       handleCloseModal();
     } catch (err) {
-      console.error("Error deleting Entitas:", err.message);
+      console.error("Error deleting Entity:", err.message);
       setError(err.message);
     }
   };
@@ -177,8 +177,8 @@ const Entity = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchEntitass();
-        setEntitass(data);
+        const data = await fetchEntitys();
+        setEntitys(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -190,8 +190,8 @@ const Entity = () => {
     fetchData();
   }, []);
 
-  const filteredData = Entitass.filter((Entitas) =>
-    Object.values(Entitas)
+  const filteredData = Entitys.filter((Entity) =>
+    Object.values(Entity)
       .join(" ")
       .toLowerCase()
       .includes(searchQuery.toLowerCase())
@@ -200,11 +200,11 @@ const Entity = () => {
   const formFields = [
     {
       name: "entity_name",
-      label: "Entitas Name",
+      label: "Entity Name",
       type: "text",
-      value: currentEntitas.entity_name,
+      value: currentEntity.entity_name,
       onChange: (e) =>
-        setCurrentEntitas((prev) => ({
+        setCurrentEntity((prev) => ({
           ...prev,
           entity_name: e.target.value,
         })),
@@ -213,97 +213,97 @@ const Entity = () => {
       name: "address",
       label: "Address",
       type: "text",
-      value: currentEntitas.address,
+      value: currentEntity.address,
       onChange: (e) =>
-        setCurrentEntitas((prev) => ({ ...prev, address: e.target.value })),
+        setCurrentEntity((prev) => ({ ...prev, address: e.target.value })),
     },
     {
       name: "city",
       label: "City",
       type: "text",
-      value: currentEntitas.city,
+      value: currentEntity.city,
       onChange: (e) =>
-        setCurrentEntitas((prev) => ({ ...prev, city: e.target.value })),
+        setCurrentEntity((prev) => ({ ...prev, city: e.target.value })),
     },
     {
       name: "province",
       label: "Provinsi",
       type: "text",
-      value: currentEntitas.province,
+      value: currentEntity.province,
       onChange: (e) =>
-        setCurrentEntitas((prev) => ({ ...prev, province: e.target.value })),
+        setCurrentEntity((prev) => ({ ...prev, province: e.target.value })),
     },
     {
       name: "postal_code",
       label: "Postal Code",
       type: "text",
-      value: currentEntitas.postal_code,
+      value: currentEntity.postal_code,
       onChange: (e) =>
-        setCurrentEntitas((prev) => ({ ...prev, postal_code: e.target.value })),
+        setCurrentEntity((prev) => ({ ...prev, postal_code: e.target.value })),
     },
     {
       name: "division_id",
       label: "Division",
       type: "select",
-      value: currentEntitas.division_id,
+      value: currentEntity.division_id,
       options: divisions.map((division) => ({
         value: division.id,
         label: division.division_name,
       })),
       onChange: (e) =>
-        setCurrentEntitas((prev) => ({ ...prev, division_id: e.target.value })),
+        setCurrentEntity((prev) => ({ ...prev, division_id: e.target.value })),
     },
     {
       name: "access",
       label: "Access",
       type: "select",
-      value: currentEntitas.access_id,
+      value: currentEntity.access_id,
       options: access.map((access) => ({
         value: access.id,
         label: access.role_name,
       })),
       onChange: (e) =>
-        setCurrentEntitas((prev) => ({ ...prev, access_id: e.target.value })),
+        setCurrentEntity((prev) => ({ ...prev, access_id: e.target.value })),
     },
     {
       name: "email",
       label: "Email",
       type: "text",
-      value: currentEntitas.email,
+      value: currentEntity.email,
       onChange: (e) =>
-        setCurrentEntitas((prev) => ({ ...prev, email: e.target.value })),
+        setCurrentEntity((prev) => ({ ...prev, email: e.target.value })),
     },
     {
       name: "phone",
       label: "Phone",
       type: "text",
-      value: currentEntitas.phone,
+      value: currentEntity.phone,
       onChange: (e) =>
-        setCurrentEntitas((prev) => ({ ...prev, phone: e.target.value })),
+        setCurrentEntity((prev) => ({ ...prev, phone: e.target.value })),
     },
     {
       name: "fax",
       label: "Fax",
       type: "text",
-      value: currentEntitas.fax,
+      value: currentEntity.fax,
       onChange: (e) =>
-        setCurrentEntitas((prev) => ({ ...prev, fax: e.target.value })),
+        setCurrentEntity((prev) => ({ ...prev, fax: e.target.value })),
     },
     {
       name: "fiscal_year",
       label: "Fiscal Year",
       type: "text",
-      value: currentEntitas.fiscal_year,
+      value: currentEntity.fiscal_year,
       onChange: (e) =>
-        setCurrentEntitas((prev) => ({ ...prev, fiscal_year: e.target.value })),
+        setCurrentEntity((prev) => ({ ...prev, fiscal_year: e.target.value })),
     },
     {
       name: "audit_period",
       label: "Audit Period",
       type: "text",
-      value: currentEntitas.audit_period,
+      value: currentEntity.audit_period,
       onChange: (e) =>
-        setCurrentEntitas((prev) => ({
+        setCurrentEntity((prev) => ({
           ...prev,
           audit_period: e.target.value,
         })),
@@ -312,13 +312,13 @@ const Entity = () => {
       name: "status",
       label: "Status",
       type: "select",
-      value: currentEntitas.status,
+      value: currentEntity.status,
       options: [
         { value: "Active", label: "Active" },
         { value: "Inactive", label: "Inactive" },
       ],
       onChange: (e) =>
-        setCurrentEntitas((prev) => ({ ...prev, status: e.target.value })),
+        setCurrentEntity((prev) => ({ ...prev, status: e.target.value })),
     },
   ];
 
@@ -333,15 +333,15 @@ const Entity = () => {
     },
     {
       header: "Status",
-      accessor: (Entitas) => (
+      accessor: (Entity) => (
         <span
           className={`inline-flex items-center justify-center px-8 py-2 rounded-full font-bold ${
-            Entitas.status.toLowerCase() === "active"
+            Entity.status.toLowerCase() === "active"
               ? "bg-green-200 text-green-600"
               : "bg-red-200 text-red-600"
           }`}
         >
-          {Entitas.status}
+          {Entity.status}
         </span>
       ),
     },
@@ -352,7 +352,7 @@ const Entity = () => {
       icon: "fas fa-edit",
       buttonClass:
         "bg-gray-200 text-gray-400 p-3 rounded-lg flex items-center justify-center w-10 h-10",
-      handler: (Entitas) => handleOpenModal("edit", Entitas),
+      handler: (Entity) => handleOpenModal("edit", Entity),
     },
   ];
 
@@ -377,13 +377,13 @@ const Entity = () => {
         <SearchBar
           value={searchQuery}
           onChange={setSearchQuery}
-          placeholder="Cari Entitas"
+          placeholder="Cari Entity"
         />
         <AddButton onClick={() => handleOpenModal("create")} />
       </div>
       <div className="overflow-auto shadow-sm mb-6">
         {filteredData.length === 0 ? (
-          <p>No Entitass found.</p>
+          <p>No Entitys found.</p>
         ) : (
           <Table columns={columns} data={filteredData} actions={actions} />
         )}
@@ -391,10 +391,10 @@ const Entity = () => {
 
       <ModalCRUD
         isOpen={showModal}
-        title={editMode ? "Edit Entitas" : "Tambah Baru"}
+        title={editMode ? "Edit Entity" : "Tambah Baru"}
         onClose={handleCloseModal}
-        onSave={handleSaveEntitas}
-        onDelete={editMode ? handleDeleteEntitas : null}
+        onSave={handleSaveEntity}
+        onDelete={editMode ? handleDeleteEntity : null}
         formFields={formFields}
         editMode={editMode}
       />
