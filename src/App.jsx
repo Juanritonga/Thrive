@@ -26,7 +26,6 @@ import UserRole from "./pages/MasterDataInternal/User/UserRole";
 import Division from "./pages/MasterDataInternal/User/Division";
 import RoleAccess from "./pages/MasterDataInternal/User/RoleAccess";
 import Entitas from "./pages/MasterDataInternal/User/Entity";
-import UserMasterData from "./pages/MasterDataInternal/UserMasterData";
 import GeneralLedgerDashboard from "./pages/GeneralLedger/GeneralLedgerDashboard";
 import Setup from "./pages/GeneralLedger/Setup";
 import MainCOAMapping from "./pages/GeneralLedger/COAMapping/MainCOAMapping";
@@ -37,7 +36,9 @@ import BudgetGroup from "./pages/GeneralLedger/Setup/BudgetGroup";
 import AccountPeriod from "./pages/GeneralLedger/Setup/AccountPeriod";
 import EntryBank from "./pages/Cashbook/Entry/EntryBank";
 import EntryReimbursement from "./pages/Cashbook/Entry/EntryReimbursement";
-import ProjectExternal from "./pages/ProjectExternal";
+import ProjectExternal from "./pages/ProjectExternal/ProjectExternal";
+import ProjectMaster from "./pages/ProjectExternal/ProjectMaster";
+import Master from "./pages/ProjectExternal/ProjectMaster/Master";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -74,11 +75,11 @@ const App = () => {
           </Route>
 
           <Route path="finance" element={<FinanceInternal />}>
-          <Route path="bank" element={<BankFinanceInternal />} />
-              <Route path="class-finance" element={<ClassFinance />} />
-              <Route path="chart" element={<Chart />} />
-              <Route path="currency" element={<Currency />} />
-              <Route path="tax" element={<TaxFinanceInternal />} />
+            <Route path="bank" element={<BankFinanceInternal />} />
+            <Route path="class-finance" element={<ClassFinance />} />
+            <Route path="chart" element={<Chart />} />
+            <Route path="currency" element={<Currency />} />
+            <Route path="tax" element={<TaxFinanceInternal />} />
           </Route>
 
           <Route path="finance" element={<FinanceExternal />}>
@@ -121,7 +122,9 @@ const App = () => {
           </Route>
 
           <Route path="project" element={<ProjectExternal />}></Route>
-
+          <Route path="projectmaster" element={<ProjectMaster />}>
+            <Route path="master" element={<Master />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

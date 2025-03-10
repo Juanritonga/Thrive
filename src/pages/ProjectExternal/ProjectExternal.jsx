@@ -1,7 +1,7 @@
 
 const ProjectExternal = () => {
   return (
-    <div>ProjectExternal</div>
+    <div>Project External</div>
   )
 }
 

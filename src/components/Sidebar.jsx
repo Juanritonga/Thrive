@@ -328,6 +328,19 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       label: "Project",
       path: "/project",
       icon: "fas fa-file-invoice",
+      isParent: true,
+    },
+    {
+      role: "front end",
+      label: "Project Master",
+      path: "/projectmaster",
+      icon: "fas fa-money-bill",
+    },
+    {
+      role: "front end",
+      label: "Master",
+      path: "projectmaster/master",
+      icon: "fas fa-money-bill",
     },
   ];
 
