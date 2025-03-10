@@ -1,7 +1,12 @@
-const ProjectMaster = () => {
+import { Outlet } from "react-router-dom";
+
+function ProjectMaster() {
   return (
-    <div>Project Master</div>
-  )
+    <div>
+      <h1>Project Master</h1>
+      <Outlet /> 
+    </div>
+  );
 }
 
-export default ProjectMaster
+export default ProjectMaster;

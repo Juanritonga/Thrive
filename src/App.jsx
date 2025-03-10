@@ -121,9 +121,10 @@ const App = () => {
             </Route>
           </Route>
 
-          <Route path="project" element={<ProjectExternal />}></Route>
-          <Route path="projectmaster" element={<ProjectMaster />}>
-            <Route path="master" element={<Master />} />
+          <Route path="project" element={<ProjectExternal />}>
+            <Route path="projectmaster" element={<ProjectMaster />}>
+              <Route path="master" element={<Master />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

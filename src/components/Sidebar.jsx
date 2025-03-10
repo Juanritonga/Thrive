@@ -333,13 +333,13 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
     {
       role: "front end",
       label: "Project Master",
-      path: "/projectmaster",
+      path: "/project/projectmaster",
       icon: "fas fa-money-bill",
     },
     {
       role: "front end",
       label: "Master",
-      path: "projectmaster/master",
+      path: "/project/projectmaster/master",
       icon: "fas fa-money-bill",
     },
   ];
