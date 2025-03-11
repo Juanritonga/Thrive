@@ -128,7 +128,12 @@ const Master = () => {
   };
 
   const handleAddItem = () => {
-    if (newItem.id && newItem.description && newItem.totalArea && newItem.sellableArea) {
+    if (
+      newItem.id &&
+      newItem.description &&
+      newItem.totalArea &&
+      newItem.sellableArea
+    ) {
       setItems([...items, newItem]);
       setNewItem({
         id: "",
@@ -278,7 +283,7 @@ const Master = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white rounded-lg w-98">
+          <div className="bg-white rounded-lg w-[600px]">
             <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
               <div className="flex items-center space-x-2">
                 <h2 className="text-lg">Tambah Baru</h2>
@@ -287,64 +292,94 @@ const Master = () => {
                 <i className="fas fa-times"></i>
               </button>
             </div>
-
             <div className="p-6">
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="block text-gray-700">ID</label>
-                  <input
-                    type="text"
-                    name="id"
-                    value={newItem.id}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-gray-700">Project ID</label>
+                    <input
+                      type="text"
+                      name="id"
+                      value={newItem.id}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border border-gray-300 rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-700">
+                      Social Facility
+                    </label>
+                    <input
+                      type="text"
+                      name="socialFacility"
+                      value={newItem.socialFacility}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border border-gray-300 rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-700">
+                      Total Project Area
+                    </label>
+                    <input
+                      type="text"
+                      name="totalProjectArea"
+                      value={newItem.totalProjectArea}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border border-gray-300 rounded"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-gray-700">Total Area</label>
-                  <input
-                    type="text"
-                    name="totalArea"
-                    value={newItem.totalArea}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-gray-700">Description</label>
+                    <input
+                      type="text"
+                      name="description"
+                      value={newItem.description}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border border-gray-300 rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-700">
+                      Other Profit Source
+                    </label>
+                    <input
+                      type="text"
+                      name="otherProfitSource"
+                      value={newItem.otherProfitSource}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border border-gray-300 rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-700">
+                      Public Facility
+                    </label>
+                    <input
+                      type="text"
+                      name="publicFacility"
+                      value={newItem.publicFacility}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border border-gray-300 rounded"
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">Description</label>
-                <textarea
-                  name="description"
-                  value={newItem.description}
+              <div className="mt-4">
+                <label className="block text-gray-700">
+                  Total Sellable Area
+                </label>
+                <input
+                  type="text"
+                  name="totalSellableArea"
+                  value={newItem.totalSellableArea}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded h-24"
-                ></textarea>
+                  className="w-full p-2 border border-gray-300 rounded"
+                />
               </div>
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="block text-gray-700">Sellable Area</label>
-                  <input
-                    type="text"
-                    name="sellableArea"
-                    value={newItem.sellableArea}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Status</label>
-                  <select
-                    name="status"
-                    value={newItem.status}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                  </select>
-                </div>
-              </div>
-              <div className="flex justify-between gap-4">
+              <div className="flex justify-between gap-4 mt-6">
                 <button
                   className="w-1/2 py-2 bg-red-400 text-white rounded hover:bg-red-500"
                   onClick={handleCloseModal}
