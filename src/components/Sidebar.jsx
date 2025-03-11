@@ -342,6 +342,64 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       path: "/project/projectmaster/master",
       icon: "fas fa-money-bill",
     },
+    {
+      role: "front end",
+      label: "Phase",
+      path: "/project/projectmaster/phase",
+      icon: "fas fa-money-bill",
+    },{
+      role: "front end",
+      label: "Property",
+      path: "/project/projectmaster/property",
+      icon: "fas fa-money-bill",
+    },{
+      role: "front end",
+      label: "Property Phase",
+      path: "/project/projectmaster/property-phase",
+      icon: "fas fa-money-bill",
+    },
+    {
+      role: "front end",
+      label: "Setup",
+      path: "/project/setup-project",
+      icon: "fas fa-money-bill",
+    },
+    {
+      role: "front end",
+      label: "Class",
+      path: "/project/setup-project/class",
+      icon: "fas fa-money-bill",
+    },
+    {
+      role: "front end",
+      label: "Component",
+      path: "/project/setup-project/component",
+      icon: "fas fa-money-bill",
+    },
+    {
+      role: "front end",
+      label: "Cost",
+      path: "/project/setup-project/cost",
+      icon: "fas fa-money-bill",
+    },
+    {
+      role: "front end",
+      label: "Budget",
+      path: "/project/budget",
+      icon: "fas fa-money-bill",
+    },
+    {
+      role: "front end",
+      label: "Entry",
+      path: "/project/budget/entry",
+      icon: "fas fa-money-bill",
+    },
+    {
+      role: "front end",
+      label: "Approval",
+      path: "/project/budget/approval",
+      icon: "fas fa-money-bill",
+    },
   ];
 
   return (
