@@ -14,3 +14,23 @@ body {
 .hidden-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.sidebar {
+  width: 100%;
+  max-width: 250px; /* Atur lebar tetap sidebar */
+  background-color: custom-blue; 
+  height: 100vh;
+}
+
+.menu-item {
+  position: relative; /* Pastikan parent memiliki relative */
+}
+
+.submenu {
+  position: absolute;
+  left: 0;
+  width: 100%; /* Membuat dropdown memiliki lebar yang sama */
+  background-color: inherit; /* Pastikan warnanya sama dengan parent */
+  padding-left: 20px; /* Tambahkan padding untuk memberi kesan nested */
+}
+

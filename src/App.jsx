@@ -135,12 +135,12 @@ const App = () => {
             </Route>
           </Route>
 
-          <Route path="project" element={<ProjectExternal />}>
-            <Route path="projectmaster" element={<ProjectMaster />}>
+          <Route path="project" element={<ProjectExternal />}></Route>
+          <Route path="managementproject" element={<ProjectMaster />}>
               <Route path="master" element={<Master />} />
               <Route path="phase" element={<Phase />} />
               <Route path="property" element={<Property />} />
-              <Route path="property-phase" element={<PropertyPhase />} />
+              <Route path="_propertyphase" element={<PropertyPhase />} />
             </Route>
             <Route path="setup-project" element={<SetupProject />}>
               <Route path="class" element={<Class />} />
@@ -152,7 +152,6 @@ const App = () => {
               <Route path="entry" element={<Entry />} />
             </Route>
             <Route path="report" element={<Report />}></Route>
-          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
