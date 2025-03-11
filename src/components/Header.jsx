@@ -22,6 +22,9 @@ const getBreadcrumbs = (pathname) => {
     "transaction-type": "Transaction Type",
     "budget-group": "Budget Group",
     "account-period": "Account Period",
+    "managementproject":"Project Management",
+    "_propertyphase":"Property Phase",
+    "setup-project":"Setup"
   };
 
   const breadcrumbPath = [

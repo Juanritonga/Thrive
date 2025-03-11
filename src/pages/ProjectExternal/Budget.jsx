@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 const Budget = () => {
   return (
 <div>
-      <div>SetupProject</div>
+      <div>Budget</div>
       <Outlet />
     </div>  )
 }

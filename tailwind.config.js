@@ -11,6 +11,7 @@ export default {
         'custom-blue': '#0F1E55',
         'custom-blue2': '#5A7BAF',
         'custom-base': '#F4F5FA', 
+        'custom-blue3': '#5C7CB0'
       },
       fontFamily: {
         sans: ['DM Sans'],
