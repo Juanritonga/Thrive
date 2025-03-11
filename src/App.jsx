@@ -39,6 +39,20 @@ import EntryReimbursement from "./pages/Cashbook/Entry/EntryReimbursement";
 import ProjectExternal from "./pages/ProjectExternal/ProjectExternal";
 import ProjectMaster from "./pages/ProjectExternal/ProjectMaster";
 import Master from "./pages/ProjectExternal/ProjectMaster/Master";
+import Phase from "./pages/ProjectExternal/ProjectMaster/Phase";
+import Property from "./pages/ProjectExternal/ProjectMaster/Property";
+import PropertyPhase from "./pages/ProjectExternal/ProjectMaster/PropertyPhase";
+import SetupProject from "./pages/ProjectExternal/SetupProject";
+import Class from "./pages/ProjectExternal/Setup/Class";
+import Component from "./pages/ProjectExternal/Setup/Component";
+import Cost from "./pages/ProjectExternal/Setup/Cost";
+import Budget from "./pages/ProjectExternal/Budget";
+import Entry from "./pages/ProjectExternal/Budget/Entry";
+import Approval from "./pages/ProjectExternal/Budget/Approval";
+import Report from "./pages/ProjectExternal/Report";
+
+
+
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -124,7 +138,20 @@ const App = () => {
           <Route path="project" element={<ProjectExternal />}>
             <Route path="projectmaster" element={<ProjectMaster />}>
               <Route path="master" element={<Master />} />
+              <Route path="phase" element={<Phase />} />
+              <Route path="property" element={<Property />} />
+              <Route path="property-phase" element={<PropertyPhase />} />
             </Route>
+            <Route path="setup-project" element={<SetupProject />}>
+              <Route path="class" element={<Class />} />
+              <Route path="component" element={<Component />} />
+              <Route path="cost" element={<Cost />} />
+            </Route>
+            <Route path="budget" element={<Budget />}>
+              <Route path="approval" element={<Approval />} />
+              <Route path="entry" element={<Entry />} />
+            </Route>
+            <Route path="report" element={<Report />}></Route>
           </Route>
         </Route>
       </Routes>
