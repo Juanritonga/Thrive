@@ -135,12 +135,12 @@ const Approval = () => {
                 <td className="py-3 px-4">{item.status}</td>
                 <td className="py-3 px-4 border">
                   <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg  items-center  w-12 h-12">
-                  <i className="fa-solid fa-square-poll-vertical"></i>
+                    <i className="fa-solid fa-square-poll-vertical"></i>
                   </button>
                 </td>
                 <td className="py-3 px-4 border">
                   <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg  items-center  w-12 h-12">
-                  <i className="fa-solid fa-list-ul"></i>
+                    <i className="fa-solid fa-list-ul"></i>
                   </button>
                 </td>
                 <td className="py-3 px-4 border">
@@ -219,142 +219,142 @@ const Approval = () => {
               </button>
             </div>
             <div className="p-6">
-  {error && <div className="text-red-500 mb-4">{error}</div>}
-  <div className="grid grid-cols-2 gap-4">
-    <div>
-      <label className="block text-gray-700">User ID</label>
-      <input
-        type="text"
-        name="entity"
-        value={newItem.entity}
-        onChange={handleInputChange}
-        className="w-full p-2 border border-gray-300 rounded"
-      />
-    </div>
-    <div>
-      <label className="block text-gray-700">Username</label>
-      <input
-        type="text"
-        name="projectID"
-        value={newItem.projectID}
-        onChange={handleInputChange}
-        className="w-full p-2 border border-gray-300 rounded"
-      />
-    </div>
-    <div>
-      <label className="block text-gray-700">Staff Submit</label>
-      <input
-        type="text"
-        name="totalBudget"
-        value={newItem.totalBudget}
-        onChange={handleInputChange}
-        className="w-full p-2 border border-gray-300 rounded"
-      />
-    </div>
-    <div>
-      <label className="block text-gray-700">Division</label>
-      <input
-        type="text"
-        name="projectLength"
-        value={newItem.projectLength}
-        onChange={handleInputChange}
-        className="w-full p-2 border border-gray-300 rounded"
-      />
-    </div>
-    <div>
-      <label className="block text-gray-700">Department</label>
-      <input
-        type="text"
-        name="projectLength"
-        className="w-full p-2 border border-gray-300 rounded"
-      />
-    </div>
-    <div>
-      <label className="block text-gray-700">Document No.</label>
-      <input
-        type="text"
-        name="projectLength"
-        className="w-full p-2 border border-gray-300 rounded"
-      />
-    </div>
-    <div>
-      <label className="block text-gray-700">Document Date</label>
-      <input
-        type="text"
-        name="projectLength"
-        className="w-full p-2 border border-gray-300 rounded"
-      />
-    </div>
-    <div>
-      <label className="block text-gray-700">Description</label>
-      <input
-        type="text"
-        name="projectLength"
-        className="w-full p-2 border border-gray-300 rounded"
-      />
-    </div>
-    <div>
-      <label className="block text-gray-700">Reference No.</label>
-      <input
-        type="text"
-        name="projectLength"
-        className="w-full p-2 border border-gray-300 rounded"
-      />
-    </div>
-    <div>
-      <label className="block text-gray-700">Currency</label>
-      <input
-        type="text"
-        name="projectLength"
-        className="w-full p-2 border border-gray-300 rounded"
-      />
-    </div>
-    <div>
-      <label className="block text-gray-700">Amount</label>
-      <input
-        type="text"
-        name="projectLength"
-        className="w-full p-2 border border-gray-300 rounded"
-      />
-    </div>
-    <div>
-      <label className="block text-gray-700">Approval Status</label>
-      <select
-        name="status"
-        value={newItem.status}
-        onChange={handleInputChange}
-        className="w-full p-2 border border-gray-300 rounded"
-      >
-        <option value="Approved">Approved</option>
-        <option value="Rejected">Rejected</option>
-      </select>
-    </div>
-    <div className="col-span-2">
-      <label className="block text-gray-700">Description</label>
-      <textarea
-        name="description"
-        value={newItem.description}
-        onChange={handleInputChange}
-        className="w-full p-2 border border-gray-300 rounded"
-        rows="3"
-      />
-    </div>
-  </div>
-  <div className="flex justify-between gap-4 mt-6">
-    <button
-      className="w-1/2 py-2 bg-red-400 text-white rounded hover:bg-red-500"
-      onClick={handleCloseModal}
-    >
-      Batal
-    </button>
-    <button
-      className="w-1/2 py-2 bg-blue-400 text-white rounded hover:bg-blue-500"
-      onClick={handleAddItem}
-    >
-      Simpan
-    </button>
-  </div>
-</div>
+              {error && <div className="text-red-500 mb-4">{error}</div>}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-gray-700">User ID</label>
+                  <input
+                    type="text"
+                    name="entity"
+                    value={newItem.entity}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700">Username</label>
+                  <input
+                    type="text"
+                    name="projectID"
+                    value={newItem.projectID}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700">Staff Submit</label>
+                  <input
+                    type="text"
+                    name="totalBudget"
+                    value={newItem.totalBudget}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700">Division</label>
+                  <input
+                    type="text"
+                    name="projectLength"
+                    value={newItem.projectLength}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700">Department</label>
+                  <input
+                    type="text"
+                    name="projectLength"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700">Document No.</label>
+                  <input
+                    type="text"
+                    name="projectLength"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700">Document Date</label>
+                  <input
+                    type="text"
+                    name="projectLength"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700">Description</label>
+                  <input
+                    type="text"
+                    name="projectLength"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700">Reference No.</label>
+                  <input
+                    type="text"
+                    name="projectLength"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700">Currency</label>
+                  <input
+                    type="text"
+                    name="projectLength"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700">Amount</label>
+                  <input
+                    type="text"
+                    name="projectLength"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700">Approval Status</label>
+                  <select
+                    name="status"
+                    value={newItem.status}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  >
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                  </select>
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-gray-700">Description</label>
+                  <textarea
+                    name="description"
+                    value={newItem.description}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    rows="3"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-between gap-4 mt-6">
+                <button
+                  className="w-1/2 py-2 bg-red-400 text-white rounded hover:bg-red-500"
+                  onClick={handleCloseModal}
+                >
+                  Batal
+                </button>
+                <button
+                  className="w-1/2 py-2 bg-blue-400 text-white rounded hover:bg-blue-500"
+                  onClick={handleAddItem}
+                >
+                  Simpan
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

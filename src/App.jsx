@@ -149,7 +149,7 @@ const App = () => {
           </Route>
           <Route path="budget" element={<Budget />}>
             <Route path="approval" element={<Approval />}>
-              <Route path="YoYbudget" element={<YoYBudget />} />
+              <Route path="yoy-budget" element={<YoYBudget />} />
               <Route path="breakdown" element={<Breakdown />} />
             </Route>
             <Route path="entry" element={<Entry />} />
