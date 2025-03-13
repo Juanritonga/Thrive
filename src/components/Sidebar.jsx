@@ -159,7 +159,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
           : "";
 
         return (
-          <li key={item.path} className="relative">
+          <li key={item.path} className="relative ">
             <Link
               to={item.path}
               onClick={() => item.hasDropdown && toggleDropdown(item.label)}
@@ -216,11 +216,11 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
         </Link>
       </div>
       <div
-        className={`fixed left-0 h-full border-gray-200 shadow-md transform duration-300 ${
+        className={`fixed left-0 h-full border-gray-200 shadow-md transform duration-300 mb-20 ${
           isSmallScreen ? "w-20" : isSidebarVisible ? "w-64" : "w-20"
         } overflow-y-auto hidden-scrollbar bg-white`}
       >
-        <ul className="p-0 space-y-2">{renderMenuItems(menuItems)}</ul>
+        <ul className="p-0 space-y-2 mb-24">{renderMenuItems(menuItems)}</ul>
       </div>
     </div>
   );
