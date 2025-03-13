@@ -304,113 +304,114 @@ const PropertyPhase = () => {
 
       {/* Modal Tambah Baru */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white rounded-lg w-[600px]">
-            <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
-              <h2 className="text-lg">Tambah Baru</h2>
-              <button className="text-white" onClick={handleCloseModal}>
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-gray-700">Project ID</label>
-                  <input
-                    type="text"
-                    name="id"
-                    value={newItem.id}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Property Phase ID</label>
-                  <input
-                    type="text"
-                    name="propertyPhase"
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Description</label>
-                  <input
-                    type="text"
-                    name="description"
-                    value={newItem.description}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Sellable Area</label>
-                  <input
-                    type="text"
-                    name="sellableArea"
-                    value={newItem.sellableArea}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Building Area</label>
-                  <input
-                    type="text"
-                    name="buildingArea"
-                    value={newItem.buildingArea}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Gross Area</label>
-                  <input
-                    type="text"
-                    name="grossArea"
-                    value={newItem.grossArea}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Control Sellable Area</label>
-                  <input
-                    type="text"
-                    name="controlSellableArea"
-                    value={newItem.controlSellableArea}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Control Building Area</label>
-                  <input
-                    type="text"
-                    name="controlBuildingArea"
-                    value={newItem.controlBuildingArea}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-              </div>
-              <div className="flex justify-between gap-4 mt-6">
-                <button
-                  className="w-1/2 py-2 bg-red-400 text-white rounded hover:bg-red-500"
-                  onClick={handleCloseModal}
-                >
-                  Batal
-                </button>
-                <button
-                  className="w-1/2 py-2 bg-blue-400 text-white rounded hover:bg-blue-500"
-                  onClick={handleAddItem}
-                >
-                  Simpan
-                </button>
-              </div>
-            </div>
+  <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+    <div className="bg-white rounded-lg w-[600px]">
+      <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
+        <h2 className="text-lg">Tambah Baru</h2>
+        <button className="text-white" onClick={handleCloseModal}>
+          <i className="fas fa-times"></i>
+        </button>
+      </div>
+      <div className="p-6">
+        <h3 className="text-gray-500 mb-4">PROPERTY PHASE</h3>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-gray-700">Project ID</label>
+            <input
+              type="text"
+              name="id"
+              value={newItem.id}
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700">Property Phase ID</label>
+            <input
+              type="text"
+              name="propertyPhase"
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700">Description</label>
+            <input
+              type="text"
+              name="description"
+              value={newItem.description}
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700">Sellable Area</label>
+            <input
+              type="text"
+              name="sellableArea"
+              value={newItem.sellableArea}
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700">Building Area</label>
+            <input
+              type="text"
+              name="buildingArea"
+              value={newItem.buildingArea}
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700">Gross Area</label>
+            <input
+              type="text"
+              name="grossArea"
+              value={newItem.grossArea}
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700">Control Sellable Area</label>
+            <input
+              type="text"
+              name="controlSellableArea"
+              value={newItem.controlSellableArea}
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700">Control Building Area</label>
+            <input
+              type="text"
+              name="controlBuildingArea"
+              value={newItem.controlBuildingArea}
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
           </div>
         </div>
-      )}
+        <div className="flex justify-between gap-4 mt-6">
+          <button
+            className="w-1/2 py-2 bg-red-400 text-white rounded hover:bg-red-500"
+            onClick={handleCloseModal}
+          >
+            Batal
+          </button>
+          <button
+            className="w-1/2 py-2 bg-blue-400 text-white rounded hover:bg-blue-500"
+            onClick={handleAddItem}
+          >
+            Simpan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };

@@ -133,7 +133,17 @@ const Approval = () => {
                 <td className="py-3 px-4">{item.projectID}</td>
                 <td className="py-3 px-4">{item.totalBudget}</td>
                 <td className="py-3 px-4">{item.projectLength}</td>
-                <td className="py-3 px-4">{item.status}</td>
+                <td className="py-3 px-4">
+                  <span
+                    className={`inline-block px-6 py-1 rounded-full font-bold w-max ${
+                      item.status === "Approved"
+                        ? "bg-green-200 text-green-600"
+                        : "bg-red-200 text-red-600"
+                    }`}
+                  >
+                    {item.status}
+                  </span>
+                </td>
                 <td className="py-3 px-4 border">
                   <Link to="/budget/approval/yoy-budget">
                     <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg items-center w-12 h-12">
