@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export const testData = [
   {
@@ -134,14 +135,18 @@ const Approval = () => {
                 <td className="py-3 px-4">{item.projectLength}</td>
                 <td className="py-3 px-4">{item.status}</td>
                 <td className="py-3 px-4 border">
-                  <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg  items-center  w-12 h-12">
-                    <i className="fa-solid fa-square-poll-vertical"></i>
-                  </button>
+                  <Link to="/budget/approval/yoy-budget">
+                    <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg items-center w-12 h-12">
+                      <i className="fa-solid fa-square-poll-vertical"></i>
+                    </button>
+                  </Link>
                 </td>
                 <td className="py-3 px-4 border">
-                  <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg  items-center  w-12 h-12">
-                    <i className="fa-solid fa-list-ul"></i>
-                  </button>
+                  <Link to="/budget/approval/breakdown">
+                    <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg  items-center  w-12 h-12">
+                      <i className="fa-solid fa-list-ul"></i>
+                    </button>
+                  </Link>
                 </td>
                 <td className="py-3 px-4 border">
                   <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg  items-center  w-12 h-12">

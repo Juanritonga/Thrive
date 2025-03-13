@@ -1,106 +1,102 @@
 import { useState } from "react";
 
-
 export const testData = [
-    {
-      entity: "Entity001",
-      projectId: "PROJ001",
-      year: 2024,
-      month: "January",
-      budget: 100000,
-    },
-    {
-      entity: "Entity002",
-      projectId: "PROJ002",
-      year: 2024,
-      month: "February",
-      budget: 150000,
-    },
-    {
-      entity: "Entity003",
-      projectId: "PROJ003",
-      year: 2024,
-      month: "March",
-      budget: 200000,
-    },
-    {
-      entity: "Entity004",
-      projectId: "PROJ004",
-      year: 2024,
-      month: "April",
-      budget: 175000,
-    },
-    {
-      entity: "Entity005",
-      projectId: "PROJ005",
-      year: 2024,
-      month: "May",
-      budget: 120000,
-    },
-    {
-      entity: "Entity006",
-      projectId: "PROJ006",
-      year: 2024,
-      month: "June",
-      budget: 250000,
-    },
-    {
-      entity: "Entity007",
-      projectId: "PROJ007",
-      year: 2024,
-      month: "July",
-      budget: 300000,
-    },
-    {
-      entity: "Entity008",
-      projectId: "PROJ008",
-      year: 2024,
-      month: "August",
-      budget: 180000,
-    },
-    {
-      entity: "Entity009",
-      projectId: "PROJ009",
-      year: 2024,
-      month: "September",
-      budget: 160000,
-    },
-    {
-      entity: "Entity010",
-      projectId: "PROJ010",
-      year: 2024,
-      month: "October",
-      budget: 140000,
-    },
-    {
-      entity: "Entity011",
-      projectId: "PROJ011",
-      year: 2024,
-      month: "November",
-      budget: 210000,
-    },
-    {
-      entity: "Entity012",
-      projectId: "PROJ012",
-      year: 2024,
-      month: "December",
-      budget: 230000,
-    }
-  ];
-  
+  {
+    entity: "Entity001",
+    projectId: "PROJ001",
+    year: 2024,
+    month: "January",
+    budget: 100000,
+  },
+  {
+    entity: "Entity002",
+    projectId: "PROJ002",
+    year: 2024,
+    month: "February",
+    budget: 150000,
+  },
+  {
+    entity: "Entity003",
+    projectId: "PROJ003",
+    year: 2024,
+    month: "March",
+    budget: 200000,
+  },
+  {
+    entity: "Entity004",
+    projectId: "PROJ004",
+    year: 2024,
+    month: "April",
+    budget: 175000,
+  },
+  {
+    entity: "Entity005",
+    projectId: "PROJ005",
+    year: 2024,
+    month: "May",
+    budget: 120000,
+  },
+  {
+    entity: "Entity006",
+    projectId: "PROJ006",
+    year: 2024,
+    month: "June",
+    budget: 250000,
+  },
+  {
+    entity: "Entity007",
+    projectId: "PROJ007",
+    year: 2024,
+    month: "July",
+    budget: 300000,
+  },
+  {
+    entity: "Entity008",
+    projectId: "PROJ008",
+    year: 2024,
+    month: "August",
+    budget: 180000,
+  },
+  {
+    entity: "Entity009",
+    projectId: "PROJ009",
+    year: 2024,
+    month: "September",
+    budget: 160000,
+  },
+  {
+    entity: "Entity010",
+    projectId: "PROJ010",
+    year: 2024,
+    month: "October",
+    budget: 140000,
+  },
+  {
+    entity: "Entity011",
+    projectId: "PROJ011",
+    year: 2024,
+    month: "November",
+    budget: 210000,
+  },
+  {
+    entity: "Entity012",
+    projectId: "PROJ012",
+    year: 2024,
+    month: "December",
+    budget: 230000,
+  },
+];
 
 const YoYBudget = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [items] = useState(testData);
 
-  // Hitung total halaman
-  const totalPages = Math.ceil(testData.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentData = items.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Ambil data untuk halaman saat ini
-  const currentData = testData.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
@@ -130,26 +126,54 @@ const YoYBudget = () => {
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-center space-x-2 mt-4">
-        <button
-          className={`px-4 py-2 border rounded ${
-            currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-blue-500 text-white"
-          }`}
-          onClick={() => setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Prev
-        </button>
-        <span className="py-2 px-4 border rounded">{currentPage} / {totalPages}</span>
-        <button
-          className={`px-4 py-2 border rounded ${
-            currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-blue-500 text-white"
-          }`}
-          onClick={() => setCurrentPage(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
+      <div className="flex flex-wrap justify-between items-center gap-4">
+        <span className="text-sm text-gray-500">
+          Showing {indexOfFirstItem + 1} to{" "}
+          {Math.min(indexOfLastItem, items.length)} of {items.length} entries
+        </span>
+
+        <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3">
+            <button
+              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              &lt;
+            </button>
+            {[...Array(Math.ceil(items.length / itemsPerPage))].map((_, index) => (
+              <button
+                key={index}
+                className={`px-4 py-2 border rounded-md ${
+                  currentPage === index + 1
+                    ? "bg-custom-blue text-white"
+                    : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                }`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              className="px-4 py-2 border rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === Math.ceil(items.length / itemsPerPage)}
+            >
+              &gt;
+            </button>
+          </div>
+          <div className="flex items-center space-x-2">
+            <select
+              className="px-4 py-2 border rounded-md text-white bg-custom-blue"
+              value={itemsPerPage}
+              onChange={(e) => setItemsPerPage(Number(e.target.value))}
+            >
+              <option value={10}>10 Baris</option>
+              <option value={20}>20 Baris</option>
+              <option value={50}>50 Baris</option>
+            </select>
+          </div>
+        </div>
       </div>
     </div>
   );

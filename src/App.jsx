@@ -148,13 +148,12 @@ const App = () => {
             <Route path="cost" element={<Cost />} />
           </Route>
           <Route path="budget" element={<Budget />}>
-            <Route path="approval" element={<Approval />}>
-              <Route path="yoy-budget" element={<YoYBudget />} />
-              <Route path="breakdown" element={<Breakdown />} />
-            </Route>
+            <Route path="approval" element={<Approval />}></Route>
             <Route path="entry" element={<Entry />} />
           </Route>
           <Route path="report" element={<Report />}></Route>
+          <Route path="/budget/approval/yoy-budget" element={<YoYBudget />} />
+          <Route path="/budget/approval/breakdown" element={<Breakdown />} />
         </Route>
       </Routes>
     </BrowserRouter>
