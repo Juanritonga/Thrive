@@ -2,155 +2,155 @@ import { useState } from "react";
 
 export const testData = [
   {
-    id: "PR001",
+    classID: "CLA001",
     description: "Journal Memorial",
-    sellableArea: "150.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
+    costType: "Cost",
+    costAllocation: "Sellable Area",
+    chargeType: "Land",
     madeBy: "Jon Pantau",
     updateDate: "19-01-2024",
   },
   {
-    id: "PR002",
+    classID: "CLA002",
     description: "Journal Memorial",
-    sellableArea: "150.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
+    costType: "Cost",
+    costAllocation: "Sellable Area",
+    chargeType: "Land",
     madeBy: "Jon Pantau",
     updateDate: "19-01-2024",
   },
   {
-    id: "PR003",
-    description: "Journal Memorial",
-    sellableArea: "150.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
-    madeBy: "Jon Pantau",
-    updateDate: "19-01-2024",
-  },
-  {
-    id: "PR004",
-    description: "Journal Memorial",
-    sellableArea: "120.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
-    madeBy: "Jane Doe",
+    classID: "CLA003",
+    description: "General Ledger",
+    costType: "Revenue",
+    costAllocation: "Rentable Area",
+    chargeType: "Building",
+    madeBy: "Alice Smith",
     updateDate: "20-01-2024",
   },
   {
-    id: "PR005",
-    description: "Journal Memorial",
-    sellableArea: "150.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
-    madeBy: "John Smith",
+    classID: "CLA004",
+    description: "Accounts Payable",
+    costType: "Expense",
+    costAllocation: "Common Area",
+    chargeType: "Maintenance",
+    madeBy: "Bob Johnson",
     updateDate: "21-01-2024",
   },
   {
-    id: "PR006",
-    description: "Journal Memorial",
-    sellableArea: "180.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
-    madeBy: "Alice Johnson",
+    classID: "CLA005",
+    description: "Accounts Receivable",
+    costType: "Revenue",
+    costAllocation: "Sellable Area",
+    chargeType: "Land",
+    madeBy: "Charlie Brown",
     updateDate: "22-01-2024",
   },
   {
-    id: "PR007",
-    description: "Journal Memorial",
-    sellableArea: "210.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
-    madeBy: "Bob Brown",
+    classID: "CLA006",
+    description: "Fixed Assets",
+    costType: "Cost",
+    costAllocation: "Building Area",
+    chargeType: "Depreciation",
+    madeBy: "Diana Prince",
     updateDate: "23-01-2024",
   },
   {
-    id: "PR008",
-    description: "Journal Memorial",
-    sellableArea: "240.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
-    madeBy: "Charlie Davis",
+    classID: "CLA007",
+    description: "Inventory Management",
+    costType: "Cost",
+    costAllocation: "Storage Area",
+    chargeType: "Handling",
+    madeBy: "Evan Wright",
     updateDate: "24-01-2024",
   },
   {
-    id: "PR009",
-    description: "Journal Memorial",
-    sellableArea: "270.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
-    madeBy: "Eve White",
+    classID: "CLA008",
+    description: "Payroll",
+    costType: "Expense",
+    costAllocation: "Office Area",
+    chargeType: "Salaries",
+    madeBy: "Fiona Green",
     updateDate: "25-01-2024",
   },
   {
-    id: "PR010",
-    description: "Journal Memorial",
-    sellableArea: "300.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
-    madeBy: "Frank Green",
+    classID: "CLA009",
+    description: "Tax Reporting",
+    costType: "Expense",
+    costAllocation: "Common Area",
+    chargeType: "Taxes",
+    madeBy: "George Black",
     updateDate: "26-01-2024",
+  },
+  {
+    classID: "CLA010",
+    description: "Budgeting",
+    costType: "Planning",
+    costAllocation: "Sellable Area",
+    chargeType: "Forecast",
+    madeBy: "Hannah White",
+    updateDate: "27-01-2024",
+  },
+  {
+    classID: "CLA011",
+    description: "Financial Reporting",
+    costType: "Revenue",
+    costAllocation: "Rentable Area",
+    chargeType: "Analysis",
+    madeBy: "Ian Blue",
+    updateDate: "28-01-2024",
+  },
+  {
+    classID: "CLA012",
+    description: "Cash Flow",
+    costType: "Cost",
+    costAllocation: "Common Area",
+    chargeType: "Liquidity",
+    madeBy: "Jenna Red",
+    updateDate: "29-01-2024",
+  },
+  {
+    classID: "CLA013",
+    description: "Audit Trail",
+    costType: "Expense",
+    costAllocation: "Office Area",
+    chargeType: "Compliance",
+    madeBy: "Kevin Yellow",
+    updateDate: "30-01-2024",
+  },
+  {
+    classID: "CLA014",
+    description: "Depreciation Schedule",
+    costType: "Cost",
+    costAllocation: "Building Area",
+    chargeType: "Depreciation",
+    madeBy: "Laura Purple",
+    updateDate: "31-01-2024",
+  },
+  {
+    classID: "CLA015",
+    description: "Project Accounting",
+    costType: "Revenue",
+    costAllocation: "Sellable Area",
+    chargeType: "Billing",
+    madeBy: "Mike Orange",
+    updateDate: "01-02-2024",
   },
 ];
 
-const Phase = () => {
+const SetupClass = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState(testData);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [error, setError] = useState("");
 
   const [newItem, setNewItem] = useState({
-    id: "",
+    classID: "",
     description: "",
-    sellableArea: "",
-    buildingArea: "",
-    grossArea: "",
-    gardenArea: "",
-    streetArea: "",
-    controlSellableArea: "",
-    controlBuildingArea: "",
+    costType: "",
+    costAllocation: "",
+    chargeType: "",
     madeBy: "Default User",
     updateDate: new Date().toLocaleDateString("en-GB"),
   });
@@ -165,11 +165,7 @@ const Phase = () => {
   );
   const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleOpenModal = () => {
-    setError("");
-    setIsModalOpen(true);
-  };
-
+  const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleInputChange = (e) => {
@@ -179,40 +175,26 @@ const Phase = () => {
 
   const handleAddItem = () => {
     if (
-      !newItem.id ||
-      !newItem.description ||
-      !newItem.sellableArea ||
-      !newItem.buildingArea ||
-      !newItem.grossArea ||
-      !newItem.gardenArea ||
-      !newItem.streetArea ||
-      !newItem.controlSellableArea ||
-      !newItem.controlBuildingArea
+      newItem.classID &&
+      newItem.description &&
+      newItem.costType &&
+      newItem.costAllocation &&
+      newItem.chargeType
     ) {
-      setError("Isi semua field terlebih dahulu.");
-      return;
+      setItems([...items, newItem]);
+      setNewItem({
+        classID: "",
+        description: "",
+        costType: "",
+        costAllocation: "",
+        chargeType: "",
+        madeBy: "Default User",
+        updateDate: new Date().toLocaleDateString("en-GB"),
+      });
+      handleCloseModal();
+    } else {
+      alert("Isi semua field terlebih dahulu.");
     }
-
-    if (items.some((item) => item.id === newItem.id)) {
-      setError("ID sudah ada. Harap gunakan ID yang unik.");
-      return;
-    }
-
-    setItems([...items, newItem]);
-    setNewItem({
-      id: "",
-      description: "",
-      sellableArea: "",
-      buildingArea: "",
-      grossArea: "",
-      gardenArea: "",
-      streetArea: "",
-      controlSellableArea: "",
-      controlBuildingArea: "",
-      madeBy: "Default User",
-      updateDate: new Date().toLocaleDateString("en-GB"),
-    });
-    handleCloseModal();
   };
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
@@ -245,35 +227,27 @@ const Phase = () => {
         <table className="min-w-full bg-white border rounded-lg">
           <thead>
             <tr className="text-custom-blue bg-gray-200">
-              <th className="py-3 px-4 border">ID</th>
+              <th className="py-3 px-4 border">Class ID</th>
               <th className="py-3 px-4 border">Description</th>
-              <th className="py-3 px-4 border">Sellable Area</th>
-              <th className="py-3 px-4 border">Building Area</th>
-              <th className="py-3 px-4 border">Gross Area</th>
-              <th className="py-3 px-4 border">Garden Area</th>
-              <th className="py-3 px-4 border">Street Area</th>
-              <th className="py-3 px-4 border">Control Sellable Area</th>
-              <th className="py-3 px-4 border">Control Building Area</th>
+              <th className="py-3 px-4 border">Cost Type</th>
+              <th className="py-3 px-4 border">Cost Allocation</th>
+              <th className="py-3 px-4 border">Charge Type</th>
               <th className="py-3 px-4 border">Made By</th>
               <th className="py-3 px-4 border">Update Date</th>
               <th className="py-3 px-4 border">Aksi</th>
             </tr>
           </thead>
           <tbody>
-            {currentData.map((item) => (
+            {currentData.map((item, index) => (
               <tr
-                key={item.id}
+                key={index}
                 className="border-t text-center text-custom-blue2"
               >
-                <td className="py-3 px-4">{item.id}</td>
+                <td className="py-3 px-4">{item.classID}</td>
                 <td className="py-3 px-4">{item.description}</td>
-                <td className="py-3 px-4">{item.sellableArea}</td>
-                <td className="py-3 px-4">{item.buildingArea}</td>
-                <td className="py-3 px-4">{item.grossArea}</td>
-                <td className="py-3 px-4">{item.gardenArea}</td>
-                <td className="py-3 px-4">{item.streetArea}</td>
-                <td className="py-3 px-4">{item.controlSellableArea}</td>
-                <td className="py-3 px-4">{item.controlBuildingArea}</td>
+                <td className="py-3 px-4">{item.costType}</td>
+                <td className="py-3 px-4">{item.costAllocation}</td>
+                <td className="py-3 px-4">{item.chargeType}</td>
                 <td className="py-3 px-4">{item.madeBy}</td>
                 <td className="py-3 px-4">{item.updateDate}</td>
                 <td className="py-3 px-4 border">
@@ -287,6 +261,7 @@ const Phase = () => {
         </table>
       </div>
 
+      {/* Pagination */}
       <div className="flex flex-wrap justify-between items-center gap-4">
         <span className="text-sm text-gray-500">
           Showing {indexOfFirstItem + 1} to{" "}
@@ -342,6 +317,7 @@ const Phase = () => {
         </div>
       </div>
 
+      {/* Modal Tambah Baru */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg w-[600px]">
@@ -352,23 +328,14 @@ const Phase = () => {
               </button>
             </div>
             <div className="p-6">
-              {error && <div className="text-red-500 mb-4">{error}</div>}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-gray-700">Project ID</label>
+                  <label className="block text-gray-700">Class ID</label>
                   <input
                     type="text"
-                    name="id"
-                    value={newItem.id}
+                    name="classID"
+                    value={newItem.classID}
                     onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Phase ID</label>
-                  <input
-                    type="text"
-                    name="phaseID"
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
@@ -383,71 +350,31 @@ const Phase = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700">Sellable Area</label>
+                  <label className="block text-gray-700">Cost Type</label>
                   <input
                     type="text"
-                    name="sellableArea"
-                    value={newItem.sellableArea}
+                    name="costType"
+                    value={newItem.costType}
                     onChange={handleInputChange}
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700">Building Area</label>
+                  <label className="block text-gray-700">Cost Allocation</label>
                   <input
                     type="text"
-                    name="buildingArea"
-                    value={newItem.buildingArea}
+                    name="costAllocation"
+                    value={newItem.costAllocation}
                     onChange={handleInputChange}
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700">Gross Area</label>
+                  <label className="block text-gray-700">Charge Type</label>
                   <input
                     type="text"
-                    name="grossArea"
-                    value={newItem.grossArea}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Garden Area</label>
-                  <input
-                    type="text"
-                    name="gardenArea"
-                    value={newItem.gardenArea}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Street Area</label>
-                  <input
-                    type="text"
-                    name="streetArea"
-                    value={newItem.streetArea}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Control Sellable Area</label>
-                  <input
-                    type="text"
-                    name="controlSellableArea"
-                    value={newItem.controlSellableArea}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Control Building Area</label>
-                  <input
-                    type="text"
-                    name="controlBuildingArea"
-                    value={newItem.controlBuildingArea}
+                    name="chargeType"
+                    value={newItem.chargeType}
                     onChange={handleInputChange}
                     className="w-full p-2 border border-gray-300 rounded"
                   />
@@ -475,4 +402,4 @@ const Phase = () => {
   );
 };
 
-export default Phase;
+export default SetupClass;

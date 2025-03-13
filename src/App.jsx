@@ -43,8 +43,8 @@ import Phase from "./pages/ProjectExternal/ProjectMaster/Phase";
 import Property from "./pages/ProjectExternal/ProjectMaster/Property";
 import PropertyPhase from "./pages/ProjectExternal/ProjectMaster/PropertyPhase";
 import SetupProject from "./pages/ProjectExternal/SetupProject";
-import Class from "./pages/ProjectExternal/Setup/Class";
-import Component from "./pages/ProjectExternal/Setup/Component";
+import SetupClass from "./pages/ProjectExternal/Setup/SetupClass";
+import SetupComponent from "./pages/ProjectExternal/Setup/SetupComponent";
 import Cost from "./pages/ProjectExternal/Setup/Cost";
 import Budget from "./pages/ProjectExternal/Budget";
 import Entry from "./pages/ProjectExternal/Budget/Entry";
@@ -143,8 +143,8 @@ const App = () => {
               <Route path="_propertyphase" element={<PropertyPhase />} />
             </Route>
             <Route path="setup-project" element={<SetupProject />}>
-              <Route path="class" element={<Class />} />
-              <Route path="component" element={<Component />} />
+              <Route path="class" element={<SetupClass />} />
+              <Route path="component" element={<SetupComponent />} />
               <Route path="cost" element={<Cost />} />
             </Route>
             <Route path="budget" element={<Budget />}>

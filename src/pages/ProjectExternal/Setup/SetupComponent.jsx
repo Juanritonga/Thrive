@@ -2,155 +2,171 @@ import { useState } from "react";
 
 export const testData = [
   {
-    id: "PR001",
+    componentID: "COM001",
     description: "Journal Memorial",
-    sellableArea: "150.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
+    invoiceAccount: "11.1010001.999",
+    stockAccount: "11.1010001.999",
+    accumulatedAccount: "11.1010001.999",
+    hppAccount: "11.1010001.999",
     madeBy: "Jon Pantau",
     updateDate: "19-01-2024",
   },
   {
-    id: "PR002",
-    description: "Journal Memorial",
-    sellableArea: "150.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
-    madeBy: "Jon Pantau",
-    updateDate: "19-01-2024",
-  },
-  {
-    id: "PR003",
-    description: "Journal Memorial",
-    sellableArea: "150.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
-    madeBy: "Jon Pantau",
-    updateDate: "19-01-2024",
-  },
-  {
-    id: "PR004",
-    description: "Journal Memorial",
-    sellableArea: "120.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
+    componentID: "COM002",
+    description: "Journal Adjustment",
+    invoiceAccount: "11.1010002.998",
+    stockAccount: "11.1010002.998",
+    accumulatedAccount: "11.1010002.998",
+    hppAccount: "11.1010002.998",
     madeBy: "Jane Doe",
     updateDate: "20-01-2024",
   },
   {
-    id: "PR005",
-    description: "Journal Memorial",
-    sellableArea: "150.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
-    madeBy: "John Smith",
+    componentID: "COM003",
+    description: "Journal Posting",
+    invoiceAccount: "11.1010003.997",
+    stockAccount: "11.1010003.997",
+    accumulatedAccount: "11.1010003.997",
+    hppAccount: "11.1010003.997",
+    madeBy: "Jon Pantau",
     updateDate: "21-01-2024",
   },
   {
-    id: "PR006",
-    description: "Journal Memorial",
-    sellableArea: "180.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
-    madeBy: "Alice Johnson",
+    componentID: "COM004",
+    description: "Journal Correction",
+    invoiceAccount: "11.1010004.996",
+    stockAccount: "11.1010004.996",
+    accumulatedAccount: "11.1010004.996",
+    hppAccount: "11.1010004.996",
+    madeBy: "Alice Smith",
     updateDate: "22-01-2024",
   },
   {
-    id: "PR007",
-    description: "Journal Memorial",
-    sellableArea: "210.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
-    madeBy: "Bob Brown",
+    componentID: "COM005",
+    description: "Journal Reversal",
+    invoiceAccount: "11.1010005.995",
+    stockAccount: "11.1010005.995",
+    accumulatedAccount: "11.1010005.995",
+    hppAccount: "11.1010005.995",
+    madeBy: "Jane Doe",
     updateDate: "23-01-2024",
   },
   {
-    id: "PR008",
+    componentID: "COM006",
     description: "Journal Memorial",
-    sellableArea: "240.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
-    madeBy: "Charlie Davis",
+    invoiceAccount: "11.1010006.994",
+    stockAccount: "11.1010006.994",
+    accumulatedAccount: "11.1010006.994",
+    hppAccount: "11.1010006.994",
+    madeBy: "Jon Pantau",
     updateDate: "24-01-2024",
   },
   {
-    id: "PR009",
-    description: "Journal Memorial",
-    sellableArea: "270.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
-    madeBy: "Eve White",
+    componentID: "COM007",
+    description: "Journal Adjustment",
+    invoiceAccount: "11.1010007.993",
+    stockAccount: "11.1010007.993",
+    accumulatedAccount: "11.1010007.993",
+    hppAccount: "11.1010007.993",
+    madeBy: "Alice Smith",
     updateDate: "25-01-2024",
   },
   {
-    id: "PR010",
-    description: "Journal Memorial",
-    sellableArea: "300.000 m2",
-    buildingArea: "90.000 m2",
-    grossArea: "90.000 m2",
-    gardenArea: "90.000 m2",
-    streetArea: "90.000 m2",
-    controlSellableArea: "150.000 m2",
-    controlBuildingArea: "90.000 m2",
-    madeBy: "Frank Green",
+    componentID: "COM008",
+    description: "Journal Posting",
+    invoiceAccount: "11.1010008.992",
+    stockAccount: "11.1010008.992",
+    accumulatedAccount: "11.1010008.992",
+    hppAccount: "11.1010008.992",
+    madeBy: "Jane Doe",
     updateDate: "26-01-2024",
+  },
+  {
+    componentID: "COM009",
+    description: "Journal Correction",
+    invoiceAccount: "11.1010009.991",
+    stockAccount: "11.1010009.991",
+    accumulatedAccount: "11.1010009.991",
+    hppAccount: "11.1010009.991",
+    madeBy: "Jon Pantau",
+    updateDate: "27-01-2024",
+  },
+  {
+    componentID: "COM010",
+    description: "Journal Reversal",
+    invoiceAccount: "11.1010010.990",
+    stockAccount: "11.1010010.990",
+    accumulatedAccount: "11.1010010.990",
+    hppAccount: "11.1010010.990",
+    madeBy: "Alice Smith",
+    updateDate: "28-01-2024",
+  },
+  {
+    componentID: "COM011",
+    description: "Journal Memorial",
+    invoiceAccount: "11.1010011.989",
+    stockAccount: "11.1010011.989",
+    accumulatedAccount: "11.1010011.989",
+    hppAccount: "11.1010011.989",
+    madeBy: "Jane Doe",
+    updateDate: "29-01-2024",
+  },
+  {
+    componentID: "COM012",
+    description: "Journal Adjustment",
+    invoiceAccount: "11.1010012.988",
+    stockAccount: "11.1010012.988",
+    accumulatedAccount: "11.1010012.988",
+    hppAccount: "11.1010012.988",
+    madeBy: "Jon Pantau",
+    updateDate: "30-01-2024",
+  },
+  {
+    componentID: "COM013",
+    description: "Journal Posting",
+    invoiceAccount: "11.1010013.987",
+    stockAccount: "11.1010013.987",
+    accumulatedAccount: "11.1010013.987",
+    hppAccount: "11.1010013.987",
+    madeBy: "Alice Smith",
+    updateDate: "31-01-2024",
+  },
+  {
+    componentID: "COM014",
+    description: "Journal Correction",
+    invoiceAccount: "11.1010014.986",
+    stockAccount: "11.1010014.986",
+    accumulatedAccount: "11.1010014.986",
+    hppAccount: "11.1010014.986",
+    madeBy: "Jane Doe",
+    updateDate: "01-02-2024",
+  },
+  {
+    componentID: "COM015",
+    description: "Journal Reversal",
+    invoiceAccount: "11.1010015.985",
+    stockAccount: "11.1010015.985",
+    accumulatedAccount: "11.1010015.985",
+    hppAccount: "11.1010015.985",
+    madeBy: "Jon Pantau",
+    updateDate: "02-02-2024",
   },
 ];
 
-const Phase = () => {
+const SetupComponent = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState(testData);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [error, setError] = useState("");
 
   const [newItem, setNewItem] = useState({
-    id: "",
+    componentID: "",
     description: "",
-    sellableArea: "",
-    buildingArea: "",
-    grossArea: "",
-    gardenArea: "",
-    streetArea: "",
-    controlSellableArea: "",
-    controlBuildingArea: "",
+    invoiceAccount: "",
+    stockAccount: "",
+    accumulatedAccount: "",
+    hppAccount: "",
     madeBy: "Default User",
     updateDate: new Date().toLocaleDateString("en-GB"),
   });
@@ -165,11 +181,7 @@ const Phase = () => {
   );
   const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleOpenModal = () => {
-    setError("");
-    setIsModalOpen(true);
-  };
-
+  const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleInputChange = (e) => {
@@ -179,40 +191,28 @@ const Phase = () => {
 
   const handleAddItem = () => {
     if (
-      !newItem.id ||
-      !newItem.description ||
-      !newItem.sellableArea ||
-      !newItem.buildingArea ||
-      !newItem.grossArea ||
-      !newItem.gardenArea ||
-      !newItem.streetArea ||
-      !newItem.controlSellableArea ||
-      !newItem.controlBuildingArea
+      newItem.componentID &&
+      newItem.description &&
+      newItem.invoiceAccount &&
+      newItem.stockAccount &&
+      newItem.accumulatedAccount &&
+      newItem.hppAccount
     ) {
-      setError("Isi semua field terlebih dahulu.");
-      return;
+      setItems([...items, newItem]);
+      setNewItem({
+        componentID: "",
+        description: "",
+        invoiceAccount: "",
+        stockAccount: "",
+        accumulatedAccount: "",
+        hppAccount: "",
+        madeBy: "Default User",
+        updateDate: new Date().toLocaleDateString("en-GB"),
+      });
+      handleCloseModal();
+    } else {
+      alert("Isi semua field terlebih dahulu.");
     }
-
-    if (items.some((item) => item.id === newItem.id)) {
-      setError("ID sudah ada. Harap gunakan ID yang unik.");
-      return;
-    }
-
-    setItems([...items, newItem]);
-    setNewItem({
-      id: "",
-      description: "",
-      sellableArea: "",
-      buildingArea: "",
-      grossArea: "",
-      gardenArea: "",
-      streetArea: "",
-      controlSellableArea: "",
-      controlBuildingArea: "",
-      madeBy: "Default User",
-      updateDate: new Date().toLocaleDateString("en-GB"),
-    });
-    handleCloseModal();
   };
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
@@ -245,35 +245,29 @@ const Phase = () => {
         <table className="min-w-full bg-white border rounded-lg">
           <thead>
             <tr className="text-custom-blue bg-gray-200">
-              <th className="py-3 px-4 border">ID</th>
+              <th className="py-3 px-4 border">Component ID</th>
               <th className="py-3 px-4 border">Description</th>
-              <th className="py-3 px-4 border">Sellable Area</th>
-              <th className="py-3 px-4 border">Building Area</th>
-              <th className="py-3 px-4 border">Gross Area</th>
-              <th className="py-3 px-4 border">Garden Area</th>
-              <th className="py-3 px-4 border">Street Area</th>
-              <th className="py-3 px-4 border">Control Sellable Area</th>
-              <th className="py-3 px-4 border">Control Building Area</th>
+              <th className="py-3 px-4 border">Inv. Account</th>
+              <th className="py-3 px-4 border">Stock Account</th>
+              <th className="py-3 px-4 border">Accum. Account</th>
+              <th className="py-3 px-4 border">HPP Account</th>
               <th className="py-3 px-4 border">Made By</th>
               <th className="py-3 px-4 border">Update Date</th>
               <th className="py-3 px-4 border">Aksi</th>
             </tr>
           </thead>
           <tbody>
-            {currentData.map((item) => (
+            {currentData.map((item, index) => (
               <tr
-                key={item.id}
+                key={index}
                 className="border-t text-center text-custom-blue2"
               >
-                <td className="py-3 px-4">{item.id}</td>
+                <td className="py-3 px-4">{item.componentID}</td>
                 <td className="py-3 px-4">{item.description}</td>
-                <td className="py-3 px-4">{item.sellableArea}</td>
-                <td className="py-3 px-4">{item.buildingArea}</td>
-                <td className="py-3 px-4">{item.grossArea}</td>
-                <td className="py-3 px-4">{item.gardenArea}</td>
-                <td className="py-3 px-4">{item.streetArea}</td>
-                <td className="py-3 px-4">{item.controlSellableArea}</td>
-                <td className="py-3 px-4">{item.controlBuildingArea}</td>
+                <td className="py-3 px-4">{item.invoiceAccount}</td>
+                <td className="py-3 px-4">{item.stockAccount}</td>
+                <td className="py-3 px-4">{item.accumulatedAccount}</td>
+                <td className="py-3 px-4">{item.hppAccount}</td>
                 <td className="py-3 px-4">{item.madeBy}</td>
                 <td className="py-3 px-4">{item.updateDate}</td>
                 <td className="py-3 px-4 border">
@@ -287,6 +281,7 @@ const Phase = () => {
         </table>
       </div>
 
+      {/* Pagination */}
       <div className="flex flex-wrap justify-between items-center gap-4">
         <span className="text-sm text-gray-500">
           Showing {indexOfFirstItem + 1} to{" "}
@@ -342,6 +337,7 @@ const Phase = () => {
         </div>
       </div>
 
+      {/* Modal Tambah Baru */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg w-[600px]">
@@ -352,23 +348,14 @@ const Phase = () => {
               </button>
             </div>
             <div className="p-6">
-              {error && <div className="text-red-500 mb-4">{error}</div>}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-gray-700">Project ID</label>
+                  <label className="block text-gray-700">Component ID</label>
                   <input
                     type="text"
-                    name="id"
-                    value={newItem.id}
+                    name="componentID"
+                    value={newItem.componentID}
                     onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Phase ID</label>
-                  <input
-                    type="text"
-                    name="phaseID"
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
@@ -383,71 +370,41 @@ const Phase = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700">Sellable Area</label>
+                  <label className="block text-gray-700">Invoice Account</label>
                   <input
                     type="text"
-                    name="sellableArea"
-                    value={newItem.sellableArea}
+                    name="invoiceAccount"
+                    value={newItem.invoiceAccount}
                     onChange={handleInputChange}
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700">Building Area</label>
+                  <label className="block text-gray-700">Stock Account</label>
                   <input
                     type="text"
-                    name="buildingArea"
-                    value={newItem.buildingArea}
+                    name="stockAccount"
+                    value={newItem.stockAccount}
                     onChange={handleInputChange}
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700">Gross Area</label>
+                  <label className="block text-gray-700">Accumulated Account</label>
                   <input
                     type="text"
-                    name="grossArea"
-                    value={newItem.grossArea}
+                    name="accumulatedAccount"
+                    value={newItem.accumulatedAccount}
                     onChange={handleInputChange}
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700">Garden Area</label>
+                  <label className="block text-gray-700">HPP Account</label>
                   <input
                     type="text"
-                    name="gardenArea"
-                    value={newItem.gardenArea}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Street Area</label>
-                  <input
-                    type="text"
-                    name="streetArea"
-                    value={newItem.streetArea}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Control Sellable Area</label>
-                  <input
-                    type="text"
-                    name="controlSellableArea"
-                    value={newItem.controlSellableArea}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Control Building Area</label>
-                  <input
-                    type="text"
-                    name="controlBuildingArea"
-                    value={newItem.controlBuildingArea}
+                    name="hppAccount"
+                    value={newItem.hppAccount}
                     onChange={handleInputChange}
                     className="w-full p-2 border border-gray-300 rounded"
                   />
@@ -475,4 +432,4 @@ const Phase = () => {
   );
 };
 
-export default Phase;
+export default SetupComponent;
