@@ -31,6 +31,12 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   const menuItems = [
     {
       role: "Super Admin",
+      label: "Dashboard",
+      icon: "fas fa-user-shield",
+      path: "/",
+    },
+    {
+      role: "Super Admin",
       label: "Master Data",
       icon: "fas fa-user-shield",
       path: "/master-data",
@@ -57,6 +63,12 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
         { label: "Bank", path: "/finance/bank" },
         { label: "Tax", path: "/finance/tax" },
       ],
+    },
+    {
+      role: "front end",
+      label: "Dashboard",
+      icon: "fas fa-user-shield",
+      path: "/",
     },
     {
       role: "front end",
@@ -105,7 +117,10 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
             { label: "Master", path: "/managementproject/master" },
             { label: "Phase", path: "/managementproject/phase" },
             { label: "Property", path: "/managementproject/property" },
-            { label: "Property Phase", path: "/managementproject/_propertyphase" },
+            {
+              label: "Property Phase",
+              path: "/managementproject/_propertyphase",
+            },
           ],
         },
         {
@@ -128,7 +143,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
           ],
         },
       ],
-    },    
+    },
   ];
 
   const renderMenuItems = (items) => {
@@ -137,24 +152,42 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
       .map((item) => {
         const active = isActive(item.path);
         const isParentActive = active && item.hasDropdown;
-        const activeBgColor = isParentActive ? "bg-custom-blue" : active ? "bg-custom-blue3" : "";
-    
+        const activeBgColor = isParentActive
+          ? "bg-custom-blue"
+          : active
+          ? "bg-custom-blue3"
+          : "";
+
         return (
           <li key={item.path} className="relative">
             <Link
               to={item.path}
               onClick={() => item.hasDropdown && toggleDropdown(item.label)}
-              className={`flex items-center rounded-md p-3 transition-colors duration-200 relative
-                ${active ? "text-white " + activeBgColor : "text-black hover:bg-gray-200 hover:text-black"}`}
+              className={`flex items-center p-3 transition-colors duration-200 relative
+                ${
+                  active
+                    ? "text-white " + activeBgColor
+                    : "text-black hover:bg-gray-200 hover:text-black"
+                }`}
             >
               {active && (
-                <span className={`absolute inset-0 rounded-md -z-10 ${activeBgColor}`}></span>
+                <span
+                  className={`absolute inset-0 -z-10 ${activeBgColor}`}
+                ></span>
               )}
-    
-              <i className={`${item.icon} text-lg w-6 text-center ${active ? "text-white" : "text-custom-blue"}`}></i>
-              
+
+              <i
+                className={`${item.icon} text-lg w-6 text-center ${
+                  active ? "text-white" : "text-custom-blue"
+                }`}
+              ></i>
+
               {!isSmallScreen && isSidebarVisible && (
-                <span className={`ml-4 flex-1 ${active ? "text-white" : "text-custom-blue3"}`}>
+                <span
+                  className={`ml-4 flex-1 ${
+                    active ? "text-white" : "text-custom-blue3"
+                  }`}
+                >
                   {item.label}
                 </span>
               )}
@@ -166,7 +199,6 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
         );
       });
   };
-  
 
   return (
     <div className="relative">

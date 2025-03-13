@@ -50,9 +50,8 @@ import Budget from "./pages/ProjectExternal/Budget";
 import Entry from "./pages/ProjectExternal/Budget/Entry";
 import Approval from "./pages/ProjectExternal/Budget/Approval";
 import Report from "./pages/ProjectExternal/Report";
-
-
-
+import YoYBudget from "./pages/ProjectExternal/Budget/DetailApproval/YoYBudget";
+import Breakdown from "./pages/ProjectExternal/Budget/DetailApproval/Breakdown";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -103,6 +102,7 @@ const App = () => {
           </Route>
 
           <Route path="cash-book" element={<CashBook />}>
+            <Route index element={<Navigate to="bank-cash-book" replace />} />
             <Route path="format" element={<Format />} />
             <Route path="bank-cash-book" element={<BankC />}>
               <Route path=":id" element={<EntryBank />} />
@@ -137,21 +137,24 @@ const App = () => {
 
           <Route path="project" element={<ProjectExternal />}></Route>
           <Route path="managementproject" element={<ProjectMaster />}>
-              <Route path="master" element={<Master />} />
-              <Route path="phase" element={<Phase />} />
-              <Route path="property" element={<Property />} />
-              <Route path="_propertyphase" element={<PropertyPhase />} />
+            <Route path="master" element={<Master />} />
+            <Route path="phase" element={<Phase />} />
+            <Route path="property" element={<Property />} />
+            <Route path="_propertyphase" element={<PropertyPhase />} />
+          </Route>
+          <Route path="setup-project" element={<SetupProject />}>
+            <Route path="class" element={<SetupClass />} />
+            <Route path="component" element={<SetupComponent />} />
+            <Route path="cost" element={<Cost />} />
+          </Route>
+          <Route path="budget" element={<Budget />}>
+            <Route path="approval" element={<Approval />}>
+              <Route path="YoYbudget" element={<YoYBudget />} />
+              <Route path="breakdown" element={<Breakdown />} />
             </Route>
-            <Route path="setup-project" element={<SetupProject />}>
-              <Route path="class" element={<SetupClass />} />
-              <Route path="component" element={<SetupComponent />} />
-              <Route path="cost" element={<Cost />} />
-            </Route>
-            <Route path="budget" element={<Budget />}>
-              <Route path="approval" element={<Approval />} />
-              <Route path="entry" element={<Entry />} />
-            </Route>
-            <Route path="report" element={<Report />}></Route>
+            <Route path="entry" element={<Entry />} />
+          </Route>
+          <Route path="report" element={<Report />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

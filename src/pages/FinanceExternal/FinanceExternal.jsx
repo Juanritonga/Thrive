@@ -8,7 +8,6 @@ const FinanceExternal = () => {
       <div className="flex-1">
         <div className="container bg-white p-8 mx-auto my-4 rounded-lg w-15/16">
           <div className="flex justify-center gap-4">
-            {/* Bank Tab */}
             <NavLink
               to="bank"
               className={({ isActive }) =>
@@ -21,8 +20,6 @@ const FinanceExternal = () => {
             >
               Bank
             </NavLink>
-
-            {/* Transcode Tab */}
             <NavLink
               to="transcode"
               className={({ isActive }) =>
@@ -36,8 +33,6 @@ const FinanceExternal = () => {
               Transcode
             </NavLink>
           </div>
-
-          {/* Nested Routes */}
           <div className="mt-4">
             <Outlet />
           </div>
