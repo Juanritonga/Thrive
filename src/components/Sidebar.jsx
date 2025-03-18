@@ -19,7 +19,12 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, [setIsSidebarVisible]);
 
-  const isActive = (path) => location.pathname.startsWith(path);
+const isActive = (path) => {
+  if (path === "/" && location.pathname !== "/") {
+    return false; // Dashboard tidak aktif saat berada di halaman lain
+  }
+  return location.pathname.startsWith(path);
+};
 
   const toggleDropdown = (label) => {
     setOpenDropdowns((prev) => ({
