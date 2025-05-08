@@ -165,7 +165,7 @@ const Occupation = () => {
                 <td className="py-3 px-4">{item.description}</td>
                 <td className="py-3 px-4">{item.companyCode}</td>
                 <td className="py-3 px-4">{item.company}</td>
-                <td className="py-3 px-4 border">
+                <td className="py-3 px-4">
                   <button className="font-bold bg-gray-200 text-gray-400 p-4 rounded-lg items-center w-12 h-12">
                     <i className="fas fa-edit"></i>
                   </button>

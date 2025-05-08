@@ -24,7 +24,8 @@ const getBreadcrumbs = (pathname) => {
     "account-period": "Account Period",
     "managementproject":"Project Management",
     "_propertyphase":"Property Phase",
-    "setup-project":"Setup"
+    "setup-project":"Setup",
+    "salesadministration":"Sales Administration"
   };
 
   const breadcrumbPath = [
@@ -121,7 +122,7 @@ const Header = ({ setIsSidebarVisible, isSidebarVisible }) => {
 
       <div className="flex items-center sm:mt-0">
         <div className="flex items-center text-black p-2 rounded mr-4">
-          <div className="font-bold border border-gray-200 bg-white text-custom-blue mr-2 p-4 rounded-lg flex items-center justify-center w-12 h-12">
+          <div className="font-bold border border-gray-200 bg-white text-custom-blue mr-5 p-4 rounded-lg flex items-center justify-center w-12 h-12">
             {name.charAt(0)}
           </div>
           <div className="min-w-0 mr-5">

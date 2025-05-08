@@ -19,12 +19,22 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, [setIsSidebarVisible]);
 
-const isActive = (path) => {
-  if (path === "/" && location.pathname !== "/") {
-    return false; // Dashboard tidak aktif saat berada di halaman lain
-  }
-  return location.pathname.startsWith(path);
-};
+  const isActive = (path, exactMatch = false) => {
+    if (exactMatch) {
+      return location.pathname === path;
+    }
+  
+    const currentSegments = location.pathname.split("/").filter(Boolean);
+    const pathSegments = path.split("/").filter(Boolean);
+  
+    // Path sekarang harus langsung child dari path yang diuji
+    return (
+      currentSegments.length === pathSegments.length + 1 &&
+      location.pathname.startsWith(path)
+    );
+  };
+  
+  
 
   const toggleDropdown = (label) => {
     setOpenDropdowns((prev) => ({
@@ -70,13 +80,13 @@ const isActive = (path) => {
       ],
     },
     {
-      role: "front end",
+      role: "frontend",
       label: "Dashboard",
       icon: "fas fa-user-shield",
       path: "/",
     },
     {
-      role: "front end",
+      role: "Super Admin",
       label: "Finance",
       icon: "fas fa-file-invoice",
       path: "/finance",
@@ -108,7 +118,7 @@ const isActive = (path) => {
       ],
     },
     {
-      role: "front end",
+      role: "Super Admin",
       label: "Project",
       icon: "fas fa-file-invoice",
       path: "/project",
@@ -116,46 +126,96 @@ const isActive = (path) => {
       children: [
         {
           label: "Project Management",
-          path: "/managementproject",
+          path: "/project/managementproject",
           hasDropdown: true,
           children: [
-            { label: "Master", path: "/managementproject/master" },
-            { label: "Phase", path: "/managementproject/phase" },
-            { label: "Property", path: "/managementproject/property" },
+            { label: "Master", path: "/project/managementproject/master" },
+            { label: "Phase", path: "/project/managementproject/phase" },
+            { label: "Property", path: "/project/managementproject/property" },
             {
               label: "Property Phase",
-              path: "/managementproject/_propertyphase",
+              path: "/project/managementproject/_propertyphase",
             },
           ],
         },
         {
           label: "Setup",
-          path: "/setup-project",
+          path: "/project/setup-project",
           hasDropdown: true,
           children: [
-            { label: "Class", path: "/setup-project/class" },
-            { label: "Component", path: "/setup-project/component" },
-            { label: "Cost", path: "/setup-project/cost" },
+            { label: "Class", path: "/project/setup-project/class" },
+            { label: "Component", path: "/project/setup-project/component" },
+            { label: "Cost", path: "/project/setup-project/cost" },
           ],
         },
         {
           label: "Budget",
-          path: "/budget",
+          path: "/project/budget",
           hasDropdown: true,
           children: [
-            { label: "Entry", path: "/budget/entry" },
-            { label: "Approval", path: "/budget/approval" },
+            { label: "Entry", path: "/project/budget/entry" },
+            { label: "Approval", path: "/project/budget/approval" },
           ],
         },
       ],
     },
+    {
+  role: "Super Admin",
+  label: "Sales",
+  icon: "fas fa-file-invoice",
+  path: "/sales",
+  hasDropdown: true,
+  children: [
+    {
+      label: "Sales Administration",
+      path: "/sales/salesadministration",
+      hasDropdown: true,
+      children: [
+        {
+          label: "Master",
+          path: "/sales/salesadministration/master",
+          hasDropdown: true,
+          children: [
+            { label: "Unit", path: "/sales/salesadministration/master/unit" },
+            { label: "Discount", path: "/sales/salesadministration/master/discount" },
+            { label: "Payment Plan", path: "/sales/salesadministration/master/paymentplan" },
+            { label: "Price", path: "/sales/salesadministration/master/price" },
+            { label: "Sales Agent", path: "/sales/salesadministration/master/salesagent" },
+            { label: "Package", path: "/sales/salesadministration/master/package" },
+            { label: "Media", path: "/sales/salesadministration/master/media" },
+            { label: "Generation", path: "/sales/salesadministration/master/generation" },
+            { label: "Occupation", path: "/sales/salesadministration/master/occupation" },
+          ],
+        },
+        {
+          label: "Purchase",
+          path: "/sales/salesadministration/purchase",
+          hasDropdown: true,
+          children: [
+            { label: "Hold / Release", path: "/sales/salesadministration/purchase/hold" },
+            { label: "Reservation", path: "/sales/salesadministration/purchase/reservation" },
+            { label: "Booking", path: "/sales/salesadministration/purchase/booking" },
+            { label: "Billing", path: "/sales/salesadministration/purchase/billing" },
+            { label: "Cancellation", path: "/sales/salesadministration/purchase/cancellation" },
+            { label: "Change Owner", path: "/sales/salesadministration/purchase/changeowner" },
+            { label: "Transfer Unit", path: "/sales/salesadministration/purchase/transferunit" },
+            { label: "Rounding", path: "/sales/salesadministration/purchase/rounding" },
+            { label: "Global Price", path: "/sales/salesadministration/purchase/globalprice" },
+            { label: "Order Document", path: "/sales/salesadministration/purchase/orderdocument" },
+          ],
+        },
+      ],
+    },
+  ],
+}
+
   ];
 
   const renderMenuItems = (items) => {
     return items
       .filter((item) => !item.role || item.role === userRole)
       .map((item) => {
-        const active = isActive(item.path);
+        const active = isActive(item.path, true) || isActive(item.path);
         const isParentActive = active && item.hasDropdown;
         const activeBgColor = isParentActive
           ? "bg-custom-blue"
@@ -164,43 +224,49 @@ const isActive = (path) => {
           : "";
 
         return (
-          <li key={item.path} className="relative ">
-            <Link
-              to={item.path}
-              onClick={() => item.hasDropdown && toggleDropdown(item.label)}
-              className={`flex items-center p-3 transition-colors duration-200 relative
-                ${
-                  active
-                    ? "text-white " + activeBgColor
-                    : "text-black hover:bg-gray-200 hover:text-black"
-                }`}
-            >
-              {active && (
-                <span
-                  className={`absolute inset-0 -z-10 ${activeBgColor}`}
-                ></span>
-              )}
+          <li key={item.path} className="relative">
+  <Link
+    to={item.path}
+    onClick={() => item.hasDropdown && toggleDropdown(item.label)}
+    className={`flex items-center p-3 transition-colors duration-200 relative
+      ${
+        isActive(item.path, true)
+          ? "text-white bg-custom-blue3"
+          : isActive(item.path)
+          ? "text-white bg-custom-blue"
+          : "text-black hover:bg-gray-200 hover:text-black"
+      }`}
+  >
+    {/* Ini bg aktif, posisinya absolute biar nggak ikut geser */}
+    {active && (
+      <span
+        className={`absolute inset-0 -z-10 ${activeBgColor}`}
+      ></span>
+    )}
 
-              <i
-                className={`${item.icon} text-lg w-6 text-center ${
-                  active ? "text-white" : "text-custom-blue"
-                }`}
-              ></i>
+    <i
+      className={`${item.icon} text-lg w-6 text-center ${
+        active ? "text-white" : "text-custom-blue"
+      }`}
+    ></i>
 
-              {!isSmallScreen && isSidebarVisible && (
-                <span
-                  className={`ml-4 flex-1 ${
-                    active ? "text-white" : "text-custom-blue3"
-                  }`}
-                >
-                  {item.label}
-                </span>
-              )}
-            </Link>
-            {item.hasDropdown && openDropdowns[item.label] && item.children && (
-              <ul className="pl-3">{renderMenuItems(item.children)}</ul>
-            )}
-          </li>
+    {!isSmallScreen && isSidebarVisible && (
+      <span
+        className={`ml-4 flex-1 ${
+          active ? "text-white" : "text-custom-blue3"
+        }`}
+      >
+        {item.label}
+      </span>
+    )}
+  </Link>
+
+  {/* Child menu */}
+  {item.hasDropdown && openDropdowns[item.label] && item.children && (
+    <ul className="pl-3 mt-1">{renderMenuItems(item.children)}</ul>
+  )}
+</li>
+
         );
       });
   };
@@ -225,7 +291,7 @@ const isActive = (path) => {
           isSmallScreen ? "w-20" : isSidebarVisible ? "w-64" : "w-20"
         } overflow-y-auto hidden-scrollbar bg-white`}
       >
-        <ul className="p-0 space-y-2 mb-24">{renderMenuItems(menuItems)}</ul>
+        <ul className="space-y-2 mb-24">{renderMenuItems(menuItems)}</ul>
       </div>
     </div>
   );

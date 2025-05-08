@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 
-function SalesMaster() {
+function SalesAdministration() {
   return (
     <div>
       <Outlet /> 
@@ -8,4 +8,4 @@ function SalesMaster() {
   );
 }
 
-export default SalesMaster;
+export default SalesAdministration;

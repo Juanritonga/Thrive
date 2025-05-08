@@ -52,6 +52,29 @@ import Approval from "./pages/ProjectExternal/Budget/Approval";
 import Report from "./pages/ProjectExternal/Report";
 import YoYBudget from "./pages/ProjectExternal/Budget/DetailApproval/YoYBudget";
 import Breakdown from "./pages/ProjectExternal/Budget/DetailApproval/Breakdown";
+import SalesExternal from "./pages/SalesExternal/SalesExternal";
+import SalesMaster from "./pages/SalesExternal/SalesMaster";
+import SalesAdministration from "./pages/SalesExternal/SalesAdministration";
+import Purchase from "./pages/SalesExternal/Purchase";
+import Billing from "./pages/SalesExternal/Purchase/Billing";
+import Hold from "./pages/SalesExternal/Purchase/Billing";
+import Booking from "./pages/SalesExternal/Purchase/Booking";
+import Cancellation from "./pages/SalesExternal/Purchase/Cancellation";
+import ChangeOwner from "./pages/SalesExternal/Purchase/ChangeOwner";
+import GlobalPrice from "./pages/SalesExternal/Purchase/GlobalPrice";
+import OrderDocument from "./pages/SalesExternal/Purchase/OrderDocument";
+import Reservation from "./pages/SalesExternal/Purchase/Reservation";
+import Rounding from "./pages/SalesExternal/Purchase/Rounding";
+import TransferUnit from "./pages/SalesExternal/Purchase/TransferUnit";
+import Generation from "./pages/SalesExternal/Master/Generation";
+import Discount from "./pages/SalesExternal/Master/Discount";
+import Media from "./pages/SalesExternal/Master/Media";
+import Occupation from "./pages/SalesExternal/Master/Occupation";
+import Package from "./pages/SalesExternal/Master/Package";
+import PaymentPlan from "./pages/SalesExternal/Master/PaymentPlan";
+import Price from "./pages/SalesExternal/Master/Price";
+import SalesAgent from "./pages/SalesExternal/Master/SalesAgent";
+import Unit from "./pages/SalesExternal/Master/Unit";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -135,25 +158,55 @@ const App = () => {
             </Route>
           </Route>
 
-          <Route path="project" element={<ProjectExternal />}></Route>
-          <Route path="managementproject" element={<ProjectMaster />}>
-            <Route path="master" element={<Master />} />
-            <Route path="phase" element={<Phase />} />
-            <Route path="property" element={<Property />} />
-            <Route path="_propertyphase" element={<PropertyPhase />} />
+          <Route path="project" element={<ProjectExternal />}>
+            <Route path="managementproject" element={<ProjectMaster />}>
+              <Route path="master" element={<Master />} />
+              <Route path="phase" element={<Phase />} />
+              <Route path="property" element={<Property />} />
+              <Route path="_propertyphase" element={<PropertyPhase />} />
+            </Route>
+            <Route path="setup-project" element={<SetupProject />}>
+              <Route path="class" element={<SetupClass />} />
+              <Route path="component" element={<SetupComponent />} />
+              <Route path="cost" element={<Cost />} />
+            </Route>
+            <Route path="budget" element={<Budget />}>
+              <Route path="approval" element={<Approval />}>
+                <Route path="yoy-budget" element={<YoYBudget />} />
+                <Route path="breakdown" element={<Breakdown />} />
+              </Route>
+              <Route path="entry" element={<Entry />} />
+            </Route>
+            <Route path="report" element={<Report />}></Route>
           </Route>
-          <Route path="setup-project" element={<SetupProject />}>
-            <Route path="class" element={<SetupClass />} />
-            <Route path="component" element={<SetupComponent />} />
-            <Route path="cost" element={<Cost />} />
+
+          <Route path="sales" element={<SalesExternal />}>
+            <Route path="salesadministration" element={<SalesAdministration />}>
+              <Route path="master" element={<SalesMaster />}>
+                <Route path="generation" element={<Generation />} />
+                <Route path="discount" element={<Discount />} />
+                <Route path="media" element={<Media />} />
+                <Route path="occupation" element={<Occupation />} />
+                <Route path="Package" element={<Package />} />
+                <Route path="paymentplan" element={<PaymentPlan />} />
+                <Route path="price" element={<Price />} />
+                <Route path="salesagent" element={<SalesAgent />} />
+                <Route path="unit" element={<Unit />} />
+              </Route>
+              <Route path="purchase" element={<Purchase />}>
+                <Route path="hold" element={<Hold />} />
+                <Route path="reservation" element={<Reservation />} />
+                <Route path="booking" element={<Booking />} />
+                <Route path="billing" element={<Billing />} />
+                <Route path="cancellation" element={<Cancellation />} />
+                <Route path="changeowner" element={<ChangeOwner />} />
+                <Route path="transferunit" element={<TransferUnit />} />
+                <Route path="rounding" element={<Rounding />} />
+                <Route path="globalprice" element={<GlobalPrice />} />
+                <Route path="orderdocument" element={<OrderDocument />} />
+              </Route>
+            </Route>
           </Route>
-          <Route path="budget" element={<Budget />}>
-            <Route path="approval" element={<Approval />}></Route>
-            <Route path="entry" element={<Entry />} />
-          </Route>
-          <Route path="report" element={<Report />}></Route>
-          <Route path="/budget/approval/yoy-budget" element={<YoYBudget />} />
-          <Route path="/budget/approval/breakdown" element={<Breakdown />} />
         </Route>
       </Routes>
     </BrowserRouter>
