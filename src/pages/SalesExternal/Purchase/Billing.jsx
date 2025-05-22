@@ -337,123 +337,228 @@ const Hold = () => {
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg w-[600px]">
-            <div className="flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg">
+            <div className="flex justify-between items-center bg-custom-blue text-white p-4 rounded-t-lg">
               <div className="flex items-center space-x-2">
-                <h2 className="text-lg">Tambah Baru</h2>
+                <h2 className="text-lg">Schedule Billing</h2>
               </div>
               <button className="text-white" onClick={handleCloseModal}>
                 <i className="fas fa-times"></i>
               </button>
             </div>
-            <div className="p-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-gray-700">Property</label>
-                    <input
-                      type="text"
-                      name="property"
-                      value={newItem.property}
-                      onChange={handleInputChange}
-                      className="w-full p-2 border border-gray-300 rounded"
-                    />
+            <div className="p-6 overflow-y-auto">
+            <h2 className="text-lg font-semibold text-gray-300">
+                  BILLING
+                </h2>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-custom-blue2 font-bold">
+                        Payment Method
+                      </label>
+                      <select
+                        name="status"
+                        className="border rounded-md p-2 w-full"
+                        value={newItem.status}
+                        onChange={handleInputChange}
+                      >
+                        <option value="Property">Payment 1</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-custom-blue2 font-bold">
+                        Lot No.
+                      </label>
+                      <select
+                        name="status"
+                        className="border rounded-md p-2 w-full"
+                        value={newItem.status}
+                        onChange={handleInputChange}
+                      >
+                        <option value="Block">LOT 1</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-custom-blue2 font-bold">
+                        Start Date
+                      </label>
+                      <input
+                        type="text"
+                        name="packageCode"
+                        value={newItem.packageCode}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-custom-blue2 font-bold">
+                        Tax Code
+                      </label>
+                      <select
+                        name="status"
+                        className="border rounded-md p-2 w-full"
+                        value={newItem.status}
+                        onChange={handleInputChange}
+                      >
+                        <option value="Block">Tax</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-custom-blue2 font-bold">
+                        Description
+                      </label>
+                      <input
+                        type="text"
+                        name="packageCode"
+                        value={newItem.packageCode}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-custom-blue2 font-bold">
+                        Amount
+                      </label>
+                      <input
+                        type="text"
+                        name="packageCode"
+                        value={newItem.packageCode}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-gray-700">Type</label>
-                    <input
-                      type="text"
-                      name="type"
-                      value={newItem.type}
-                      onChange={handleInputChange}
-                      className="w-full p-2 border border-gray-300 rounded"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Block</label>
-                    <input
-                      type="text"
-                      name="block"
-                      value={newItem.block}
-                      onChange={handleInputChange}
-                      className="w-full p-2 border border-gray-300 rounded"
-                    />
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-custom-blue2 font-bold">
+                        Transaction Type
+                      </label>
+                      <select
+                        name="status"
+                        className="border rounded-md p-2 w-full text-gray-900"
+                        value={newItem.status}
+                        onChange={handleInputChange}
+                      >
+                        <option
+                          value=""
+                          disabled
+                          hidden
+                          className="text-gray-400"
+                        >
+                          Type
+                        </option>
+                        <option value="Type A">Type A</option>
+                        <option value="Type B">Type B</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-custom-blue2 font-bold">
+                        Frequency
+                      </label>
+                      <select
+                        name="status"
+                        className="border rounded-md p-2 w-full"
+                        value={newItem.status}
+                        onChange={handleInputChange}
+                      >
+                        <option value="Zone">Frequency 1</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-custom-blue2 font-bold">
+                        Payment Type
+                      </label>
+                      <select
+                        name="status"
+                        className="border rounded-md p-2 w-full"
+                        value={newItem.status}
+                        onChange={handleInputChange}
+                      >
+                        <option value="Lot">Transfer</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-custom-blue2 font-bold">
+                        Currency
+                      </label>
+                      <select
+                        name="status"
+                        className="border rounded-md p-2 w-full"
+                        value={newItem.status}
+                        onChange={handleInputChange}
+                      >
+                        <option value="Lot">Currency</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-custom-blue2 font-bold">
+                        Payment Interval
+                      </label>
+                      <select
+                        name="status"
+                        className="border rounded-md p-2 w-full"
+                        value={newItem.status}
+                        onChange={handleInputChange}
+                      >
+                        <option value="Lot">Interval</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-custom-blue2 font-bold">
+                        Tax Amount
+                      </label>
+                      <input
+                        type="text"
+                        name="packageCode"
+                        value={newItem.packageCode}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-gray-700">Zone</label>
-                    <input
-                      type="text"
-                      name="zone"
-                      value={newItem.zone}
-                      onChange={handleInputChange}
-                      className="w-full p-2 border border-gray-300 rounded"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Direction</label>
-                    <input
-                      type="text"
-                      name="direction"
-                      value={newItem.direction}
-                      onChange={handleInputChange}
-                      className="w-full p-2 border border-gray-300 rounded"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Lot</label>
-                    <input
-                      type="text"
-                      name="lot"
-                      value={newItem.lot}
-                      onChange={handleInputChange}
-                      className="w-full p-2 border border-gray-300 rounded"
-                    />
-                  </div>
+                <div className="mt-4">
+                  <label className="block text-custom-blue2 font-bold">
+                    Total Amount
+                  </label>
+                  <input
+                    type="text"
+                    name="packageCode"
+                    value={newItem.packageCode}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
                 </div>
-              </div>
-              <div className="mt-4">
-                <label className="block mb-1 font-bold">Status</label>
-                <select
-                  name="status"
-                  className="border rounded-md p-2 w-full"
-                  value={newItem.status}
-                  onChange={handleInputChange}
-                >
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                </select>
-              </div>
-              <div className="mt-4">
-                <label className="block text-gray-700">Hold/Unhold</label>
-                <select
-                  name="hold"
-                  className="border rounded-md p-2 w-full"
-                  value={newItem.hold}
-                  onChange={handleInputChange}
-                >
-                  <option value="Active">Hold</option>
-                  <option value="Inactive">Unhold</option>
-                </select>
-              </div>
-              <div className="flex justify-between gap-4 mt-6">
-                <button
-                  className="w-1/2 py-2 bg-red-400 text-white rounded hover:bg-red-500"
-                  onClick={handleCloseModal}
-                >
-                  Delete
-                </button>
 
-                <button
-                  className="w-1/2 py-2 bg-blue-400 text-white rounded hover:bg-blue-500"
-                  onClick={handleAddItem}
-                >
-                  Simpan
-                </button>
+                <div className="flex justify-between gap-4 mt-6">
+                  <button
+                    className="w-1/2 py-2 bg-red-600 text-white rounded hover:bg-red-500"
+                    onClick={handleCloseModal}
+                  >
+                    Delete
+                  </button>
+
+                  <button
+                    className="w-1/2 py-2 bg-custom-blue2 text-white rounded hover:bg-custom-blue"
+                    onClick={handleAddItem}
+                  >
+                    SP
+                  </button>
+                  <button
+                    className="w-1/2 py-2 bg-custom-blue2 text-white rounded hover:bg-custom-blue"
+                    onClick={handleAddItem}
+                  >
+                    Billing Detail
+                  </button>
+                  <button
+                    className="w-1/2 py-2 bg-custom-blue2 text-white rounded hover:bg-custom-blue"
+                    onClick={handleAddItem}
+                  >
+                    Posting
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
       )}
     </div>
   );

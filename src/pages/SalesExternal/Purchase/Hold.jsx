@@ -462,6 +462,9 @@ const Hold = () => {
               </button>
             </div>
             <div className="p-6">
+              <h2 className="text-lg font-semibold mb-4 text-gray-300">
+                PROPERTY
+              </h2>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-4">
                   <div>
@@ -479,19 +482,6 @@ const Hold = () => {
                   </div>
                   <div>
                     <label className="block text-custom-blue2 font-bold">
-                      Type
-                    </label>
-                    <select
-                      name="status"
-                      className="border rounded-md p-2 w-full"
-                      value={newItem.status}
-                      onChange={handleInputChange}
-                    >
-                      <option value="Type">Type</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-custom-blue2 font-bold">
                       Block
                     </label>
                     <select
@@ -501,21 +491,6 @@ const Hold = () => {
                       onChange={handleInputChange}
                     >
                       <option value="Block">Block</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-custom-blue2 font-bold">
-                      Zone
-                    </label>
-                    <select
-                      name="status"
-                      className="border rounded-md p-2 w-full"
-                      value={newItem.status}
-                      onChange={handleInputChange}
-                    >
-                      <option value="Zone">Zone</option>
                     </select>
                   </div>
                   <div>
@@ -531,9 +506,46 @@ const Hold = () => {
                       <option value="Direction">Direction</option>
                     </select>
                   </div>
+                </div>
+                <div className="space-y-4">
                   <div>
                     <label className="block text-custom-blue2 font-bold">
-                      Lot
+                      Type
+                    </label>
+                    <select
+                      name="status"
+                      className="border rounded-md p-2 w-full text-gray-900"
+                      value={newItem.status}
+                      onChange={handleInputChange}
+                    >
+                      <option
+                        value=""
+                        disabled
+                        hidden
+                        className="text-gray-400"
+                      >
+                        Type
+                      </option>
+                      <option value="Type A">Type A</option>
+                      <option value="Type B">Type B</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-custom-blue2 font-bold">
+                      Zone
+                    </label>
+                    <select
+                      name="status"
+                      className="border rounded-md p-2 w-full"
+                      value={newItem.status}
+                      onChange={handleInputChange}
+                    >
+                      <option value="Zone">Zone</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-custom-blue2 font-bold">
+                      Lot No.
                     </label>
                     <select
                       name="status"
@@ -546,37 +558,58 @@ const Hold = () => {
                   </div>
                 </div>
               </div>
-              <div className="mt-4">
-                <label className="block text-custom-blue2 font-bold">
-                  Status
-                </label>
-                <select
-                  name="status"
-                  className="border rounded-md p-2 w-full"
-                  value={newItem.status}
-                  onChange={handleInputChange}
-                >
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                </select>
+              <h2 className="text-lg font-semibold mb-4 text-gray-300 mt-4">
+                LOT
+              </h2>
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <label className="block text-custom-blue2 font-bold">
+                    Lot No.
+                  </label>
+                  <select
+                    name="lot"
+                    className="border rounded-md p-2 w-full"
+                    value={newItem.lot}
+                    onChange={handleInputChange}
+                  >
+                    <option value="Lot">Lot</option>
+                  </select>
+                </div>
+
+                <div className="flex-1">
+                  <label className="block text-custom-blue2 font-bold">
+                    Status
+                  </label>
+                  <select
+                    name="status"
+                    className="border rounded-md p-2 w-full"
+                    value={newItem.status}
+                    onChange={handleInputChange}
+                  >
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                </div>
+
+                <div className="flex-1">
+                  <label className="block text-custom-blue2 font-bold">
+                    Hold/Unhold
+                  </label>
+                  <select
+                    name="hold"
+                    className="border rounded-md p-2 w-full"
+                    value={newItem.hold}
+                    onChange={handleInputChange}
+                  >
+                    <option value="Hold">Hold</option>
+                    <option value="Unhold">Unhold</option>
+                  </select>
+                </div>
               </div>
-              <div className="mt-4">
-                <label className="block text-custom-blue2 font-bold">
-                  Hold/Unhold
-                </label>
-                <select
-                  name="hold"
-                  className="border rounded-md p-2 w-full"
-                  value={newItem.hold}
-                  onChange={handleInputChange}
-                >
-                  <option value="Active">Hold</option>
-                  <option value="Inactive">Unhold</option>
-                </select>
-              </div>
+
               <div className="flex justify-between gap-4 mt-6">
                 <button
-                  className="w-1/2 py-2 bg-red-400 text-white rounded hover:bg-red-500"
+                  className="w-1/2 py-2 bg-red-600 text-white rounded hover:bg-red-500"
                   onClick={handleCloseModal}
                 >
                   Delete

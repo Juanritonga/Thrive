@@ -57,7 +57,7 @@ import SalesMaster from "./pages/SalesExternal/SalesMaster";
 import SalesAdministration from "./pages/SalesExternal/SalesAdministration";
 import Purchase from "./pages/SalesExternal/Purchase";
 import Billing from "./pages/SalesExternal/Purchase/Billing";
-import Hold from "./pages/SalesExternal/Purchase/Billing";
+import Hold from "./pages/SalesExternal/Purchase/Hold";
 import Booking from "./pages/SalesExternal/Purchase/Booking";
 import Cancellation from "./pages/SalesExternal/Purchase/Cancellation";
 import ChangeOwner from "./pages/SalesExternal/Purchase/ChangeOwner";
