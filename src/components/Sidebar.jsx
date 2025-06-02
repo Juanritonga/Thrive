@@ -6,6 +6,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   const location = useLocation();
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
   const [openDropdowns, setOpenDropdowns] = useState({});
+  
   const userRole = sessionStorage.getItem("role") || "";
 
   useEffect(() => {

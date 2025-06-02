@@ -80,11 +80,12 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []);
+  const token = sessionStorage.getItem("token");
+  if (token) {
+    setIsAuthenticated(true);
+  }
+}, []);
+
 
   return (
     <BrowserRouter>

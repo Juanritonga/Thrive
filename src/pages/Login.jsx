@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import authService from "@/services/auth.service";
 import { useImageCarousel } from "@/hooks/useImageCarousel";
-import { validateEmail } from "@/utils/validation";
 
 const CAROUSEL_IMAGES = [
   "/thrivewp.jpg",
@@ -22,34 +20,40 @@ const Login = ({ setIsAuthenticated }) => {
 
   const validateForm = () => {
     if (!username || !password) {
-      setError("Please enter both email/Whatsapp and password.");
+      setError("Please enter both username and password.");
       return false;
     }
-
-    if (!validateEmail(username)) {
-      setError("Please enter a valid email.");
-      return false;
-    }
-
     return true;
   };
 
   const handleLogin = async () => {
-    if (!validateForm()) return;
-    setIsLoading(true);
-    setError("");
+  if (!validateForm()) return;
+  setIsLoading(true);
+  setError("");
 
-    try {
-      const response = await authService.login(username, password);
+  // Static login
+  const STATIC_USERNAME = "admin";
+  const STATIC_PASSWORD = "123";
+  const STATIC_ROLE = "Super Admin"; // role manual
+  const STATIC_TOKEN = "123454jjjj";
+  const STATIC_NAME = "Thrive Admin";
+
+
+  
+    if (username === STATIC_USERNAME && password === STATIC_PASSWORD) {
+      // Simpan role manual
+      sessionStorage.setItem("role", STATIC_ROLE);
+      sessionStorage.setItem("token", STATIC_TOKEN);
+            sessionStorage.setItem("name", STATIC_NAME);
+
+
       setIsAuthenticated(true);
       navigate("/");
-    } catch (err) {
-      console.error("Login failed:", err);
-      setError(err.message || "An error occurred. Please try again later.");
-    } finally {
-      setIsLoading(false);
+      setIsLoading(false)
+    } else {
+      setError("Invalid username or password.");
     }
-  };
+};
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
@@ -87,7 +91,7 @@ const Login = ({ setIsAuthenticated }) => {
               <InputField
                 type="text"
                 icon="fa-user"
-                placeholder="Email / Whatsapp"
+                placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 disabled={isLoading}
